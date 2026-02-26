@@ -1,44 +1,59 @@
 @layer components {
 
     .primary__header {
-        @apply container px-0 border-b border-x border-mercury-200 flex items-center justify-between;
+        @apply relative container px-0 border-b border-x border-mercury-200 flex items-center justify-between;
 
-        .hamburger {
-            @apply bg-mercury-100
-            block lg:hidden
-            aspect-square h-auto w-14 shrink-0 p-4 border-l border-mercury-200 relative
-            cursor-pointer;
 
-            span:nth-child(1) {
-                @apply absolute top-2/5 left-1/2 -translate-x-1/2 -translate-y-1/2
-                duration-300
-                w-6 h-0.5 bg-black;
-            }
+        .header__navigation {
+            .hamburger {
+                @apply bg-mercury-100
+                block lg:hidden
+                aspect-square h-auto w-14 shrink-0 p-4 border-l border-mercury-200 relative
+                cursor-pointer;
 
-            span:nth-child(2) {
-                @apply absolute top-3/5 left-1/2 -translate-x-1/2 -translate-y-1/2
-                duration-300
-                w-6 h-0.5 bg-black;
-            }
-
-            &.open {
                 span:nth-child(1) {
-                    @apply -rotate-225 top-1/2
+                    @apply absolute top-2/5 left-1/2 -translate-x-1/2 -translate-y-1/2
+                    duration-300
+                    w-6 h-0.5 bg-black;
                 }
 
                 span:nth-child(2) {
-                    @apply -rotate-135 top-1/2
+                    @apply absolute top-3/5 left-1/2 -translate-x-1/2 -translate-y-1/2
+                    duration-300
+                    w-6 h-0.5 bg-black;
+                }
+
+            }
+
+            &.open {
+                .hamburger {
+                    span:nth-child(1) {
+                        @apply -rotate-225 top-1/2
+                    }
+
+                    span:nth-child(2) {
+                        @apply -rotate-135 top-1/2
+                    }
+                }
+
+                .primary__navigation {
+                    @apply block lg:flex
                 }
             }
-        }
 
-        .header__navigation {
+            &:not(.open) {
+                .primary__navigation {
+                    @apply hidden lg:flex
+                }
+            }
+
 
             .primary__navigation {
-                @apply lg:flex items-center justify-end hidden;
+                @apply absolute  lg:static lg:items-center lg:justify-end
+                left-0 w-full lg:left-auto lg:w-auto p-6 lg:p-0 border-b border-b-mercury-200 lg:border-b-0;
 
                 > li {
-                    @apply px-4 py-6 relative duration-300;
+                    @apply lg:px-4 py-2 lg:py-6 relative duration-300;
 
                     &.mouse__in__nav:not(.focus__item):not(.call__to__action) {
                         @apply opacity-50;
@@ -51,16 +66,16 @@
 
                     a {
                         svg {
-                            @apply size-4 stroke-[1.5] duration-200;
+                            @apply size-3 lg:size-4 stroke-[1.5] duration-200;
                         }
 
                         span {
-                            @apply uppercase text-sm duration-300 text-nowrap;
+                            @apply uppercase text-xs lg:text-sm duration-300 text-nowrap;
                         }
                     }
 
                     &.call__to__action {
-                        @apply bg-black text-white font-semibold px-6;
+                        @apply bg-black text-white font-semibold px-6 inline-flex lg:flex;
 
                         a {
                             @apply flex-row-reverse gap-2;
@@ -91,7 +106,7 @@
                                     }
 
                                     span {
-                                        @apply -translate-x-2;
+                                        @apply -translate-x-3 lg:-translate-x-2;
                                     }
 
                                 }
@@ -101,8 +116,12 @@
                         &:hover {
                             &:not(.has__subitems) {
                                 > div a {
-                                    svg, span {
+                                    svg {
                                         @apply translate-x-0;
+                                    }
+
+                                    span {
+                                        @apply translate-x-1 lg:translate-x-0
                                     }
                                 }
                             }
@@ -110,7 +129,7 @@
 
                         &.has__subitems {
                             a {
-                                @apply flex-row-reverse gap-2;
+                                @apply flex-row-reverse gap-2 justify-end ;
 
                                 svg {
                                     @apply rotate-90 duration-300;
@@ -127,9 +146,9 @@
 
                     .navigation__submenu {
 
-                        @apply absolute top-full right-1/2
-                        translate-x-1/2 -translate-y-1 p-4 border
-                        border-mercury-200 bg-white min-w-full;
+                        @apply lg:absolute lg:top-full lg:right-1/2
+                        lg:translate-x-1/2 lg:-translate-y-1 lg:px-4 py-4 lg:border
+                        lg:border-mercury-200 bg-white lg:min-w-full;
 
                         &:not(.is__visible) {
                             @apply hidden;

@@ -11,12 +11,12 @@ export default function Navigation() {
             <div className="px-6">
                 <span className="text-5xl font-semibold">Coiné</span>
             </div>
-            <nav className="header__navigation">
+            <nav className={clsx({ open: open, header__navigation: true })}>
                 <div
                     onClick={() => {
                         setOpen(!open);
                     }}
-                    className={clsx({ open: open, hamburger: true })}
+                    className="hamburger"
                 >
                     <span></span>
                     <span></span>
@@ -28,8 +28,9 @@ export default function Navigation() {
                         return (
                             <li
                                 key={index}
-                                onMouseEnter={() => setHoveredIndex(index)}
-                                onMouseLeave={() => setHoveredIndex(null)}
+                                onMouseEnter={() => window.innerWidth >= 1024 && setHoveredIndex(index)}
+                                onMouseLeave={() => window.innerWidth >= 1024 && setHoveredIndex(null)}
+                                onClick={() => window.innerWidth < 1024 && setHoveredIndex(index !== hoveredIndex ? index : null)}
                                 className={clsx({
                                     has__subitems: hasSubItems,
                                     call__to__action: menuItem.isCallToAction,
@@ -62,7 +63,7 @@ export default function Navigation() {
                                     >
                                         <ul>
                                             {menuItem.subItems.map((subItem, subIndex) => (
-                                                <li key={subIndex}>
+                                                <li key={subIndex} className={clsx({})}>
                                                     <a href={subItem.href} title={subItem.title}>
                                                         <span>{subItem.title}</span>
                                                     </a>
