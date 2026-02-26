@@ -147,11 +147,18 @@
                     .navigation__submenu {
 
                         @apply lg:absolute lg:top-full lg:right-1/2
-                        lg:translate-x-1/2 lg:-translate-y-1 lg:px-4 py-4 lg:border
-                        lg:border-mercury-200 bg-white lg:min-w-full;
+                        lg:translate-x-1/2 lg:px-4 lg:border
+                        lg:border-mercury-200 bg-white lg:min-w-full
+                        overflow-hidden transition-all duration-200 ease-in-out;
 
                         &:not(.is__visible) {
-                            @apply hidden;
+                            @apply max-h-0 lg:max-h-none py-0
+                            lg:invisible lg:opacity-0 lg:-translate-y-3;
+                        }
+
+                        &.is__visible {
+                            @apply max-h-96 lg:max-h-none py-4
+                            lg:visible lg:opacity-100 lg:translate-y-0;
                         }
 
                     }

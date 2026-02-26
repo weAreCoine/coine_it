@@ -1,11 +1,18 @@
 import { usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function Navigation() {
     const { navigationItems } = usePage<{ navigationItems: App.Entities.NavigationItem[] }>().props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [open, setOpen] = useState<boolean>(true);
+
+    useEffect(() => {
+        const handleResize = () => setHoveredIndex(null);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     return (
         <div className="primary__header">
             <div className="px-6">
