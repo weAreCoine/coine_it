@@ -10,14 +10,35 @@ export default function Features(props: FeaturesData) {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const timeline = gsap.timeline({
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 80%',
-                    end: 'bottom 20%',
-                    scrub: true,
-                    markers: true,
-                },
+            const svgs = containerRef.current?.querySelectorAll('.features-icon svg');
+            if (!svgs?.length) return;
+
+            svgs.forEach((svg) => {
+                const paths = Array.from(svg.querySelectorAll('path'));
+
+                const sortedPaths = paths.sort((a, b) => {
+                    const aCoords = a.getAttribute('d')?.match(/M\s*([\d.]+)[,\s]+([\d.]+)/);
+                    const bCoords = b.getAttribute('d')?.match(/M\s*([\d.]+)[,\s]+([\d.]+)/);
+                    const ay = parseFloat(aCoords?.[2] ?? '0');
+                    const by = parseFloat(bCoords?.[2] ?? '0');
+                    if (Math.abs(ay - by) > 1) return ay - by;
+                    const ax = parseFloat(aCoords?.[1] ?? '0');
+                    const bx = parseFloat(bCoords?.[1] ?? '0');
+                    return ax - bx;
+                });
+
+                gsap.set(sortedPaths, { fill: '#e3e3e3' });
+
+                gsap.to(sortedPaths, {
+                    fill: '#000000',
+                    stagger: { each: 0.02 },
+                    scrollTrigger: {
+                        trigger: svg,
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        scrub: true,
+                    },
+                });
             });
         }, containerRef);
 
@@ -38,7 +59,7 @@ export default function Features(props: FeaturesData) {
                 <div className="relative mt-12 grid grid-cols-3 divide-x divide-mercury-200 border border-mercury-200">
                     {props.columns.map((column, index) => (
                         <div key={index} className="p-8">
-                            <div dangerouslySetInnerHTML={{ __html: column.icon }} />
+                            <div className="features-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
                             <p className="mb-2 text-xl font-medium">{column.title}</p>
                             <p>{column.description}</p>
                         </div>
