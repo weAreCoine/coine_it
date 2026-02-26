@@ -1,0 +1,144 @@
+@layer components {
+
+    .primary__header {
+        @apply container px-0 border-b border-x border-mercury-200 flex items-center justify-between;
+
+        .hamburger {
+            @apply bg-mercury-100
+            block lg:hidden
+            aspect-square h-auto w-14 shrink-0 p-4 border-l border-mercury-200 relative
+            cursor-pointer;
+
+            span:nth-child(1) {
+                @apply absolute top-2/5 left-1/2 -translate-x-1/2 -translate-y-1/2
+                duration-300
+                w-6 h-0.5 bg-black;
+            }
+
+            span:nth-child(2) {
+                @apply absolute top-3/5 left-1/2 -translate-x-1/2 -translate-y-1/2
+                duration-300
+                w-6 h-0.5 bg-black;
+            }
+
+            &.open {
+                span:nth-child(1) {
+                    @apply -rotate-225 top-1/2
+                }
+
+                span:nth-child(2) {
+                    @apply -rotate-135 top-1/2
+                }
+            }
+        }
+
+        .header__navigation {
+
+            .primary__navigation {
+                @apply lg:flex items-center justify-end hidden;
+
+                > li {
+                    @apply px-4 py-6 relative duration-300;
+
+                    &.mouse__in__nav:not(.focus__item):not(.call__to__action) {
+                        @apply opacity-50;
+                    }
+
+
+                    > div > a {
+                        @apply flex items-center;
+                    }
+
+                    a {
+                        svg {
+                            @apply size-4 stroke-[1.5] duration-200;
+                        }
+
+                        span {
+                            @apply uppercase text-sm duration-300 text-nowrap;
+                        }
+                    }
+
+                    &.call__to__action {
+                        @apply bg-black text-white font-semibold px-6;
+
+                        a {
+                            @apply flex-row-reverse gap-2;
+
+                            svg {
+                                @apply stroke-2;
+                            }
+                        }
+
+                        :hover {
+                            svg {
+                                @apply -rotate-45
+                            }
+
+                        }
+                    }
+
+                    &:not(.call__to__action) {
+
+
+                        &:not(.has__subitems) {
+                            > div {
+                                @apply overflow-hidden;
+
+                                a {
+                                    svg {
+                                        @apply -translate-x-4
+                                    }
+
+                                    span {
+                                        @apply -translate-x-2;
+                                    }
+
+                                }
+                            }
+                        }
+
+                        &:hover {
+                            &:not(.has__subitems) {
+                                > div a {
+                                    svg, span {
+                                        @apply translate-x-0;
+                                    }
+                                }
+                            }
+                        }
+
+                        &.has__subitems {
+                            a {
+                                @apply flex-row-reverse gap-2;
+
+                                svg {
+                                    @apply rotate-90 duration-300;
+                                }
+
+                                &:hover {
+                                    svg {
+                                        @apply -rotate-90
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    .navigation__submenu {
+
+                        @apply absolute top-full right-1/2
+                        translate-x-1/2 -translate-y-1 p-4 border
+                        border-mercury-200 bg-white min-w-full;
+
+                        &:not(.is__visible) {
+                            @apply hidden;
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+}
+

@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Entities\NavigationItem;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -40,6 +41,17 @@ class HandleInertiaRequests extends Middleware
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
+            ],
+            'navigationItems' => [
+                new NavigationItem('Home', 'home'),
+
+                new NavigationItem('Services', null, isPlaceholder: true, subItems: [
+                    new NavigationItem('About Us', null),
+                ]),
+                new NavigationItem('Services', null, isPlaceholder: true, subItems: [
+                    new NavigationItem('About Us', null),
+                ]),
+                new NavigationItem('Contact', null, isPlaceholder: true, isCallToAction: true)
             ],
         ];
     }
