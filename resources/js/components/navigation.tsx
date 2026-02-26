@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 export default function Navigation() {
     const { navigationItems } = usePage<{ navigationItems: App.Entities.NavigationItem[] }>().props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
-    const [open, setOpen] = useState<boolean>(true);
+    const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
         const handleResize = () => setHoveredIndex(null);

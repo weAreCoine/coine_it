@@ -2,4 +2,19 @@
     .page__title {
         @apply text-5xl font-medium
     }
+
+    .button__primary {
+        @apply bg-black text-white uppercase font-medium text-sm pl-6 pr-4 py-4 inline-flex items-center justify-center gap-2;
+
+        svg {
+            @apply size-4 stroke-[1.5]  duration-300
+        }
+
+        &:hover {
+            svg {
+                @apply translate-x-1;
+            }
+        }
+
+    }
 }

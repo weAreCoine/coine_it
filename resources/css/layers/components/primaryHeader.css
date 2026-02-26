@@ -5,6 +5,8 @@
 
 
         .header__navigation {
+            @apply bg-white;
+
             .hamburger {
                 @apply bg-mercury-100
                 block lg:hidden
@@ -49,7 +51,7 @@
 
 
             .primary__navigation {
-                @apply absolute  lg:static lg:items-center lg:justify-end
+                @apply absolute bg-white lg:static lg:items-center lg:justify-end
                 left-0 w-full lg:left-auto lg:w-auto p-6 lg:p-0 border-b border-b-mercury-200 lg:border-b-0;
 
                 > li {
@@ -145,7 +147,6 @@
                     }
 
                     .navigation__submenu {
-
                         @apply lg:absolute lg:top-full lg:right-1/2
                         lg:translate-x-1/2 lg:px-4 lg:border
                         lg:border-mercury-200 bg-white lg:min-w-full
