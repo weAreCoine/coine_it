@@ -1,5 +1,5 @@
 import { clsx } from 'clsx';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const CELLS = 32;
 const FRAME_RATE = 2.5;
@@ -76,19 +76,59 @@ export default function GameOfLife() {
         setCell(row, col, paintValue.current);
     };
 
+    const getCellFromPoint = useCallback(
+        (clientX: number, clientY: number): { row: number; col: number } | null => {
+            if (!containerRef.current || cellWidth === 0) return null;
+            const rect = containerRef.current.getBoundingClientRect();
+            const col = Math.floor((clientX - rect.left) / cellWidth);
+            const row = Math.floor((clientY - rect.top) / cellWidth);
+            if (row < 0 || row >= CELLS || col < 0 || col >= CELLS) return null;
+            return { row, col };
+        },
+        [cellWidth],
+    );
+
+    const lastTouchedCell = useRef<string | null>(null);
+
+    const handleTouchStart = (e: React.TouchEvent, row: number, col: number) => {
+        if (isPlaying) return;
+        e.preventDefault();
+        isDragging.current = true;
+        paintValue.current = !board[row][col];
+        lastTouchedCell.current = `${row},${col}`;
+        setCell(row, col, paintValue.current);
+    };
+
+    const handleTouchMove = (e: React.TouchEvent) => {
+        if (isPlaying || !isDragging.current) return;
+        e.preventDefault();
+        const touch = e.touches[0];
+        const cell = getCellFromPoint(touch.clientX, touch.clientY);
+        if (!cell) return;
+        const key = `${cell.row},${cell.col}`;
+        if (key === lastTouchedCell.current) return;
+        lastTouchedCell.current = key;
+        setCell(cell.row, cell.col, paintValue.current);
+    };
+
     useEffect(() => {
-        const handleMouseUp = () => {
+        const handlePointerUp = () => {
             isDragging.current = false;
+            lastTouchedCell.current = null;
         };
 
-        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mouseup', handlePointerUp);
+        window.addEventListener('touchend', handlePointerUp);
 
-        return () => window.removeEventListener('mouseup', handleMouseUp);
+        return () => {
+            window.removeEventListener('mouseup', handlePointerUp);
+            window.removeEventListener('touchend', handlePointerUp);
+        };
     }, []);
 
     return (
         <>
-            <div ref={containerRef}>
+            <div ref={containerRef} style={!isPlaying ? { touchAction: 'none' } : undefined} onTouchMove={handleTouchMove}>
                 {board.map((row, rowIndex) => (
                     <div key={rowIndex} className="flex">
                         {row.map((cell, colIndex) => (
@@ -100,6 +140,7 @@ export default function GameOfLife() {
                                 style={{ width: cellWidth }}
                                 onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
                                 onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                                onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
                             >
                                 <div
                                     className={clsx('h-2/3 w-2/3', {

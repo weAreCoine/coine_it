@@ -1,12 +1,12 @@
-import type { HeroData } from '@/types/dto/heroSection';
 import GameOfLife from '@/components/gameOfLife';
+import type { HeroData } from '@/types/dto/sections';
 
 export default function Hero(props: HeroData) {
     return (
         <section id="hero" aria-labelledby="heroLabel" className="relative">
             <div className="relative container my-20 grid grid-cols-1 items-center gap-12 md:grid-cols-2">
                 <div>
-                    <div className="absolute top-full left-0 -translate-x-1/4 -translate-y-full text-mercury-200">
+                    <div className="absolute top-full left-0 hidden -translate-x-1/4 -translate-y-full text-mercury-200 md:block">
                         <div>
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 381 382" fill="none">
                                 <rect x="0.509766" y="305" width="76" height="76" stroke="currentColor"></rect>
