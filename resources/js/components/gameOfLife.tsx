@@ -34,6 +34,8 @@ export default function GameOfLife() {
     const [board, setBoard] = useState(createBoard);
     const [cellWidth, setCellWidth] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
+    const isDragging = useRef(false);
+    const paintValue = useRef(false);
 
     useEffect(() => {
         const updateCellWidth = () => {
@@ -58,10 +60,31 @@ export default function GameOfLife() {
         return () => clearInterval(interval);
     }, [isPlaying]);
 
-    const toggleCell = (row: number, col: number) => {
-        if (isPlaying) return;
-        setBoard((prev) => prev.map((r, i) => (i === row ? r.map((c, j) => (j === col ? !c : c)) : r)));
+    const setCell = (row: number, col: number, value: boolean) => {
+        setBoard((prev) => prev.map((r, i) => (i === row ? r.map((c, j) => (j === col ? value : c)) : r)));
     };
+
+    const handleMouseDown = (row: number, col: number) => {
+        if (isPlaying) return;
+        isDragging.current = true;
+        paintValue.current = !board[row][col];
+        setCell(row, col, paintValue.current);
+    };
+
+    const handleMouseEnter = (row: number, col: number) => {
+        if (isPlaying || !isDragging.current) return;
+        setCell(row, col, paintValue.current);
+    };
+
+    useEffect(() => {
+        const handleMouseUp = () => {
+            isDragging.current = false;
+        };
+
+        window.addEventListener('mouseup', handleMouseUp);
+
+        return () => window.removeEventListener('mouseup', handleMouseUp);
+    }, []);
 
     return (
         <>
@@ -75,7 +98,8 @@ export default function GameOfLife() {
                                     'cursor-pointer': !isPlaying,
                                 })}
                                 style={{ width: cellWidth }}
-                                onClick={() => toggleCell(rowIndex, colIndex)}
+                                onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                                onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
                             >
                                 <div
                                     className={clsx('h-2/3 w-2/3', {
