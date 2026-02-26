@@ -2,7 +2,7 @@ import { clsx } from 'clsx';
 import { useEffect, useRef, useState } from 'react';
 
 const CELLS = 32;
-const FRAME_RATE = 2;
+const FRAME_RATE = 2.5;
 
 function createBoard(): boolean[][] {
     return Array.from({ length: CELLS }, () => Array.from({ length: CELLS }, () => Math.random() > 0.5));

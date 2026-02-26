@@ -7,8 +7,8 @@ use Inertia\Inertia;
 Route::get('/', function () {
     return Inertia::render('welcome', [
         'hero' => [
-            'title' => 'The future beyond human intelligence',
-            'description' => 'Lorem ipsum dolor sit amet consectetur convallis ut et in id enim tempus quis amet consequat ut rhoncus morbi ullamcorper faucibus in natoque.',
+            'title' => 'Costruiamo insieme la tua presenza digitale',
+            'description' => 'Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.',
             'link' => new NavigationItem('Scopri di più', null, isCallToAction: true)
         ]
     ]);
