@@ -1,67 +1,118 @@
 import { clsx } from 'clsx';
+import { useEffect, useRef, useState } from 'react';
+
+const CELLS = 32;
+const FRAME_RATE = 2;
+
+function createBoard(): boolean[][] {
+    return Array.from({ length: CELLS }, () => Array.from({ length: CELLS }, () => Math.random() > 0.5));
+}
+
+function countNeighbors(board: boolean[][], x: number, y: number): number {
+    let neighbors = 0;
+    for (let i = Math.max(0, x - 1); i <= Math.min(CELLS - 1, x + 1); i++) {
+        for (let j = Math.max(0, y - 1); j <= Math.min(CELLS - 1, y + 1); j++) {
+            if (i === x && j === y) continue;
+            if (board[i][j]) neighbors++;
+        }
+    }
+    return neighbors;
+}
+
+function nextGeneration(board: boolean[][]): boolean[][] {
+    return board.map((row, i) =>
+        row.map((cell, j) => {
+            const neighbors = countNeighbors(board, i, j);
+            if (cell) return neighbors === 2 || neighbors === 3;
+            return neighbors === 3;
+        }),
+    );
+}
 
 export default function GameOfLife() {
-    const boardElement: HTMLDivElement | null = document.querySelector('#game-of-life-board');
-    const cells: number = 32;
-    const frameRate: number = 2;
-    const board: boolean[][] = Array.from({ length: cells }, () => Array.from({ length: cells }, () => Math.random() > 0.5));
-    let boardWidth: number = boardElement?.clientWidth ?? 0;
+    const containerRef = useRef<HTMLDivElement | null>(null);
+    const [board, setBoard] = useState(createBoard);
+    const [cellWidth, setCellWidth] = useState(0);
+    const [isPlaying, setIsPlaying] = useState(true);
 
-    let cellWidth: number = (boardWidth ?? 0) / cells;
-    function tick() {
-        for (let i = 0; i < cells; i++) {
-            for (let j = 0; j < cells; j++) {
-                const neighbors = countNeighbors(i, j);
-                if (board[i][j]) {
-                    if (neighbors < 2 || neighbors > 3) {
-                        board[i][j] = false;
-                    }
-                } else {
-                    if (neighbors === 3) {
-                        board[i][j] = true;
-                    }
-                }
+    useEffect(() => {
+        const updateCellWidth = () => {
+            if (containerRef.current) {
+                setCellWidth(containerRef.current.clientWidth / CELLS);
             }
-        }
-    }
+        };
 
-    function countNeighbors(x: number, y: number) {
-        let neighbors = 0;
-        for (let i = Math.max(0, x - 1); i < Math.min(cells - 1, x + 1); i++) {
-            for (let j = Math.max(0, y - 1); j < Math.min(cells - 1, y + 1); j++) {
-                if (i === x && j === y) {
-                    continue;
-                }
-                if (board[i][j]) {
-                    neighbors++;
-                }
-            }
-        }
-        return neighbors;
-    }
-    setInterval(tick, 1000 / frameRate);
+        updateCellWidth();
+        window.addEventListener('resize', updateCellWidth);
 
-    window.onresize = () => {
-        boardWidth = boardElement?.clientWidth ?? 0;
-        cellWidth = (boardWidth ?? 0) / cells;
+        return () => window.removeEventListener('resize', updateCellWidth);
+    }, []);
+
+    useEffect(() => {
+        if (!isPlaying) return;
+
+        const interval = setInterval(() => {
+            setBoard((prev) => nextGeneration(prev));
+        }, 1000 / FRAME_RATE);
+
+        return () => clearInterval(interval);
+    }, [isPlaying]);
+
+    const toggleCell = (row: number, col: number) => {
+        if (isPlaying) return;
+        setBoard((prev) => prev.map((r, i) => (i === row ? r.map((c, j) => (j === col ? !c : c)) : r)));
     };
+
     return (
-        <div id="game-of-life-board" className="aspect-square">
-            {board.map((row, rowIndex) => (
-                <div key={rowIndex} className="flex">
-                    {row.map((cell, colIndex) => (
-                        <div key={colIndex} className="flex aspect-square h-auto items-center justify-center" style={{ width: cellWidth }}>
+        <>
+            <div ref={containerRef}>
+                {board.map((row, rowIndex) => (
+                    <div key={rowIndex} className="flex">
+                        {row.map((cell, colIndex) => (
                             <div
-                                className={clsx({
-                                    'bg-black': board[rowIndex][colIndex],
-                                    'bg-mercury-200': !board[rowIndex][colIndex],
-                                    'h-2/3 w-2/3': true,
+                                key={colIndex}
+                                className={clsx('flex aspect-square h-auto items-center justify-center', {
+                                    'cursor-pointer': !isPlaying,
                                 })}
-                            ></div>
-                        </div>
-                    ))}
-                </div>
-            ))}
-        </div>
+                                style={{ width: cellWidth }}
+                                onClick={() => toggleCell(rowIndex, colIndex)}
+                            >
+                                <div
+                                    className={clsx('h-2/3 w-2/3', {
+                                        'bg-black': cell,
+                                        'bg-mercury-200': !cell,
+                                    })}
+                                />
+                            </div>
+                        ))}
+                    </div>
+                ))}
+            </div>
+            <div className="mt-2 flex justify-end gap-2">
+                <button onClick={() => setIsPlaying((prev) => !prev)} className="game-of-life__button">
+                    {isPlaying ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+                            <path d="M48 64C21.5 64 0 85.5 0 112L0 400C0 426.5 21.5 448 48 448L112 448C138.5 448 160 426.5 160 400L160 112C160 85.5 138.5 64 112 64L48 64zM208 112L208 400C208 426.5 229.5 448 256 448L320 448C346.5 448 368 426.5 368 400L368 112C368 85.5 346.5 64 320 64L256 64C229.5 64 208 85.5 208 112z" />
+                        </svg>
+                    ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                            <path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80L0 432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.8 23-24.2 23-41s-8.7-32.2-23-41L73 39z" />
+                        </svg>
+                    )}
+                </button>
+                {!isPlaying && (
+                    <button onClick={() => setBoard(Array.from({ length: CELLS }, () => Array(CELLS).fill(false)))} className="game-of-life__button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+                            <path d="M290.7 57.4L57.4 290.7c-25 25-25 65.5 0 90.5l80 80c12 12 28.3 18.7 45.3 18.7L288 480l9.4 0L512 480c17.7 0 32-14.3 32-32s-14.3-32-32-32l-124.1 0L518.6 285.3c25-25 25-65.5 0-90.5L381.3 57.4c-25-25-65.5-25-90.5 0zM297.4 416l-9.4 0-105.4 0-80-80L227.3 211.3 364.7 348.7 297.4 416z" />
+                        </svg>
+                    </button>
+                )}
+                <button onClick={() => setBoard(createBoard)} className="game-of-life__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640">
+                        <path d="M88 256L232 256C241.7 256 250.5 250.2 254.2 241.2C257.9 232.2 255.9 221.9 249 215L202.3 168.3C277.6 109.7 386.6 115 455.8 184.2C530.8 259.2 530.8 380.7 455.8 455.7C380.8 530.7 259.3 530.7 184.3 455.7C174.1 445.5 165.3 434.4 157.9 422.7C148.4 407.8 128.6 403.4 113.7 412.9C98.8 422.4 94.4 442.2 103.9 457.1C113.7 472.7 125.4 487.5 139 501C239 601 401 601 501 501C601 401 601 239 501 139C406.8 44.7 257.3 39.3 156.7 122.8L105 71C98.1 64.2 87.8 62.1 78.8 65.8C69.8 69.5 64 78.3 64 88L64 232C64 245.3 74.7 256 88 256z" />
+                    </svg>
+                </button>
+            </div>
+        </>
     );
 }

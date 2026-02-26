@@ -14,7 +14,7 @@ export default function Hero(props: HeroData) {
                     </svg>
                 </a>
             </div>
-            <div id="game-of-life-board" className="aspect-square">
+            <div className="aspect-square">
                 <GameOfLife />
             </div>
         </div>
