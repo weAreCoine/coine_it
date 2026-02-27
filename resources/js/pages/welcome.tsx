@@ -26,8 +26,8 @@ export default function Welcome({
 
             <Navigation />
             <Hero {...hero} />
-            <Features {...features} />
             <Slider {...slider} />
+            <Features {...features} />
             <GetInTouch {...getInTouch} />
             <About {...about} />
         </>

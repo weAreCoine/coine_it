@@ -32,10 +32,10 @@ export default function Slider(props: SliderData) {
 
     return (
         <div className="my-32 bg-mercury-50 py-10">
-            <div className="container grid grid-cols-1 items-end gap-8 md:grid-cols-2 md:gap-64">
+            <div className="container grid grid-cols-1 items-end gap-2 md:grid-cols-2 md:gap-32 lg:gap-64">
                 <div>
                     <p className="kicker">{props.kicker}</p>
-                    <h2 className="section__title">{props.title}</h2>
+                    <h2 className="section__title text-balance">{props.title}</h2>
                 </div>
                 <div>
                     <p className="text-balance">{props.subtitle}</p>
