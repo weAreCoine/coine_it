@@ -48,12 +48,13 @@ export default function Slider(props: SliderData) {
                             key={index}
                             href={slide.link.href}
                             title={slide.link.title}
-                            className="flex h-24 w-48 shrink-0 items-center justify-center border-r border-mercury-200 bg-mercury-50 px-8"
+                            className="group relative flex h-24 w-48 shrink-0 items-center justify-center overflow-hidden border-r border-mercury-200 bg-mercury-50 px-8"
                         >
+                            <span className="absolute inset-0 -translate-x-full bg-black transition-transform duration-300 ease-out group-hover:translate-x-0" />
                             <img
                                 src={slide.logoUrl}
                                 alt={slide.title}
-                                className="h-auto max-h-12 w-full object-contain mix-blend-darken grayscale duration-300 hover:grayscale-0"
+                                className="relative h-auto max-h-12 w-full object-contain mix-blend-darken grayscale group-hover:mix-blend-lighten group-hover:invert"
                             />
                         </a>
                     ))}

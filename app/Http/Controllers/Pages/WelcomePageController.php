@@ -1,10 +1,13 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
 use App\Entities\NavigationItem;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Inertia\Inertia;
 
 class WelcomePageController extends Controller
@@ -18,19 +21,22 @@ class WelcomePageController extends Controller
             'hero' => [
                 'title' => 'Costruiamo insieme la tua presenza digitale',
                 'description' => 'Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.',
-                'link' => $callToAction
+                'link' => $callToAction,
             ],
             'slider' => [
                 'kicker' => __('Integrations'),
                 'title' => __('AI engineered to integrate across every platform'),
                 'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
                 'link' => $callToAction,
-                'slides' =>
-                    array_fill(0, 15, [
-                        'logoUrl' => asset('images/clients/adecco.png'),
-                        'title' => __('Slide'),
+                'slides' => collect(File::files(public_path('images/clients')))
+                    ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                    ->map(fn ($file) => [
+                        'logoUrl' => asset('images/clients/'.$file->getFilename()),
+                        'title' => Str::headline($file->getFilenameWithoutExtension()),
                         'link' => $callToAction,
                     ])
+                    ->values()
+                    ->all(),
 
             ],
             'features' => [
@@ -54,7 +60,7 @@ class WelcomePageController extends Controller
                         'title' => 'Generality',
                         'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
                     ],
-                ]
+                ],
             ],
             'about' => [
                 'kicker' => __('Core principles'),
@@ -71,7 +77,7 @@ class WelcomePageController extends Controller
 </svg>
 ',
                         'scalar' => '99,5%',
-                        'description' => 'Accuracy in predictive algorithms'
+                        'description' => 'Accuracy in predictive algorithms',
                     ],
                     [
                         'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -81,7 +87,7 @@ class WelcomePageController extends Controller
 </svg>
 ',
                         'scalar' => '99,5%',
-                        'description' => 'Accuracy in predictive algorithms'
+                        'description' => 'Accuracy in predictive algorithms',
                     ],
                     [
                         'icon' => '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -91,17 +97,17 @@ class WelcomePageController extends Controller
 </svg>
 ',
                         'scalar' => '99,5%',
-                        'description' => 'Accuracy in predictive algorithms'
+                        'description' => 'Accuracy in predictive algorithms',
                     ],
-                ]
+                ],
             ],
             'getInTouch' => [
                 'kicker' => 'Get in touch',
                 'title' => 'Join our team that is shaping the next era of intelligence',
                 'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla
 amet viverra tortor pharetra mauris a maecenas habitant est mattis.',
-                'link' => $callToAction
-            ]
+                'link' => $callToAction,
+            ],
 
         ]);
     }
