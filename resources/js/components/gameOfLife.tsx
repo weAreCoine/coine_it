@@ -34,6 +34,7 @@ export default function GameOfLife() {
     const [board, setBoard] = useState(createBoard);
     const [cellWidth, setCellWidth] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
+    const [showInfo, setShowInfo] = useState(false);
     const isDragging = useRef(false);
     const paintValue = useRef(false);
 
@@ -128,32 +129,57 @@ export default function GameOfLife() {
 
     return (
         <>
-            <div ref={containerRef} style={!isPlaying ? { touchAction: 'none' } : undefined} onTouchMove={handleTouchMove}>
-                {board.map((row, rowIndex) => (
-                    <div key={rowIndex} className="flex">
-                        {row.map((cell, colIndex) => (
-                            <div
-                                key={colIndex}
-                                className={clsx('flex aspect-square h-auto items-center justify-center', {
-                                    'cursor-pointer': !isPlaying,
-                                })}
-                                style={{ width: cellWidth }}
-                                onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                                onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
-                                onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
-                            >
+            <div className="relative">
+                <div ref={containerRef} className="border-2 border-transparent" style={!isPlaying ? { touchAction: 'none' } : undefined} onTouchMove={handleTouchMove}>
+                    {board.map((row, rowIndex) => (
+                        <div key={rowIndex} className="flex">
+                            {row.map((cell, colIndex) => (
                                 <div
-                                    className={clsx('h-2/3 w-2/3', {
-                                        'bg-black': cell,
-                                        'bg-mercury-200': !cell,
+                                    key={colIndex}
+                                    className={clsx('flex aspect-square h-auto items-center justify-center', {
+                                        'cursor-pointer': !isPlaying,
                                     })}
-                                />
-                            </div>
-                        ))}
+                                    style={{ width: cellWidth }}
+                                    onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                                    onTouchStart={(e) => handleTouchStart(e, rowIndex, colIndex)}
+                                >
+                                    <div
+                                        className={clsx('h-2/3 w-2/3', {
+                                            'bg-black': cell,
+                                            'bg-mercury-200': !cell,
+                                        })}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    ))}
+                </div>
+                {showInfo && (
+                    <div className="absolute inset-0 flex flex-col justify-center gap-4 border-2 border-black bg-white/80 backdrop-blur-sm p-6 text-sm leading-relaxed">
+                        <p>
+                            <strong>Game of Life</strong> è un automa cellulare ideato dal matematico John Conway nel 1970. È un gioco a
+                            zero giocatori: la sua evoluzione è determinata dallo stato iniziale, senza ulteriori input.
+                        </p>
+                        <p>L'universo è una griglia di celle, ciascuna viva o morta. Ad ogni generazione, le celle evolvono secondo tre regole:</p>
+                        <ul className="list-inside list-disc space-y-1">
+                            <li>Una cella viva con 2 o 3 vicini sopravvive.</li>
+                            <li>Una cella morta con esattamente 3 vicini diventa viva.</li>
+                            <li>Tutte le altre celle muoiono o restano morte.</li>
+                        </ul>
+                        <p>Metti in pausa la simulazione per disegnare i tuoi pattern, poi premi play per vederli evolvere.</p>
                     </div>
-                ))}
+                )}
             </div>
-            <div className="mt-2 flex justify-end gap-2">
+            <div className="mt-2 flex justify-between">
+                <div className="flex gap-2">
+                    <button onClick={() => setShowInfo((prev) => !prev)} className="game-of-life__button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 512">
+                            <path d="M48 80a48 48 0 1 1 96 0A48 48 0 1 1 48 80zM0 224c0-17.7 14.3-32 32-32l64 0c17.7 0 32 14.3 32 32l0 224 32 0c17.7 0 32 14.3 32 32s-14.3 32-32 32L32 512c-17.7 0-32-14.3-32-32s14.3-32 32-32l32 0 0-192-32 0c-17.7 0-32-14.3-32-32z" />
+                        </svg>
+                    </button>
+                </div>
+                <div className="flex gap-2">
                 <button onClick={() => setIsPlaying((prev) => !prev)} className="game-of-life__button">
                     {isPlaying ? (
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
@@ -177,6 +203,7 @@ export default function GameOfLife() {
                         <path d="M88 256L232 256C241.7 256 250.5 250.2 254.2 241.2C257.9 232.2 255.9 221.9 249 215L202.3 168.3C277.6 109.7 386.6 115 455.8 184.2C530.8 259.2 530.8 380.7 455.8 455.7C380.8 530.7 259.3 530.7 184.3 455.7C174.1 445.5 165.3 434.4 157.9 422.7C148.4 407.8 128.6 403.4 113.7 412.9C98.8 422.4 94.4 442.2 103.9 457.1C113.7 472.7 125.4 487.5 139 501C239 601 401 601 501 501C601 401 601 239 501 139C406.8 44.7 257.3 39.3 156.7 122.8L105 71C98.1 64.2 87.8 62.1 78.8 65.8C69.8 69.5 64 78.3 64 88L64 232C64 245.3 74.7 256 88 256z" />
                     </svg>
                 </button>
+                </div>
             </div>
         </>
     );
