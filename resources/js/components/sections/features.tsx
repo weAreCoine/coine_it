@@ -6,7 +6,7 @@ import type { FeaturesData } from '@/types/dto/sections';
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Features(props: FeaturesData) {
-    const containerRef = useRef<HTMLDivElement>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
@@ -48,20 +48,31 @@ export default function Features(props: FeaturesData) {
     return (
         <div ref={containerRef} className="container my-24">
             <div className="text-center">
-                <p className="mb-2 text-sm font-medium text-mercury-400 uppercase">{props.kicker}</p>
-                <h2 className="mb-2 text-4xl font-medium">{props.title}</h2>
+                <p className="kicker">{props.kicker}</p>
+                <h2 className="section__title">{props.title}</h2>
                 <p>{props.subtitle}</p>
             </div>
             <div className="relative">
-                <div className="absolute right-full bottom-full h-32 w-32 translate-x-px translate-y-px bg-linear-to-br from-transparent to-mercury-200">
+                <div className="absolute right-full bottom-full h-20 w-32 translate-x-px translate-y-px bg-linear-to-br from-transparent to-mercury-200">
                     <div className="absolute right-px bottom-px h-full w-full bg-white"></div>
                 </div>
-                <div className="relative mt-12 grid grid-cols-3 divide-x divide-mercury-200 border border-mercury-200">
+                <div className="absolute bottom-full left-full h-24 w-18 -translate-x-px translate-y-px bg-linear-to-bl from-transparent from-40% to-mercury-200">
+                    <div className="absolute bottom-px left-px h-full w-full bg-white"></div>
+                </div>
+                <div className="absolute top-full right-full h-32 w-20 translate-x-px -translate-y-px bg-linear-to-tr from-transparent to-mercury-200">
+                    <div className="absolute top-px right-px h-full w-full bg-white"></div>
+                </div>
+                <div className="absolute top-full left-full h-24 w-36 -translate-x-px -translate-y-px bg-linear-to-tl from-transparent to-mercury-200">
+                    <div className="absolute top-px left-px h-full w-full bg-white"></div>
+                </div>
+                <div className="relative mt-12 grid grid-cols-1 divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
                     {props.columns.map((column, index) => (
-                        <div key={index} className="p-8">
+                        <div key={index} className="grid grid-cols-3 items-center gap-8 p-8 md:grid-cols-1">
                             <div className="features-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
-                            <p className="mb-2 text-xl font-medium">{column.title}</p>
-                            <p>{column.description}</p>
+                            <div className="col-span-2 md:col-span-1">
+                                <p className="mb-2 text-xl font-medium">{column.title}</p>
+                                <p>{column.description}</p>
+                            </div>
                         </div>
                     ))}
                 </div>

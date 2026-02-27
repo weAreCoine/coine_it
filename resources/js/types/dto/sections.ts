@@ -19,3 +19,22 @@ export type FeaturesData = {
     link: NavigationItem;
     columns: FeaturesColumn[];
 };
+
+export type AboutData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    link: NavigationItem;
+    skills: {
+        icon: string;
+        scalar: string;
+        description: string;
+    }[];
+};
+
+export type GetInTouchData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    link: NavigationItem;
+};

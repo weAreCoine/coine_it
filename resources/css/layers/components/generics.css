@@ -1,10 +1,18 @@
 @layer components {
     .page__title {
-        @apply text-5xl font-medium
+        @apply text-4xl lg:text-5xl font-medium
+    }
+
+    .section__title {
+        @apply mb-2 text-3xl font-semibold md:text-4xl;
+    }
+
+    .kicker {
+        @apply mb-2 text-sm font-medium text-mercury-400 uppercase
     }
 
     .button__primary {
-        @apply bg-black text-white uppercase font-medium text-sm pl-6 pr-4 py-4 inline-flex items-center justify-center gap-2;
+        @apply bg-black text-white uppercase font-medium text-sm pl-6 pr-4 py-2 md:py-4 inline-flex items-center justify-center gap-2;
 
         svg {
             @apply size-4 stroke-[1.5]  duration-300
