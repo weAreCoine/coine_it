@@ -29,8 +29,8 @@ class WelcomePageController extends Controller
                 'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
                 'link' => $callToAction,
                 'slides' => collect(File::files(public_path('images/clients')))
-                    ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                    ->map(fn ($file) => [
+                    ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                    ->map(fn($file) => [
                         'logoUrl' => asset('images/clients/'.$file->getFilename()),
                         'title' => Str::headline($file->getFilenameWithoutExtension()),
                         'link' => $callToAction,
@@ -76,7 +76,7 @@ class WelcomePageController extends Controller
   <path d="M4.462 19.462c.42-.419.753-.89 1-1.395.453.214.902.435 1.347.662a6.742 6.742 0 0 1-1.286 1.794.75.75 0 0 1-1.06-1.06Z" />
 </svg>
 ',
-                        'scalar' => '99,5%',
+                        'scalar' => '32+',
                         'description' => 'Accuracy in predictive algorithms',
                     ],
                     [
