@@ -3,8 +3,8 @@ import type { AboutData } from '@/types/dto/sections';
 export default function About(props: AboutData) {
     return (
         <section className="container my-32">
-            <div className="grid grid-cols-12 divide-x divide-mercury-200 border border-mercury-200">
-                <div className="col-span-7 bg-mercury-50">
+            <div className="grid grid-cols-1 divide-y divide-mercury-200 border border-mercury-200 lg:grid-cols-12 lg:divide-x lg:divide-y-0">
+                <div className="bg-mercury-50 lg:col-span-7">
                     <div className="flex h-full flex-col justify-between px-10 pt-16 pb-8">
                         <div>
                             <p className="kicker">{props.kicker}</p>
@@ -14,8 +14,8 @@ export default function About(props: AboutData) {
                         <img src="/svg/dots.svg" alt="" />
                     </div>
                 </div>
-                <div className="col-span-5">
-                    <div className="grid grid-rows-3 divide-y divide-mercury-200">
+                <div className="lg:col-span-5">
+                    <div className="grid grid-cols-3 divide-x divide-mercury-200 lg:grid-cols-1 lg:grid-rows-3 lg:divide-x-0 lg:divide-y">
                         {props.skills.map((skill, key) => (
                             <div key={key} className="flex items-center gap-4 p-8">
                                 <div
