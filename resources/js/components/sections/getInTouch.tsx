@@ -32,10 +32,14 @@ export default function GetInTouch(props: GetInTouchData) {
 
                 const svg = container.querySelector('svg');
                 if (svg) {
-                    svg.setAttribute('preserveAspectRatio', 'xMidYMax slice');
-                    svg.style.width = '100%';
+                    svg.removeAttribute('width');
+                    svg.removeAttribute('height');
+                    svg.removeAttribute('preserveAspectRatio');
+                    svg.removeAttribute('style');
                     svg.style.height = '100%';
+                    svg.style.width = 'auto';
                     svg.style.display = 'block';
+                    svg.style.marginLeft = 'auto';
                 }
 
                 ctx = gsap.context(() => {
@@ -83,36 +87,13 @@ export default function GetInTouch(props: GetInTouchData) {
                     const downOffsets = yPositions.map((y, i) => (y / MAX_Y) * SWEEP_DURATION + Math.random() * JITTER + bandDelay(i));
                     const upOffsets = yPositions.map((y, i) => ((MAX_Y - y) / MAX_Y) * SWEEP_DURATION + Math.random() * JITTER + bandDelay(i));
 
+                    // Timeline order: up → pause → down → pause
+                    // This way linger pixels survive until the down sweep clears them.
+                    // On repeat, state is all BASE_FILL so the reset is invisible.
                     const tl = gsap.timeline({ repeat: -1 });
 
-                    // --- Down sweep ---
-                    const downStart = 0;
-
-                    tl.to(
-                        paths,
-                        {
-                            fill: (index: number) => peakFills[index],
-                            duration: ROW_TIME,
-                            stagger: (index: number) => downOffsets[index],
-                        },
-                        downStart,
-                    );
-
-                    tl.to(
-                        paths,
-                        {
-                            fill: BASE_FILL,
-                            duration: FLASH_OFF,
-                            stagger: (index: number) => downOffsets[index] + ROW_TIME,
-                        },
-                        downStart,
-                    );
-
-                    const downEnd = Math.max(...downOffsets) + ROW_TIME + FLASH_OFF;
-                    tl.set({}, {}, downEnd + 3);
-
-                    // --- Up sweep ---
-                    const upStart = downEnd + 3;
+                    // --- Up sweep (with linger) ---
+                    const upStart = 0;
 
                     tl.to(
                         paths,
@@ -134,9 +115,36 @@ export default function GetInTouch(props: GetInTouchData) {
                         upStart,
                     );
 
-                    // Linger pixels stay lit until the next down sweep resets them
-                    const upEnd = upStart + Math.max(...upOffsets) + ROW_TIME + FLASH_OFF;
+                    // Pause 3s (linger pixels stay lit)
+                    const upEnd = Math.max(...upOffsets) + ROW_TIME + FLASH_OFF;
                     tl.set({}, {}, upEnd + 3);
+
+                    // --- Down sweep (clears linger as it passes) ---
+                    const downStart = upEnd + 3;
+
+                    tl.to(
+                        paths,
+                        {
+                            fill: (index: number) => peakFills[index],
+                            duration: ROW_TIME,
+                            stagger: (index: number) => downOffsets[index],
+                        },
+                        downStart,
+                    );
+
+                    tl.to(
+                        paths,
+                        {
+                            fill: BASE_FILL,
+                            duration: FLASH_OFF,
+                            stagger: (index: number) => downOffsets[index] + ROW_TIME,
+                        },
+                        downStart,
+                    );
+
+                    // Pause 3s
+                    const downEnd = Math.max(...downOffsets) + ROW_TIME + FLASH_OFF;
+                    tl.set({}, {}, downStart + downEnd + 3);
                 }, container);
             });
 
@@ -148,7 +156,7 @@ export default function GetInTouch(props: GetInTouchData) {
     return (
         <div className="my-32 bg-black pt-10 text-white">
             <div className="relative">
-                <div ref={mountainsRef} className="absolute inset-x-0 bottom-0 top-10 text-mercury-400" />
+                <div ref={mountainsRef} className="absolute inset-x-0 top-10 bottom-0 overflow-hidden text-mercury-400" />
                 <div className="relative container pt-24 pb-48">
                     <div className="max-w-lg">
                         <p className="kicker">{props.kicker}</p>
