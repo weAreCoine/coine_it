@@ -32,8 +32,10 @@ export default function GetInTouch(props: GetInTouchData) {
 
                 const svg = container.querySelector('svg');
                 if (svg) {
-                    svg.classList.add('h-full', 'w-auto');
-                    svg.style.objectFit = 'cover';
+                    svg.setAttribute('preserveAspectRatio', 'xMidYMax slice');
+                    svg.style.width = '100%';
+                    svg.style.height = '100%';
+                    svg.style.display = 'block';
                 }
 
                 ctx = gsap.context(() => {
@@ -146,7 +148,7 @@ export default function GetInTouch(props: GetInTouchData) {
     return (
         <div className="my-32 bg-black pt-10 text-white">
             <div className="relative">
-                <div ref={mountainsRef} className="absolute bottom-0 left-0 h-full w-full text-mercury-400" />
+                <div ref={mountainsRef} className="absolute inset-x-0 bottom-0 top-10 text-mercury-400" />
                 <div className="relative container pt-24 pb-48">
                     <div className="max-w-lg">
                         <p className="kicker">{props.kicker}</p>
