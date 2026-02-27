@@ -38,3 +38,15 @@ export type GetInTouchData = {
     subtitle: string;
     link: NavigationItem;
 };
+
+export type SliderData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    link: NavigationItem;
+    slides: {
+        logoUrl: string;
+        title: string;
+        link: NavigationItem;
+    }[];
+};

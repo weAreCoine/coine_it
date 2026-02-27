@@ -20,6 +20,19 @@ class WelcomePageController extends Controller
                 'description' => 'Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.',
                 'link' => $callToAction
             ],
+            'slider' => [
+                'kicker' => __('Integrations'),
+                'title' => __('AI engineered to integrate across every platform'),
+                'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
+                'link' => $callToAction,
+                'slides' =>
+                    array_fill(0, 15, [
+                        'logoUrl' => asset('images/clients/adecco.png'),
+                        'title' => __('Slide'),
+                        'link' => $callToAction,
+                    ])
+
+            ],
             'features' => [
                 'kicker' => __('Core principles'),
                 'title' => __('Architecting tomorrow\'s mind'),

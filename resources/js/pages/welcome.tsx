@@ -4,18 +4,21 @@ import About from '@/components/sections/about';
 import Features from '@/components/sections/features';
 import GetInTouch from '@/components/sections/getInTouch';
 import Hero from '@/components/sections/hero';
-import type { AboutData, FeaturesData, GetInTouchData, HeroData } from '@/types/dto/sections';
+import Slider from '@/components/sections/slider';
+import type { AboutData, FeaturesData, GetInTouchData, HeroData, SliderData } from '@/types/dto/sections';
 
 export default function Welcome({
     hero,
     features,
     about,
     getInTouch,
+    slider,
 }: {
     hero: HeroData;
     features: FeaturesData;
     about: AboutData;
     getInTouch: GetInTouchData;
+    slider: SliderData;
 }) {
     return (
         <>
@@ -24,6 +27,7 @@ export default function Welcome({
             <Navigation />
             <Hero {...hero} />
             <Features {...features} />
+            <Slider {...slider} />
             <GetInTouch {...getInTouch} />
             <About {...about} />
         </>
