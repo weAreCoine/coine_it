@@ -14,6 +14,11 @@ class Category extends Model
 
     protected $guarded = [];
 
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
+
     public function articles(): BelongsToMany
     {
         return $this->belongsToMany(Article::class);

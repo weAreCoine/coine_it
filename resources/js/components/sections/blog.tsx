@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
+import { show as showCategory } from '@/actions/App/Http/Controllers/Pages/CategoryPageController';
 import type { BlogData } from '@/types/dto/sections';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
@@ -49,8 +50,8 @@ export default function Blog(props: BlogData) {
 
             <div className="mt-8 grid grid-cols-2 divide-x divide-mercury-200 border border-mercury-200">
                 {props.articles.map((article: BlogArticleCard) => (
-                    <Link href={show.url({ slug: article.slug })} key={article.slug} prefetch className="group">
-                        <article>
+                    <Link href={show.url({ slug: article.slug })} key={article.slug} prefetch className="group flex">
+                        <article className="flex w-full flex-col justify-between gap-2">
                             <div className="px-5 pt-5">
                                 {article.cover && (
                                     <figure className="mb-6 bg-mercury-50">
@@ -62,7 +63,19 @@ export default function Blog(props: BlogData) {
                                 <time dateTime={article.createdAtIso} className="text-sm uppercase">
                                     {article.createdAt}
                                 </time>{' '}
-                                / {article.categories.map((category) => category.name).join(', ')}
+                                <span className="text-sm font-semibold text-mercury-400">/</span>{' '}
+                                {article.categories.map((category, index) => (
+                                    <span key={category.slug} className="uppercase">
+                                        {index > 0 && ', '}
+                                        <Link
+                                            href={showCategory.url({ slug: category.slug })}
+                                            className="text-sm underline decoration-mercury-300 underline-offset-2 transition-colors hover:decoration-black"
+                                            onClick={(e) => e.stopPropagation()}
+                                        >
+                                            {category.name}
+                                        </Link>
+                                    </span>
+                                ))}
                             </div>
                             <div className="flex justify-end">
                                 <span className="relative flex aspect-square w-16 items-center justify-center overflow-hidden border-t border-l border-mercury-200 bg-mercury-50">

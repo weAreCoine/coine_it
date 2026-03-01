@@ -4,10 +4,14 @@ title: string;
 slug: string;
 excerpt: string;
 cover: string | null;
-categories: string;
+categories: Array<App.Entities.BlogCategoryItem>;
 createdAt: string;
 createdAtIso: string;
 authorName: string;
+};
+export type BlogCategoryItem = {
+name: string;
+slug: string;
 };
 export type NavigationItem = {
 href: string;

@@ -19,7 +19,7 @@ class BlogArticleCard implements Arrayable
 
     public ?string $cover;
 
-    /** @var array<int, array{name: string, slug: string}> */
+    /** @var BlogCategoryItem[] */
     public array $categories;
 
     public string $createdAt;
@@ -35,7 +35,9 @@ class BlogArticleCard implements Arrayable
         $instance->slug = $article->slug;
         $instance->excerpt = $article->excerpt;
         $instance->cover = $article->cover;
-        $instance->categories = $article->categories->pluck('name')->implode(', ');
+        $instance->categories = $article->categories
+            ->map(fn ($category) => BlogCategoryItem::fromCategory($category))
+            ->all();
         $instance->createdAt = $article->created_at->format('d M Y');
         $instance->createdAtIso = $article->created_at->toIso8601String();
         $instance->authorName = $article->user->name ?? '';
