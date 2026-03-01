@@ -174,6 +174,7 @@ class WelcomePageController extends Controller
                     return [
                         'title' => $article->title,
                         'excerpt' => $article->excerpt,
+                        'cover' => asset('svg/dots.svg'),
                         'categories' => $article->categories->pluck('name')->implode(', '),
                         'created_at' => $article->created_at->format('d M Y'),
                     ];

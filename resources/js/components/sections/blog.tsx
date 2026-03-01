@@ -24,6 +24,9 @@ export default function Blog(props: BlogData) {
                     <a href="#">
                         <article key={index}>
                             <div className="p-4">
+                                <div className="mb-2 bg-mercury-50 p-2">
+                                    <img src={article.cover} alt={article.title} />
+                                </div>
                                 <p className="mb-2 text-2xl font-medium">{article.title}</p>
                                 <p className="mb-2">{article.excerpt}</p>
                                 <p className="text-sm uppercase">{article.created_at}</p>
