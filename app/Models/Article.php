@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
-class Article extends Model
+#[TypeScript]
+class Article extends Model implements Arrayable
 {
     use HasFactory;
     use SoftDeletes;

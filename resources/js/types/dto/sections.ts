@@ -1,4 +1,5 @@
 import NavigationItem = App.Entities.NavigationItem;
+import Article = App.Models.Article;
 
 export type HeroData = {
     title: string;
@@ -49,4 +50,12 @@ export type SliderData = {
         title: string;
         link: NavigationItem;
     }[];
+};
+
+export type BlogData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    link: NavigationItem;
+    articles: Article[];
 };

@@ -7,6 +7,7 @@ namespace App\Http\Controllers\Pages;
 use App\Entities\NavigationItem;
 use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\Controller;
+use App\Models\Article;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
@@ -27,6 +28,7 @@ class WelcomePageController extends Controller
             'features' => $this->featuresData(),
             'about' => $this->aboutData(),
             'getInTouch' => $this->getInTouchData(),
+            'blog' => $this->blog()
         ]);
     }
 
@@ -53,8 +55,8 @@ class WelcomePageController extends Controller
             'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn ($file) => [
+                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -154,6 +156,22 @@ class WelcomePageController extends Controller
             'title' => 'Join our team that is shaping the next era of intelligence',
             'subtitle' => "Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla\namet viverra tortor pharetra mauris a maecenas habitant est mattis.",
             'link' => $this->callToAction,
+        ];
+    }
+
+    private function blog(): array
+    {
+        return [
+            'kicker' => 'Blog',
+            'title' => 'Our latest articles',
+            'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla',
+            'articles' => Article::where('is_published', true)
+                ->orderBy('created_at')
+                ->limit(2)
+                ->get()
+                ->all(),
+            'link' => $this->callToAction,
+
         ];
     }
 }

@@ -5,7 +5,8 @@ import Features from '@/components/sections/features';
 import GetInTouch from '@/components/sections/getInTouch';
 import Hero from '@/components/sections/hero';
 import Slider from '@/components/sections/slider';
-import type { AboutData, FeaturesData, GetInTouchData, HeroData, SliderData } from '@/types/dto/sections';
+import type { AboutData, BlogData, FeaturesData, GetInTouchData, HeroData, SliderData } from '@/types/dto/sections';
+import Blog from '@/components/sections/blog';
 
 export default function Welcome({
     hero,
@@ -13,12 +14,14 @@ export default function Welcome({
     about,
     getInTouch,
     slider,
+    blog,
 }: {
     hero: HeroData;
     features: FeaturesData;
     about: AboutData;
     getInTouch: GetInTouchData;
     slider: SliderData;
+    blog: BlogData;
 }) {
     return (
         <>
@@ -30,6 +33,7 @@ export default function Welcome({
             <Features {...features} />
             <GetInTouch {...getInTouch} />
             <About {...about} />
+            <Blog {...blog} />
         </>
     );
 }
