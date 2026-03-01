@@ -1,4 +1,14 @@
 declare namespace App.Entities {
+export type BlogArticleCard = {
+title: string;
+slug: string;
+excerpt: string;
+cover: string | null;
+categories: string;
+createdAt: string;
+createdAtIso: string;
+authorName: string;
+};
 export type NavigationItem = {
 href: string;
 isCurrent: boolean;

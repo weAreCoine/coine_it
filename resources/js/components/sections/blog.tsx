@@ -1,51 +1,90 @@
+import { Link } from '@inertiajs/react';
+import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import type { BlogData } from '@/types/dto/sections';
-import Article = App.Models.Article;
+import BlogArticleCard = App.Entities.BlogArticleCard;
 
 export default function Blog(props: BlogData) {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@type': 'ItemList',
+        itemListElement: props.articles.map((article: BlogArticleCard, position: number) => ({
+            '@type': 'ListItem',
+            position: position + 1,
+            item: {
+                '@type': 'BlogPosting',
+                headline: article.title,
+                description: article.excerpt,
+                datePublished: article.createdAtIso,
+                url: show.url({ slug: article.slug }),
+                author: {
+                    '@type': 'Person',
+                    name: article.authorName,
+                },
+                ...(article.cover ? { image: article.cover } : {}),
+            },
+        })),
+    };
+
     return (
-        <div className="container my-32">
+        <section aria-labelledby="blogTitle" className="container my-32">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+
             <div className="flex items-end justify-between">
-                <div className="">
+                <div>
                     <p className="kicker">{props.kicker}</p>
-                    <h2 className="section__title">{props.title}</h2>
+                    <h2 id="blogTitle" className="section__title">
+                        {props.title}
+                    </h2>
                     <p>{props.subtitle}</p>
                 </div>
                 <div>
                     <a href={props.link.href} title={props.link.title} className="button__primary relative flex py-6 text-center">
-                        <span> {props.link.title}</span>
+                        <span>{props.link.title}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
                     </a>
                 </div>
             </div>
-            <div className="mt-8 grid grid-cols-2 gap-6 divide-x divide-mercury-200 border border-mercury-200">
-                {props.articles.map((article: Article, index) => (
-                    <a href="#">
-                        <article key={index}>
-                            <div className="p-4">
-                                <div className="mb-2 bg-mercury-50 p-2">
-                                    <img src={article.cover} alt={article.title} />
-                                </div>
-                                <p className="mb-2 text-2xl font-medium">{article.title}</p>
+
+            <div className="mt-8 grid grid-cols-2 divide-x divide-mercury-200 border border-mercury-200">
+                {props.articles.map((article: BlogArticleCard) => (
+                    <Link href={show.url({ slug: article.slug })} key={article.slug} prefetch className="group">
+                        <article>
+                            <div className="px-5 pt-5">
+                                {article.cover && (
+                                    <figure className="mb-6 bg-mercury-50">
+                                        <img src={article.cover} alt={article.title} loading="lazy" />
+                                    </figure>
+                                )}
+                                <h3 className="mb-2 text-2xl font-medium">{article.title}</h3>
                                 <p className="mb-2">{article.excerpt}</p>
-                                <p className="text-sm uppercase">{article.created_at}</p>
+                                <time dateTime={article.createdAtIso} className="text-sm uppercase">
+                                    {article.createdAt}
+                                </time>{' '}
+                                / {article.categories.map((category) => category.name).join(', ')}
                             </div>
                             <div className="flex justify-end">
-                                <p className="flex aspect-square w-12 items-center justify-center border border-mercury-200 bg-mercury-50">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                                <span className="relative flex aspect-square w-16 items-center justify-center overflow-hidden border-t border-l border-mercury-200 bg-mercury-50">
+                                    <span className="absolute inset-0 -translate-x-full bg-black transition-transform duration-300 ease-out group-hover:translate-x-0" />
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        viewBox="0 0 24 24"
+                                        fill="currentColor"
+                                        className="relative size-4 transition-colors duration-300 group-hover:text-white"
+                                    >
                                         <path
-                                            fill-rule="evenodd"
+                                            fillRule="evenodd"
                                             d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
-                                            clip-rule="evenodd"
+                                            clipRule="evenodd"
                                         />
                                     </svg>
-                                </p>
+                                </span>
                             </div>
                         </article>
-                    </a>
+                    </Link>
                 ))}
             </div>
-        </div>
+        </section>
     );
 }

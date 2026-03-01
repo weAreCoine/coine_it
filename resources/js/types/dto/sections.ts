@@ -1,5 +1,5 @@
 import NavigationItem = App.Entities.NavigationItem;
-import Article = App.Models.Article;
+import BlogArticleCard = App.Entities.BlogArticleCard;
 
 export type HeroData = {
     title: string;
@@ -57,5 +57,5 @@ export type BlogData = {
     title: string;
     subtitle: string;
     link: NavigationItem;
-    articles: Article[];
+    articles: BlogArticleCard[];
 };

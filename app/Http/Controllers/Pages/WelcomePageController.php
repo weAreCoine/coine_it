@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Entities\BlogArticleCard;
 use App\Entities\NavigationItem;
 use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\Controller;
@@ -28,7 +29,7 @@ class WelcomePageController extends Controller
             'features' => $this->featuresData(),
             'about' => $this->aboutData(),
             'getInTouch' => $this->getInTouchData(),
-            'blog' => $this->blog()
+            'blog' => $this->blog(),
         ]);
     }
 
@@ -55,8 +56,8 @@ class WelcomePageController extends Controller
             'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn($file) => [
+                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn ($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -159,28 +160,23 @@ class WelcomePageController extends Controller
         ];
     }
 
+    /**
+     * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem, articles: \Illuminate\Support\Collection<int, BlogArticleCard>}
+     */
     private function blog(): array
     {
         return [
             'kicker' => 'Blog',
             'title' => 'Our latest articles',
             'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla',
-            'articles' => Article::where('is_published', true)
-                ->orderBy('created_at')
-                ->with('categories')
+            'articles' => Article::query()
+                ->where('is_published', true)
+                ->orderByDesc('created_at')
+                ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(function (Article $article) {
-                    return [
-                        'title' => $article->title,
-                        'excerpt' => $article->excerpt,
-                        'cover' => asset('svg/dots.svg'),
-                        'categories' => $article->categories->pluck('name')->implode(', '),
-                        'created_at' => $article->created_at->format('d M Y'),
-                    ];
-                }),
+                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
             'link' => $this->callToAction,
-
         ];
     }
 }
