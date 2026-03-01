@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Entities\NavigationItem;
+use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class WelcomePageController extends Controller
 {
@@ -74,22 +76,33 @@ class WelcomePageController extends Controller
             'link' => $this->callToAction,
             'columns' => [
                 [
-                    'icon' => File::get(public_path('images/icons/feature-1.svg')),
+                    'icon' => $this->loadSvg('feature-1.svg'),
                     'title' => 'Generality',
                     'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
                 ],
                 [
-                    'icon' => File::get(public_path('images/icons/feature-2.svg')),
+                    'icon' => $this->loadSvg('feature-2.svg'),
                     'title' => 'Generality',
                     'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
                 ],
                 [
-                    'icon' => File::get(public_path('images/icons/feature-3.svg')),
+                    'icon' => $this->loadSvg('feature-3.svg'),
                     'title' => 'Generality',
                     'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
                 ],
             ],
         ];
+    }
+
+    private function loadSvg(string $filename): string
+    {
+        try {
+            return File::get(public_path('svg/'.$filename));
+        } catch (Throwable $exception) {
+            ExceptionHandler::handle($exception);
+
+            return '';
+        }
     }
 
     /**
