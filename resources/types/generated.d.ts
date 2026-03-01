@@ -13,12 +13,20 @@ isCallToAction: boolean;
 }
 declare namespace App.Models {
 export type Article = {
+id: number;
+title: string;
+content: string;
+slug: string;
 excerpt: string;
-timestamps: any;
-incrementing: boolean;
-preventsLazyLoading: boolean;
-exists: boolean;
-wasRecentlyCreated: boolean;
-usesUniqueIds: boolean;
+cover?: string | null;
+user_id: number;
+seo_title?: string | null;
+seo_description?: string | null;
+seo_image?: string | null;
+is_published: boolean;
+is_featured: boolean;
+created_at: string;
+updated_at: string;
+deleted_at?: string | null;
 };
 }

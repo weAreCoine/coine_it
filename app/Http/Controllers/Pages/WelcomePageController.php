@@ -167,9 +167,17 @@ class WelcomePageController extends Controller
             'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla',
             'articles' => Article::where('is_published', true)
                 ->orderBy('created_at')
+                ->with('categories')
                 ->limit(2)
                 ->get()
-                ->all(),
+                ->map(function (Article $article) {
+                    return [
+                        'title' => $article->title,
+                        'excerpt' => $article->excerpt,
+                        'categories' => $article->categories->pluck('name')->implode(', '),
+                        'created_at' => $article->created_at->format('d M Y'),
+                    ];
+                }),
             'link' => $this->callToAction,
 
         ];

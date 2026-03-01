@@ -19,11 +19,28 @@ export default function Blog(props: BlogData) {
                     </a>
                 </div>
             </div>
-            <div>
+            <div className="mt-8 grid grid-cols-2 gap-6 divide-x divide-mercury-200 border border-mercury-200">
                 {props.articles.map((article: Article, index) => (
-                    <article key={index}>
-                        <p>{article.title}</p>
-                    </article>
+                    <a href="#">
+                        <article key={index}>
+                            <div className="p-4">
+                                <p className="mb-2 text-2xl font-medium">{article.title}</p>
+                                <p className="mb-2">{article.excerpt}</p>
+                                <p className="text-sm uppercase">{article.created_at}</p>
+                            </div>
+                            <div className="flex justify-end">
+                                <p className="flex aspect-square w-12 items-center justify-center border border-mercury-200 bg-mercury-50">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                                        <path
+                                            fill-rule="evenodd"
+                                            d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z"
+                                            clip-rule="evenodd"
+                                        />
+                                    </svg>
+                                </p>
+                            </div>
+                        </article>
+                    </a>
                 ))}
             </div>
         </div>

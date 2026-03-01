@@ -11,6 +11,23 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
+/**
+ * @property int $id
+ * @property string $title
+ * @property string $content
+ * @property string $slug
+ * @property string $excerpt
+ * @property string|null $cover
+ * @property int $user_id
+ * @property string|null $seo_title
+ * @property string|null $seo_description
+ * @property string|null $seo_image
+ * @property bool $is_published
+ * @property bool $is_featured
+ * @property string $created_at
+ * @property string $updated_at
+ * @property string|null $deleted_at
+ */
 #[TypeScript]
 class Article extends Model implements Arrayable
 {
