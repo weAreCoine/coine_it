@@ -30,7 +30,7 @@ export default function Blog(props: BlogData) {
         <section aria-labelledby="blogTitle" className="container my-32">
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
-            <div className="flex items-end justify-between">
+            <div className="flex flex-col items-start justify-between sm:flex-row sm:items-end gap-4">
                 <div>
                     <p className="kicker">{props.kicker}</p>
                     <h2 id="blogTitle" className="section__title">
@@ -39,7 +39,7 @@ export default function Blog(props: BlogData) {
                     <p>{props.subtitle}</p>
                 </div>
                 <div>
-                    <a href={props.link.href} title={props.link.title} className="button__primary relative flex py-6 text-center">
+                    <a href={props.link.href} title={props.link.title} className="button__primary relative flex text-center md:py-6">
                         <span>{props.link.title}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
@@ -48,7 +48,7 @@ export default function Blog(props: BlogData) {
                 </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-2 divide-x divide-mercury-200 border border-mercury-200">
+            <div className="mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-2 md:divide-x md:divide-y-0">
                 {props.articles.map((article: BlogArticleCard) => (
                     <Link href={show.url({ slug: article.slug })} key={article.slug} prefetch className="group flex">
                         <article className="flex w-full flex-col justify-between gap-2">
