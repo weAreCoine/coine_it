@@ -39,7 +39,7 @@ class WelcomePageController extends Controller
     private function heroData(): array
     {
         return [
-            'title' => 'Costruiamo insieme la tua presenza digitale',
+            'title' => __('Costruiamo insieme la tua presenza digitale'),
             'description' => 'Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.',
             'link' => $this->callToAction,
         ];
@@ -51,13 +51,13 @@ class WelcomePageController extends Controller
     private function sliderData(): array
     {
         return [
-            'kicker' => __('Integrations'),
-            'title' => __('AI engineered to integrate across every platform'),
-            'subtitle' => __('Lorem ipsum dolor sit amet consectetur scelerisque quam dui dictumst suspendisse iaculis ac gravida venenatis mattis sed.'),
+            'kicker' => __('Portfolio'),
+            'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
+            'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn ($file) => [
+                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -73,25 +73,25 @@ class WelcomePageController extends Controller
     private function featuresData(): array
     {
         return [
-            'kicker' => __('Core principles'),
-            'title' => __('Architecting tomorrow\'s mind'),
-            'subtitle' => __('We are a team of experts in digital marketing'),
+            'kicker' => __('Il nostro metodo'),
+            'title' => __('Decisioni basate sui dati.'),
+            'subtitle' => __('Un metodo chiaro, basato su dati e conversioni.'),
             'link' => $this->callToAction,
             'columns' => [
                 [
                     'icon' => $this->loadSvg('feature-1.svg'),
-                    'title' => 'Generality',
-                    'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
+                    'title' => 'Analisi',
+                    'description' => 'Definiamo obiettivi, target e priorità attraverso dati e valutazioni strategiche.',
                 ],
                 [
                     'icon' => $this->loadSvg('feature-2.svg'),
-                    'title' => 'Generality',
-                    'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
+                    'title' => 'Implementazione',
+                    'description' => 'Mettiamo in pratica la strategia con sviluppo, contenuti o campagne.',
                 ],
                 [
                     'icon' => $this->loadSvg('feature-3.svg'),
-                    'title' => 'Generality',
-                    'description' => 'Lorem ipsum dolor sit amet consectetur nec quuis suspendisse nulla amet viverra tortor.',
+                    'title' => 'Monitoraggio',
+                    'description' => 'Misuriamo e ottimizziamo costantemente le performance.',
                 ],
             ],
         ];
@@ -175,7 +175,7 @@ class WelcomePageController extends Controller
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
+                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
             'link' => $this->callToAction,
         ];
     }
