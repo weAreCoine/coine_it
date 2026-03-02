@@ -1,0 +1,50 @@
+@layer components {
+    .services {
+        @apply container my-32;
+
+        .services__header {
+            @apply text-center;
+        }
+
+        .services__tabs {
+            @apply mx-auto mt-12 max-w-4xl;
+        }
+
+        .services__tab-list {
+            @apply grid grid-cols-3 items-center;
+        }
+
+        .services__tab {
+            @apply flex flex-col sm:flex-row cursor-pointer items-center justify-center gap-2 border px-6 py-5 font-medium transition-colors duration-300
+            border-mercury-200 text-mercury-400 hover:text-black text-xs sm:text-sm;
+
+            &.services__tab--active {
+                @apply border-black bg-mercury-50 text-black;
+            }
+        }
+
+        .services__tab-icon {
+            @apply size-4 sm:size-4 fill-current shrink-0;
+        }
+
+        .services__panel {
+            @apply border-x border-b border-mercury-200 bg-mercury-50;
+        }
+
+        .services__panel-grid {
+            @apply grid grid-cols-1 md:grid-cols-2 px-6 sm:px-12 py-18 gap-12 items-center ;
+        }
+
+        .services__panel-icon {
+            @apply w-full h-auto max-w-56 mx-auto ;
+        }
+
+        .services__panel-title {
+            @apply mb-2 text-lg font-medium;
+        }
+
+        .services__panel-cta {
+            @apply mt-6;
+        }
+    }
+}

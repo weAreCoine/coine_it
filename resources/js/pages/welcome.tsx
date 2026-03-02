@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 import About from '@/components/sections/about';
 import Blog from '@/components/sections/blog';
@@ -29,15 +30,15 @@ export default function Welcome({
     return (
         <>
             <Head title="Welcome" />
-
             <Navigation />
             <Hero {...hero} />
             <Slider {...slider} />
             <Features {...features} />
             <GetInTouch {...getInTouch} />
-            <About {...about} />
             <Services {...services} />
+            <About {...about} />
             <Blog {...blog} />
+            <Colophon />
         </>
     );
 }

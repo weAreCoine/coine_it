@@ -1,6 +1,5 @@
 import { Link } from '@inertiajs/react';
 import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
-import { show as showCategory } from '@/actions/App/Http/Controllers/Pages/CategoryPageController';
 import type { BlogData } from '@/types/dto/sections';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
@@ -65,15 +64,9 @@ export default function Blog(props: BlogData) {
                                 </time>{' '}
                                 <span className="text-sm font-semibold text-mercury-400">/</span>{' '}
                                 {article.categories.map((category, index) => (
-                                    <span key={category.slug} className="uppercase">
+                                    <span key={category.slug} className="text-sm uppercase">
                                         {index > 0 && ', '}
-                                        <Link
-                                            href={showCategory.url({ slug: category.slug })}
-                                            className="text-sm underline decoration-mercury-300 underline-offset-2 transition-colors hover:decoration-black"
-                                            onClick={(e) => e.stopPropagation()}
-                                        >
-                                            {category.name}
-                                        </Link>
+                                        {category.name}
                                     </span>
                                 ))}
                             </div>

@@ -26,6 +26,60 @@
 
     }
 
+    .rich__text {
+        h2 {
+            @apply text-2xl font-semibold mt-8 mb-3;
+        }
+
+        h3 {
+            @apply text-xl font-semibold mt-6 mb-2;
+        }
+
+        h4 {
+            @apply text-lg font-medium mt-4 mb-2;
+        }
+
+        p {
+            @apply mb-4 leading-relaxed;
+        }
+
+        ul {
+            @apply mb-4 list-disc pl-6 space-y-1;
+        }
+
+        ol {
+            @apply mb-4 list-decimal pl-6 space-y-1;
+        }
+
+        li {
+            @apply leading-relaxed;
+        }
+
+        blockquote {
+            @apply my-4 border-l-4 border-mercury-300 pl-4 italic text-mercury-600;
+        }
+
+        a {
+            @apply underline underline-offset-2 decoration-mercury-300 transition-colors hover:decoration-black;
+        }
+
+        strong {
+            @apply font-semibold;
+        }
+
+        hr {
+            @apply my-8 border-mercury-200;
+        }
+
+        > *:first-child {
+            @apply mt-0;
+        }
+
+        > *:last-child {
+            @apply mb-0;
+        }
+    }
+
     .game-of-life__button {
         @apply border-2 border-black p-2 aspect-square cursor-pointer;
 

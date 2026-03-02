@@ -66,12 +66,12 @@ export type ServiceItem = {
     icon: string;
     title: string;
     html: string;
+    link: NavigationItem;
 };
 
 export type ServicesData = {
     kicker: string;
     title: string;
     subtitle: string;
-    link: NavigationItem;
     services: ServiceItem[];
 };

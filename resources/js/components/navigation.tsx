@@ -16,7 +16,9 @@ export default function Navigation() {
     return (
         <div className="primary__header">
             <div className="px-6">
-                <span className="text-5xl font-semibold">Coiné</span>
+                <a href="/" title="Home">
+                    <span className="text-5xl font-semibold">Coiné</span>
+                </a>
             </div>
             <nav className={clsx({ open: open, header__navigation: true })}>
                 <div

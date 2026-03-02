@@ -30,7 +30,7 @@ class WelcomePageController extends Controller
             'about' => $this->aboutData(),
             'getInTouch' => $this->getInTouchData(),
             'blog' => $this->blog(),
-            'services' => $this->servicesData()
+            'services' => $this->servicesData(),
         ]);
     }
 
@@ -57,8 +57,8 @@ class WelcomePageController extends Controller
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn($file) => [
+                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn ($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -102,6 +102,17 @@ class WelcomePageController extends Controller
     {
         try {
             return File::get(public_path('svg/'.$filename));
+        } catch (Throwable $exception) {
+            ExceptionHandler::handle($exception);
+
+            return '';
+        }
+    }
+
+    private function renderPartial(string $view): string
+    {
+        try {
+            return view($view)->render();
         } catch (Throwable $exception) {
             ExceptionHandler::handle($exception);
 
@@ -176,7 +187,7 @@ class WelcomePageController extends Controller
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
+                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
             'link' => $this->callToAction,
         ];
     }
@@ -184,34 +195,35 @@ class WelcomePageController extends Controller
     private function servicesData(): array
     {
         return [
-            'kicker' => 'Blog',
-            'title' => 'Our latest articles',
-            'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla',
-            'link' => $this->callToAction,
-            'services' =>
+            'kicker' => __('Servizi'),
+            'title' => __('Cosa facciamo'),
+            'subtitle' => __('Advertising, sviluppo e contenuti per e-commerce che vogliono vendere di più, non sembrare solamente più belli.'),
+            'services' => [
                 [
-                    [
-                        'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><g clip-path="url(#clip0_15906_7025)"><path d="M16.1862 5.33333H10.1862V0L1.51953 10.6667H7.51953V16L16.1862 5.33333Z" fill="currentColor"></path></g></svg>',
-                        'tabLabel' => __('Sviluppo'),
-                        'icon' => asset('svg/flash.svg'),
-                        'title' => __('Sviluppo'),
-                        'html' => '<p>Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla</p>',
-                    ],
-                    [
-                        'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.8539 0.700195C7.69882 0.700195 6.56967 1.04272 5.60925 1.68445C4.64883 2.32618 3.90027 3.2383 3.45824 4.30546C3.0162 5.37263 2.90055 6.5469 3.12589 7.6798C3.35124 8.81269 3.90747 9.85332 4.72424 10.6701C5.54101 11.4869 6.58164 12.0431 7.71453 12.2684C8.84742 12.4938 10.0217 12.3781 11.0889 11.9361C12.156 11.4941 13.0681 10.7455 13.7099 9.78508C14.3516 8.82466 14.6941 7.69551 14.6941 6.54042C14.6924 4.99203 14.0765 3.50756 12.9816 2.41268C11.8868 1.3178 10.4023 0.701934 8.8539 0.700195Z" fill="currentColor"></path><path d="M9.58235 9.12158V12.8187H8.12229V9.12158L6.25707 7.87981L7.0674 6.66504L8.85232 7.85498L10.6372 6.66577L11.4476 7.88054L9.58235 9.12158Z" fill="white"></path><path d="M6.66406 14.5704H8.12412V15.3004H9.58418V14.5704H11.0442V13.1104H6.66406V14.5704Z" fill="currentColor"></path></svg>',
-                        'tabLabel' => __('Marketing'),
-                        'icon' => asset('svg/bulb.svg'),
-                        'title' => __('Marketing & Advertising'),
-                        'html' => '<p>Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla</p>',
-                    ],
-                    [
-                        'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.75722 0.972769C8.76758 0.856733 8.93715 0.856733 8.9475 0.972769C9.27623 4.65642 12.1958 7.57595 15.8794 7.90468C15.9955 7.91504 15.9955 8.08461 15.8794 8.09496C12.1958 8.42369 9.27623 11.3432 8.9475 15.0269C8.93715 15.1429 8.76758 15.1429 8.75722 15.0269C8.42849 11.3432 5.50896 8.42369 1.82531 8.09496C1.70927 8.08461 1.70927 7.91504 1.82531 7.90468C5.50896 7.57595 8.42849 4.65642 8.75722 0.972769Z" fill="currentColor"></path></svg>',
-                        'tabLabel' => __('Content'),
-                        'icon' => asset('svg/star.svg'),
-                        'title' => __('Content'),
-                        'html' => '<p>Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla</p>',
-                    ],
-                ]
+                    'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><g clip-path="url(#clip0_15906_7025)"><path d="M16.1862 5.33333H10.1862V0L1.51953 10.6667H7.51953V16L16.1862 5.33333Z" fill="currentColor"></path></g></svg>',
+                    'tabLabel' => __('Sviluppo'),
+                    'icon' => asset('svg/flash.svg'),
+                    'title' => __('Sviluppo'),
+                    'link' => $this->callToAction,
+                    'html' => $this->renderPartial('partials.services.sviluppo'),
+                ],
+                [
+                    'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.8539 0.700195C7.69882 0.700195 6.56967 1.04272 5.60925 1.68445C4.64883 2.32618 3.90027 3.2383 3.45824 4.30546C3.0162 5.37263 2.90055 6.5469 3.12589 7.6798C3.35124 8.81269 3.90747 9.85332 4.72424 10.6701C5.54101 11.4869 6.58164 12.0431 7.71453 12.2684C8.84742 12.4938 10.0217 12.3781 11.0889 11.9361C12.156 11.4941 13.0681 10.7455 13.7099 9.78508C14.3516 8.82466 14.6941 7.69551 14.6941 6.54042C14.6924 4.99203 14.0765 3.50756 12.9816 2.41268C11.8868 1.3178 10.4023 0.701934 8.8539 0.700195Z" fill="currentColor"></path><path d="M9.58235 9.12158V12.8187H8.12229V9.12158L6.25707 7.87981L7.0674 6.66504L8.85232 7.85498L10.6372 6.66577L11.4476 7.88054L9.58235 9.12158Z" fill="white"></path><path d="M6.66406 14.5704H8.12412V15.3004H9.58418V14.5704H11.0442V13.1104H6.66406V14.5704Z" fill="currentColor"></path></svg>',
+                    'tabLabel' => __('Marketing'),
+                    'icon' => asset('svg/bulb.svg'),
+                    'link' => $this->callToAction,
+                    'title' => __('Marketing & Advertising'),
+                    'html' => $this->renderPartial('partials.services.marketing'),
+                ],
+                [
+                    'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.75722 0.972769C8.76758 0.856733 8.93715 0.856733 8.9475 0.972769C9.27623 4.65642 12.1958 7.57595 15.8794 7.90468C15.9955 7.91504 15.9955 8.08461 15.8794 8.09496C12.1958 8.42369 9.27623 11.3432 8.9475 15.0269C8.93715 15.1429 8.76758 15.1429 8.75722 15.0269C8.42849 11.3432 5.50896 8.42369 1.82531 8.09496C1.70927 8.08461 1.70927 7.91504 1.82531 7.90468C5.50896 7.57595 8.42849 4.65642 8.75722 0.972769Z" fill="currentColor"></path></svg>',
+                    'tabLabel' => __('Content'),
+                    'icon' => asset('svg/star.svg'),
+                    'link' => $this->callToAction,
+                    'title' => __('Content'),
+                    'html' => $this->renderPartial('partials.services.content'),
+                ],
+            ],
         ];
     }
 }
