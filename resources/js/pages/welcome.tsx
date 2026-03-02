@@ -1,12 +1,13 @@
 import { Head } from '@inertiajs/react';
 import Navigation from '@/components/navigation';
 import About from '@/components/sections/about';
+import Blog from '@/components/sections/blog';
 import Features from '@/components/sections/features';
 import GetInTouch from '@/components/sections/getInTouch';
 import Hero from '@/components/sections/hero';
+import Services from '@/components/sections/services';
 import Slider from '@/components/sections/slider';
-import type { AboutData, BlogData, FeaturesData, GetInTouchData, HeroData, SliderData } from '@/types/dto/sections';
-import Blog from '@/components/sections/blog';
+import type { AboutData, BlogData, FeaturesData, GetInTouchData, HeroData, ServicesData, SliderData } from '@/types/dto/sections';
 
 export default function Welcome({
     hero,
@@ -15,6 +16,7 @@ export default function Welcome({
     getInTouch,
     slider,
     blog,
+    services,
 }: {
     hero: HeroData;
     features: FeaturesData;
@@ -22,6 +24,7 @@ export default function Welcome({
     getInTouch: GetInTouchData;
     slider: SliderData;
     blog: BlogData;
+    services: ServicesData;
 }) {
     return (
         <>
@@ -33,6 +36,7 @@ export default function Welcome({
             <Features {...features} />
             <GetInTouch {...getInTouch} />
             <About {...about} />
+            <Services {...services} />
             <Blog {...blog} />
         </>
     );

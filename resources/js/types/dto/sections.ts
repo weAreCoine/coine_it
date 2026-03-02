@@ -59,3 +59,19 @@ export type BlogData = {
     link: NavigationItem;
     articles: BlogArticleCard[];
 };
+
+export type ServiceItem = {
+    tabIcon: string;
+    tabLabel: string;
+    icon: string;
+    title: string;
+    html: string;
+};
+
+export type ServicesData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    link: NavigationItem;
+    services: ServiceItem[];
+};
