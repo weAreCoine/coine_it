@@ -24,15 +24,7 @@ type BlogIndexProps = {
     canonicalUrl: string;
 };
 
-export default function Index({
-    featuredArticles,
-    articles,
-    categories,
-    currentCategory,
-    seoTitle,
-    seoDescription,
-    canonicalUrl,
-}: BlogIndexProps) {
+export default function Index({ featuredArticles, articles, categories, currentCategory, seoTitle, seoDescription, canonicalUrl }: BlogIndexProps) {
     return (
         <>
             <Head title={seoTitle}>
@@ -49,9 +41,7 @@ export default function Index({
             <header className="container mt-16 mb-12 max-w-180 text-center text-balance">
                 <p className="kicker">Insights & Risorse</p>
                 <h1 className="page__title">Blog</h1>
-                <p className="mt-4 text-lg text-mercury-500">
-                    Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.
-                </p>
+                <p className="mt-4 text-lg text-mercury-500">Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.</p>
             </header>
 
             {/* Category Filters */}
@@ -61,9 +51,7 @@ export default function Index({
                         href={index.url()}
                         preserveState
                         className={`px-4 py-2 text-sm font-medium uppercase transition-colors ${
-                            !currentCategory
-                                ? 'bg-black text-white'
-                                : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
+                            !currentCategory ? 'bg-black text-white' : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
                         }`}
                     >
                         Tutti
@@ -103,7 +91,7 @@ export default function Index({
                 <section className="container mb-16">
                     <p className="kicker">Ultimi articoli</p>
                     <h2 className="section__title">Tutti gli articoli</h2>
-                    <div className="mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x md:divide-y-0">
+                    <div className="mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
                         {articles.data.map((article) => (
                             <ArticleCard key={article.slug} article={article} />
                         ))}
@@ -115,18 +103,20 @@ export default function Index({
             {articles.last_page > 1 && (
                 <nav className="container mb-32 flex items-center justify-center gap-4">
                     {articles.current_page > 1 ? (
-                        <Link
-                            href={articles.links[0].url!}
-                            preserveState
-                            className="button__primary reverse__motion"
-                        >
+                        <Link href={articles.links[0].url!} preserveState className="button__primary reverse__motion">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="-rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </Link>
                     ) : (
                         <span className="inline-flex items-center justify-center bg-mercury-100 px-4 py-2 text-sm font-medium text-mercury-400 uppercase md:py-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-4 -rotate-180">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                stroke="currentColor"
+                                className="size-4 -rotate-180"
+                            >
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </span>
@@ -137,11 +127,7 @@ export default function Index({
                     </span>
 
                     {articles.current_page < articles.last_page ? (
-                        <Link
-                            href={articles.links[articles.links.length - 1].url!}
-                            preserveState
-                            className="button__primary"
-                        >
+                        <Link href={articles.links[articles.links.length - 1].url!} preserveState className="button__primary">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
