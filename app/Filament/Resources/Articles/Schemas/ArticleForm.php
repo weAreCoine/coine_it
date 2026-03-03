@@ -62,14 +62,12 @@ class ArticleForm
                 TextInput::make('seo_description'),
                 FileUpload::make('cover')
                     ->disk(Article::$disk)
-                    ->storeFileNamesIn('original_filename')
                     ->directory('images/'.now()->format('Y/m'))
                     ->maxSize(1024 * 2)
                     ->openable()
                     ->image(),
                 FileUpload::make('seo_image')
                     ->disk(Article::$disk)
-                    ->storeFileNamesIn('original_filename')
                     ->directory('images/'.now()->format('Y/m'))
                     ->maxSize(1024 * 2)
                     ->openable()
