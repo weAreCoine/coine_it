@@ -128,7 +128,7 @@ export default function Show({
 
                 {/* Content */}
                 <div className="container">
-                    <div className="rich__text mx-auto max-w-3xl" dangerouslySetInnerHTML={{ __html: content }} />
+                    <div className="rich__text mx-auto max-w-160" dangerouslySetInnerHTML={{ __html: content }} />
                 </div>
 
                 {/* Tags */}

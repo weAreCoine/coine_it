@@ -34,11 +34,11 @@
 
     .rich__text {
         h2 {
-            @apply text-2xl font-semibold mt-8 mb-3;
+            @apply text-4xl font-medium mt-10 mb-4;
         }
 
         h3 {
-            @apply text-xl font-semibold mt-6 mb-2;
+            @apply text-xl font-medium mt-6 mb-2;
         }
 
         h4 {
@@ -49,20 +49,25 @@
             @apply mb-4 leading-relaxed;
         }
 
+        ul, ol {
+            @apply mb-4  pl-8 space-y-1;
+
+        }
+
         ul {
-            @apply mb-4 list-disc pl-6 space-y-1;
+            @apply list-disc ;
         }
 
         ol {
-            @apply mb-4 list-decimal pl-6 space-y-1;
+            @apply list-decimal;
         }
 
         li {
-            @apply leading-relaxed;
+            @apply leading-relaxed pl-2;
         }
 
         blockquote {
-            @apply my-4 border-l-4 border-mercury-300 pl-4 italic text-mercury-600;
+            @apply bg-black text-white p-12 leading-relaxed text-center text-lg my-6;
         }
 
         a {
