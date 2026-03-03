@@ -23,12 +23,12 @@ class ArticlePageController extends Controller
         $relatedArticles = Article::query()
             ->where('is_published', true)
             ->where('id', '!=', $article->id)
-            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
+            ->whereHas('categories', fn($q) => $q->whereIn('categories.id', $categoryIds))
             ->with(['categories', 'user'])
             ->latest()
             ->limit(3)
             ->get()
-            ->map(fn (Article $related) => BlogArticleCard::fromArticle($related))
+            ->map(fn(Article $related) => BlogArticleCard::fromArticle($related))
             ->all();
 
         return Inertia::render('blog/show', [
@@ -36,7 +36,7 @@ class ArticlePageController extends Controller
             'slug' => $article->slug,
             'content' => $article->content,
             'excerpt' => $article->excerpt,
-            'cover' => $article->cover,
+            'cover' => asset($article->cover),
             'categories' => $article->categories->pluck('name')->all(),
             'tags' => $article->tags->pluck('name')->all(),
             'authorName' => $article->user->name ?? '',
