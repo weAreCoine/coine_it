@@ -23,11 +23,11 @@ class ArticleFactory extends Factory
             'title' => $title,
             'content' => $this->generateRichContent(),
             'slug' => Str::slug($title).'-'.fake()->unique()->numberBetween(1, 10000),
-            'cover' => 'https://placehold.co/1200x630?font=roboto',
+            'cover' => null,
             'user_id' => \App\Models\User::factory(),
             'seo_title' => fake()->optional()->sentence(),
             'seo_description' => fake()->optional()->text(160),
-            'seo_image' => 'https://placehold.co/1200x630?font=roboto',
+            'seo_image' => null,
             'is_published' => fake()->boolean(80),
             'is_featured' => fake()->boolean(20),
         ];
