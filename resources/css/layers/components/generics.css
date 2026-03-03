@@ -24,6 +24,12 @@
             }
         }
 
+        &.reverse__motion:hover {
+            svg {
+                @apply -translate-x-1;
+            }
+        }
+
     }
 
     .rich__text {

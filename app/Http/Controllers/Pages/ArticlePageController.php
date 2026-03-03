@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
+use App\Entities\BlogArticleCard;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use Inertia\Inertia;
@@ -16,6 +17,19 @@ class ArticlePageController extends Controller
         abort_unless($article->is_published, 404);
 
         $article->load(['categories', 'tags', 'user']);
+
+        $categoryIds = $article->categories->pluck('id');
+
+        $relatedArticles = Article::query()
+            ->where('is_published', true)
+            ->where('id', '!=', $article->id)
+            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
+            ->with(['categories', 'user'])
+            ->latest()
+            ->limit(3)
+            ->get()
+            ->map(fn (Article $related) => BlogArticleCard::fromArticle($related))
+            ->all();
 
         return Inertia::render('blog/show', [
             'title' => $article->title,
@@ -32,6 +46,7 @@ class ArticlePageController extends Controller
             'seoDescription' => $article->seo_description ?? $article->excerpt,
             'seoImage' => $article->seo_image ?? $article->cover,
             'canonicalUrl' => route('blog.show', $article),
+            'relatedArticles' => $relatedArticles,
         ]);
     }
 }
