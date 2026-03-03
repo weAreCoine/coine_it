@@ -25,12 +25,12 @@ class WelcomePageController extends Controller
 
         return Inertia::render('welcome', [
             'hero' => $this->heroData(),
-            'slider' => $this->sliderData(),
-            'features' => $this->featuresData(),
-            'about' => $this->aboutData(),
-            'getInTouch' => $this->getInTouchData(),
-            'blog' => $this->blog(),
-            'services' => $this->servicesData(),
+            'marquee' => $this->marqueeData(),
+            'cardGrid' => $this->cardGridData(),
+            'contentStats' => $this->contentStatsData(),
+            'ctaBanner' => $this->ctaBannerData(),
+            'articleGrid' => $this->articleGridData(),
+            'tabSection' => $this->tabSectionData(),
         ]);
     }
 
@@ -49,7 +49,7 @@ class WelcomePageController extends Controller
     /**
      * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem, slides: array<int, array{logoUrl: string, title: string, link: NavigationItem}>}
      */
-    private function sliderData(): array
+    private function marqueeData(): array
     {
         return [
             'kicker' => __('Portfolio'),
@@ -71,7 +71,7 @@ class WelcomePageController extends Controller
     /**
      * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem, columns: list<array{icon: string, title: string, description: string}>}
      */
-    private function featuresData(): array
+    private function cardGridData(): array
     {
         return [
             'kicker' => __('Il nostro metodo'),
@@ -123,7 +123,7 @@ class WelcomePageController extends Controller
     /**
      * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem, svg: string, skills: list<array{icon: string, scalar: string, description: string}>}
      */
-    private function aboutData(): array
+    private function contentStatsData(): array
     {
         $skillIcon = <<<'SVG'
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
@@ -162,7 +162,7 @@ class WelcomePageController extends Controller
     /**
      * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem}
      */
-    private function getInTouchData(): array
+    private function ctaBannerData(): array
     {
         return [
             'kicker' => 'Approccio Data-Driven',
@@ -175,7 +175,7 @@ class WelcomePageController extends Controller
     /**
      * @return array{kicker: string, title: string, subtitle: string, link: NavigationItem, articles: \Illuminate\Support\Collection<int, BlogArticleCard>}
      */
-    private function blog(): array
+    private function articleGridData(): array
     {
         return [
             'kicker' => 'Blog',
@@ -192,7 +192,7 @@ class WelcomePageController extends Controller
         ];
     }
 
-    private function servicesData(): array
+    private function tabSectionData(): array
     {
         return [
             'kicker' => __('Servizi'),

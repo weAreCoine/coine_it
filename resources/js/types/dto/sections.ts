@@ -7,21 +7,21 @@ export type HeroData = {
     link: NavigationItem;
 };
 
-export type FeaturesColumn = {
+export type CardGridColumn = {
     icon: string;
     title: string;
     description: string;
 };
 
-export type FeaturesData = {
+export type CardGridData = {
     kicker: string;
     subtitle: string;
     title: string;
     link: NavigationItem;
-    columns: FeaturesColumn[];
+    columns: CardGridColumn[];
 };
 
-export type AboutData = {
+export type ContentStatsData = {
     kicker: string;
     title: string;
     subtitle: string;
@@ -33,14 +33,14 @@ export type AboutData = {
     }[];
 };
 
-export type GetInTouchData = {
+export type CtaBannerData = {
     kicker: string;
     title: string;
     subtitle: string;
     link: NavigationItem;
 };
 
-export type SliderData = {
+export type MarqueeData = {
     kicker: string;
     title: string;
     subtitle: string;
@@ -52,7 +52,7 @@ export type SliderData = {
     }[];
 };
 
-export type BlogData = {
+export type ArticleGridData = {
     kicker: string;
     title: string;
     subtitle: string;
@@ -60,7 +60,7 @@ export type BlogData = {
     articles: BlogArticleCard[];
 };
 
-export type ServiceItem = {
+export type TabSectionItem = {
     tabIcon: string;
     tabLabel: string;
     icon: string;
@@ -69,9 +69,9 @@ export type ServiceItem = {
     link: NavigationItem;
 };
 
-export type ServicesData = {
+export type TabSectionData = {
     kicker: string;
     title: string;
     subtitle: string;
-    services: ServiceItem[];
+    services: TabSectionItem[];
 };

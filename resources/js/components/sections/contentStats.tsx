@@ -1,7 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCallback, useEffect, useRef } from 'react';
-import type { AboutData } from '@/types/dto/sections';
+import type { ContentStatsData } from '@/types/dto/sections';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -17,7 +17,7 @@ function parseScalar(scalar: string): { number: number; suffix: string } {
     return { number: parseInt(match[1], 10), suffix: match[2] };
 }
 
-export default function About(props: AboutData) {
+export default function ContentStats(props: ContentStatsData) {
     const sectionRef = useRef<HTMLDivElement | null>(null);
     const dotsRef = useRef<HTMLDivElement | null>(null);
     const dotsIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -79,7 +79,7 @@ export default function About(props: AboutData) {
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const counters = sectionRef.current?.querySelectorAll<HTMLSpanElement>('.scalar-value');
+            const counters = sectionRef.current?.querySelectorAll<HTMLSpanElement>('.content-stats-value');
             if (!counters?.length) return;
 
             counters.forEach((el) => {
@@ -133,7 +133,7 @@ export default function About(props: AboutData) {
                                     ></div>
                                     <div>
                                         <p className="mb-1 text-2xl font-semibold sm:text-4xl">
-                                            <span className="scalar-value" data-target={number}>
+                                            <span className="content-stats-value" data-target={number}>
                                                 0
                                             </span>
                                             {suffix}

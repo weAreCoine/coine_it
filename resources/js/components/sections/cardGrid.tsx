@@ -1,16 +1,16 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
-import type { FeaturesData } from '@/types/dto/sections';
+import type { CardGridData } from '@/types/dto/sections';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function Features(props: FeaturesData) {
+export default function CardGrid(props: CardGridData) {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const ctx = gsap.context(() => {
-            const svgs = containerRef.current?.querySelectorAll('.features-icon svg');
+            const svgs = containerRef.current?.querySelectorAll('.card-grid-icon svg');
             if (!svgs?.length) return;
 
             svgs.forEach((svg) => {
@@ -68,7 +68,7 @@ export default function Features(props: FeaturesData) {
                 <div className="relative mt-12 grid grid-cols-1 divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
                     {props.columns.map((column, index) => (
                         <div key={index} className="grid grid-cols-3 items-center gap-8 p-8 md:grid-cols-1">
-                            <div className="features-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
+                            <div className="card-grid-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
                             <div className="col-span-2 md:col-span-1">
                                 <p className="mb-2 text-xl font-medium">{column.title}</p>
                                 <p>{column.description}</p>

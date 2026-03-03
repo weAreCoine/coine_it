@@ -1,6 +1,6 @@
 import { gsap } from 'gsap';
 import { useEffect, useRef } from 'react';
-import type { GetInTouchData } from '@/types/dto/sections';
+import type { CtaBannerData } from '@/types/dto/sections';
 
 const SWEEP_DURATION = 2;
 const JITTER = 0.01;
@@ -14,7 +14,7 @@ const LINGER_CHANCE = 0.12;
 // Per-row flash probability: index 0 = leading row, index 1 = trailing, etc.
 const BAND_CHANCES = [0.5, 0.2];
 
-export default function GetInTouch(props: GetInTouchData) {
+export default function CtaBanner(props: CtaBannerData) {
     const mountainsRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {

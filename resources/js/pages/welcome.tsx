@@ -1,43 +1,43 @@
 import { Head } from '@inertiajs/react';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
-import About from '@/components/sections/about';
-import Blog from '@/components/sections/blog';
-import Features from '@/components/sections/features';
-import GetInTouch from '@/components/sections/getInTouch';
+import ArticleGrid from '@/components/sections/articleGrid';
+import CardGrid from '@/components/sections/cardGrid';
+import ContentStats from '@/components/sections/contentStats';
+import CtaBanner from '@/components/sections/ctaBanner';
 import Hero from '@/components/sections/hero';
-import Services from '@/components/sections/services';
-import Slider from '@/components/sections/slider';
-import type { AboutData, BlogData, FeaturesData, GetInTouchData, HeroData, ServicesData, SliderData } from '@/types/dto/sections';
+import Marquee from '@/components/sections/marquee';
+import TabSection from '@/components/sections/tabSection';
+import type { ArticleGridData, CardGridData, ContentStatsData, CtaBannerData, HeroData, MarqueeData, TabSectionData } from '@/types/dto/sections';
 
 export default function Welcome({
     hero,
-    features,
-    about,
-    getInTouch,
-    slider,
-    blog,
-    services,
+    cardGrid,
+    contentStats,
+    ctaBanner,
+    marquee,
+    articleGrid,
+    tabSection,
 }: {
     hero: HeroData;
-    features: FeaturesData;
-    about: AboutData;
-    getInTouch: GetInTouchData;
-    slider: SliderData;
-    blog: BlogData;
-    services: ServicesData;
+    cardGrid: CardGridData;
+    contentStats: ContentStatsData;
+    ctaBanner: CtaBannerData;
+    marquee: MarqueeData;
+    articleGrid: ArticleGridData;
+    tabSection: TabSectionData;
 }) {
     return (
         <>
             <Head title="Welcome" />
             <Navigation />
             <Hero {...hero} />
-            <Slider {...slider} />
-            <Features {...features} />
-            <GetInTouch {...getInTouch} />
-            <Services {...services} />
-            <About {...about} />
-            <Blog {...blog} />
+            <Marquee {...marquee} />
+            <CardGrid {...cardGrid} />
+            <CtaBanner {...ctaBanner} />
+            <TabSection {...tabSection} />
+            <ContentStats {...contentStats} />
+            <ArticleGrid {...articleGrid} />
             <Colophon />
         </>
     );

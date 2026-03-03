@@ -1,9 +1,9 @@
 import { Link } from '@inertiajs/react';
 import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
-import type { BlogData } from '@/types/dto/sections';
+import type { ArticleGridData } from '@/types/dto/sections';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
-export default function Blog(props: BlogData) {
+export default function ArticleGrid(props: ArticleGridData) {
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'ItemList',

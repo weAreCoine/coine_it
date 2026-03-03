@@ -1,8 +1,8 @@
 import { gsap } from 'gsap';
 import { useEffect, useRef } from 'react';
-import type { SliderData } from '@/types/dto/sections';
+import type { MarqueeData } from '@/types/dto/sections';
 
-export default function Slider(props: SliderData) {
+export default function Marquee(props: MarqueeData) {
     const trackRef = useRef<HTMLDivElement | null>(null);
     const tweenRef = useRef<gsap.core.Tween | null>(null);
 
