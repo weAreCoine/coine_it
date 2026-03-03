@@ -8,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [WelcomePageController::class, 'show'])
     ->name('home');
 
+Route::get('/blog', [ArticlePageController::class, 'index'])
+    ->name('blog.index');
+
 Route::get('/blog/{article:slug}', [ArticlePageController::class, 'show'])
     ->name('blog.show');
 

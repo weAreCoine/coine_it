@@ -1,7 +1,8 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import Navigation from '@/components/navigation';
 import Colophon from '@/components/colophon';
 import ArticleCard from '@/components/articleCard';
+import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
 type ArticlePageProps = {
@@ -158,12 +159,12 @@ export default function Show({
                     </div>
 
                     <div className="mt-8 flex justify-center">
-                        <a href="/" className="button__primary reverse__motion">
+                        <Link href={index.url()} className="button__primary reverse__motion">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="-rotate-180">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                             <span>Torna al blog</span>
-                        </a>
+                        </Link>
                     </div>
                 </section>
             )}

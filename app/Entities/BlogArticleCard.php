@@ -6,6 +6,7 @@ namespace App\Entities;
 
 use App\Models\Article;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Support\Facades\Storage;
 use Spatie\TypeScriptTransformer\Attributes\TypeScript;
 
 #[TypeScript]
@@ -34,7 +35,7 @@ class BlogArticleCard implements Arrayable
         $instance->title = $article->title;
         $instance->slug = $article->slug;
         $instance->excerpt = $article->excerpt;
-        $instance->cover = $article->cover;
+        $instance->cover = $article->cover ? Storage::disk(Article::$disk)->url($article->cover) : null;
         $instance->categories = $article->categories
             ->map(fn ($category) => BlogCategoryItem::fromCategory($category))
             ->all();
