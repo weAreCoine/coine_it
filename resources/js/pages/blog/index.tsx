@@ -38,46 +38,15 @@ export default function Index({ featuredArticles, articles, categories, currentC
             <Navigation />
 
             {/* Hero */}
-            <header className="container mt-16 mb-12 max-w-180 text-center text-balance">
+            <header className="container mt-16 mb-12 text-balance">
                 <p className="kicker">Insights & Risorse</p>
-                <h1 className="page__title">Blog</h1>
+                <h1 className="page__title">Gli ultimi articoli</h1>
                 <p className="mt-4 text-lg text-mercury-500">Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.</p>
             </header>
-
-            {/* Category Filters */}
-            <section className="container mb-12">
-                <nav className="flex flex-wrap gap-2">
-                    <Link
-                        href={index.url()}
-                        preserveState
-                        className={`px-4 py-2 text-sm font-medium uppercase transition-colors ${
-                            !currentCategory ? 'bg-black text-white' : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
-                        }`}
-                    >
-                        Tutti
-                    </Link>
-                    {categories.map((category) => (
-                        <Link
-                            key={category.slug}
-                            href={index.url({ query: { category: category.slug } })}
-                            preserveState
-                            className={`px-4 py-2 text-sm font-medium uppercase transition-colors ${
-                                currentCategory === category.slug
-                                    ? 'bg-black text-white'
-                                    : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
-                            }`}
-                        >
-                            {category.name}
-                        </Link>
-                    ))}
-                </nav>
-            </section>
 
             {/* Featured Articles */}
             {featuredArticles.length > 0 && (
                 <section className="container mb-16">
-                    <p className="kicker">In evidenza</p>
-                    <h2 className="section__title">Articoli consigliati</h2>
                     <div className="mt-8 grid gap-6 md:grid-cols-2">
                         {featuredArticles.map((article) => (
                             <FeaturedArticleCard key={article.slug} article={article} />
@@ -89,8 +58,43 @@ export default function Index({ featuredArticles, articles, categories, currentC
             {/* Articles Grid */}
             {articles.data.length > 0 && (
                 <section className="container mb-16">
-                    <p className="kicker">Ultimi articoli</p>
-                    <h2 className="section__title">Tutti gli articoli</h2>
+                    <div className="mb-12 flex items-end justify-between">
+                        <div>
+                            <p className="kicker">Ultimi articoli</p>
+                            <h2 className="section__title">Tutti gli articoli</h2>
+                        </div>
+                        {/* Category Filters */}
+                        <div className="scrollbar-hidden max-w-90 overflow-x-auto">
+                            <nav className="flex snap-x snap-mandatory gap-2">
+                                <Link
+                                    href={index.url()}
+                                    preserveState
+                                    className={`snap-start snap-always px-4 py-2 text-sm font-medium uppercase transition-colors ${
+                                        !currentCategory
+                                            ? 'bg-black text-white'
+                                            : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
+                                    }`}
+                                >
+                                    Tutti
+                                </Link>
+                                {categories.map((category) => (
+                                    <Link
+                                        key={category.slug}
+                                        href={index.url({ query: { category: category.slug } })}
+                                        preserveState
+                                        className={`snap-start snap-always px-4 py-2 text-sm font-medium whitespace-nowrap uppercase transition-colors ${
+                                            currentCategory === category.slug
+                                                ? 'bg-black text-white'
+                                                : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
+                                        }`}
+                                    >
+                                        {category.name}
+                                    </Link>
+                                ))}
+                            </nav>
+                        </div>
+                    </div>
+
                     <div className="mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
                         {articles.data.map((article) => (
                             <ArticleCard key={article.slug} article={article} />
