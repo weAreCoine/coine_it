@@ -14,15 +14,15 @@ class AboutPageController extends Controller
             'numbers' => [
                 [
                     'scalar' => '10+',
-                    'description' => __('Anni di esperienza, dal fashion al biomedicale'),
+                    'description' => __('Anni di esperienza'),
                 ],
                 [
                     'scalar' => '30+',
-                    'description' => __('Brand gestiti, da PMI a Multinazionali'),
+                    'description' => __('Brand gestiti'),
                 ],
                 [
                     'scalar' => '500+',
-                    'description' => __('Campagne advertising gestite e ottimizzate'),
+                    'description' => __('Campagne gestite'),
                 ],
                 [
                     'scalar' => '14+',

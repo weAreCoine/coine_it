@@ -1,6 +1,6 @@
 @layer components {
     .blog-index__filters {
-        @apply max-w-120;
+        @apply md:max-w-120;
     }
 
     .blog-index__filters-nav {

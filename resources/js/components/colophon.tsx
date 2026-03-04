@@ -6,9 +6,7 @@ export default function Colophon() {
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">
                     <AppLink href="/">
-                        <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 text-5xl font-semibold">
-                            Coiné
-                        </span>
+                        <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 text-5xl font-black">Coiné</span>
                     </AppLink>
                     <AppLink
                         href="/"

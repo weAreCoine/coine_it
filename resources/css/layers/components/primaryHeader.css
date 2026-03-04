@@ -77,7 +77,7 @@
                     }
 
                     &.call__to__action {
-                        @apply bg-black text-white font-semibold px-6 inline-flex lg:flex;
+                        @apply bg-black text-white font-semibold px-6 inline-flex lg:flex last:mt-4 lg:last:mt-0;
 
                         a {
                             @apply flex-row-reverse gap-2;

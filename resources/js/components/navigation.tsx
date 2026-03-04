@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
 import { useEffect, useState } from 'react';
 import AppLink from '@/components/appLink';
+import NavigationItem = App.Entities.NavigationItem;
 
 export default function Navigation() {
     const { navigationItems } = usePage<{ navigationItems: App.Entities.NavigationItem[] }>().props;
@@ -18,7 +19,7 @@ export default function Navigation() {
         <div className="primary__header">
             <div className="px-6">
                 <AppLink href="/" title="Home">
-                    <span className="text-5xl font-semibold">Coiné</span>
+                    <span className="text-5xl font-black text-black">Coiné</span>
                 </AppLink>
             </div>
             <nav className={clsx({ open: open, header__navigation: true })}>
@@ -73,7 +74,7 @@ export default function Navigation() {
                                         })}
                                     >
                                         <ul>
-                                            {menuItem.subItems.map((subItem, subIndex) => (
+                                            {menuItem.subItems.map((subItem: NavigationItem, subIndex) => (
                                                 <li key={subIndex} className={clsx({})}>
                                                     <AppLink href={subItem.href} title={subItem.title} external={subItem.isExternal}>
                                                         <span>{subItem.title}</span>

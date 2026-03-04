@@ -59,7 +59,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
             {/* Articles Grid */}
             {articles.data.length > 0 && (
                 <section className="container mb-16">
-                    <div className="mb-12 flex items-end justify-between">
+                    <div className="mb-12 flex flex-col justify-between px-4 md:flex-row md:items-end">
                         <div>
                             <p className="kicker">Ultimi articoli</p>
                             <h2 className="section__title">Tutti gli articoli</h2>
