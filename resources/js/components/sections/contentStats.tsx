@@ -118,7 +118,7 @@ export default function ContentStats(props: ContentStatsData) {
                         <div ref={dotsRef} className="mt-8" />
                     </div>
                 </div>
-                <div className="lg:col-span-5">
+                <div className="lg:col-span-5 flex flex-col justify-between">
                     <div className="grid grid-cols-1 divide-y divide-mercury-200 sm:grid-cols-3 sm:divide-x sm:divide-y-0 lg:grid-cols-1 lg:grid-rows-3 lg:divide-x-0 lg:divide-y">
                         {props.skills.map((skill, key) => {
                             const { number, suffix } = parseScalar(skill.scalar);
