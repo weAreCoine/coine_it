@@ -41,7 +41,7 @@ export default function Contact() {
                 )}
 
                 <form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-3xl">
-                    <div className="grid grid-cols-1 md:grid-cols-2">
+                    <div className="grid grid-cols-1 gap-px border border-mercury-200 bg-mercury-200 md:grid-cols-2">
                         <div className="coine__input">
                             <input
                                 id="firstName"
@@ -100,7 +100,7 @@ export default function Contact() {
                             {errors.phone && <p className="error__message">{errors.phone}</p>}
                         </div>
 
-                        <div className="coine__input col-span-2">
+                        <div className="coine__input md:col-span-2">
                             <textarea
                                 id="message"
                                 rows={6}
@@ -114,29 +114,30 @@ export default function Contact() {
                             {errors.message && <p className="error__message">{errors.message}</p>}
                         </div>
                     </div>
+                    <div className="mt-8 flex items-center justify-between gap-6">
+                        <div>
+                            <label className="flex items-start gap-3">
+                                <input
+                                    type="checkbox"
+                                    checked={data.termsAccepted}
+                                    onChange={(e) => setData('termsAccepted', e.target.checked)}
+                                    className="mt-0.5 size-4 shrink-0 accent-black"
+                                />
+                                <span className="text-sm text-mercury-500">
+                                    Accetto il trattamento dei dati personali ai sensi del GDPR. <span className="text-mercury-400">*</span>
+                                </span>
+                            </label>
+                            {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
+                        </div>
 
-                    <div className="mt-6">
-                        <label className="flex items-start gap-3">
-                            <input
-                                type="checkbox"
-                                checked={data.termsAccepted}
-                                onChange={(e) => setData('termsAccepted', e.target.checked)}
-                                className="mt-0.5 size-4 shrink-0 accent-black"
-                            />
-                            <span className="text-sm text-mercury-500">
-                                Accetto il trattamento dei dati personali ai sensi del GDPR. <span className="text-mercury-400">*</span>
-                            </span>
-                        </label>
-                        {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
-                    </div>
-
-                    <div className="mt-8">
-                        <button type="submit" disabled={processing} className="button__primary">
-                            {processing ? 'Invio in corso...' : 'Invia messaggio'}
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                            </svg>
-                        </button>
+                        <div>
+                            <button type="submit" disabled={processing} className="button__primary">
+                                {processing ? 'Invio in corso...' : 'Invia messaggio'}
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                                </svg>
+                            </button>
+                        </div>
                     </div>
                 </form>
 
@@ -160,9 +161,9 @@ export default function Contact() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-xs text-mercury-400">Email</p>
-                                <a href="mailto:info@coine.it" className="text-sm font-medium">
-                                    info@coine.it
+                                <p className="text-xs text-mercury-400">Sviluppo Web & App</p>
+                                <a href="mailto:dev@coine.it" className="text-sm font-medium">
+                                    dev@coine.it
                                 </a>
                             </div>
                         </div>
@@ -185,9 +186,9 @@ export default function Contact() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-xs text-mercury-400">Telefono</p>
-                                <a href="tel:+390591855825" className="text-sm font-medium">
-                                    059 185 5825
+                                <p className="text-xs text-mercury-400">Marketing</p>
+                                <a href="mailto:marketing@coine.it" className="text-sm font-medium">
+                                    marketing@coine.it
                                 </a>
                             </div>
                         </div>
@@ -211,8 +212,8 @@ export default function Contact() {
                                 </svg>
                             </div>
                             <div>
-                                <p className="text-xs text-mercury-400">Sede</p>
-                                <p className="text-sm font-medium">Modena, Italia</p>
+                                <p className="text-xs text-mercury-400">Sedi</p>
+                                <p className="text-sm font-medium">Modena e Milano</p>
                             </div>
                         </div>
                     </div>

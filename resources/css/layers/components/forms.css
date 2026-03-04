@@ -1,11 +1,13 @@
 @layer components {
     .coine__input {
-        @apply relative;
+        @apply relative bg-white;
 
         input, textarea {
-            @apply w-full border border-mercury-200 bg-white px-4 py-6 text-sm transition-colors outline-none focus:border-black;
+            @apply w-full bg-white px-4 py-6 text-sm outline-none duration-300;
 
             &:focus, &:not(:placeholder-shown) {
+                @apply bg-mercury-100;
+
                 & ~ label {
                     @apply text-xs top-2 translate-y-0 font-semibold;
                 }
@@ -13,11 +15,11 @@
         }
 
         textarea {
-            @apply resize-none  ;
+            @apply resize-none  h-full;
         }
 
         label {
-            @apply mb-2 block text-sm font-medium absolute left-4 top-1/2 -translate-y-1/2 duration-300;
+            @apply block text-sm font-medium absolute left-4 top-1/2 -translate-y-1/2 duration-300;
         }
 
         textarea ~ label {
