@@ -67,6 +67,10 @@
                     }
 
                     a {
+                        &.current {
+                            @apply font-semibold;
+                        }
+
                         svg {
                             @apply size-3 lg:size-4 stroke-[1.5] duration-200;
                         }
@@ -96,8 +100,6 @@
                     }
 
                     &:not(.call__to__action) {
-
-
                         &:not(.has__subitems) {
                             > div {
                                 @apply overflow-hidden;

@@ -1,6 +1,6 @@
 @layer components {
     .blog-index__filters {
-        @apply md:max-w-120;
+        @apply md:max-w-120 mt-4 md:mt-0;
     }
 
     .blog-index__filters-nav {

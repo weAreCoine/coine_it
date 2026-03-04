@@ -39,9 +39,11 @@ export default function Index({ featuredArticles, articles, categories, currentC
 
             {/* Hero */}
             <header className="container mt-16 mb-12 text-balance">
-                <p className="kicker">Insights & Risorse</p>
-                <h1 className="page__title">Gli ultimi articoli</h1>
-                <p className="mt-4 text-lg text-mercury-500">Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.</p>
+                <div className="px-4">
+                    <p className="kicker">Insights & Risorse</p>
+                    <h1 className="page__title">Gli ultimi articoli</h1>
+                    <p className="mt-4 text-lg text-mercury-500">Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.</p>
+                </div>{' '}
             </header>
 
             {/* Featured Articles */}

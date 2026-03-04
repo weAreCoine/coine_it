@@ -70,12 +70,56 @@ export default function About({ numbers, principles }: AboutProps) {
                                 key={index}
                                 className="flex flex-col items-start justify-start gap-x-6 gap-y-4 bg-mercury-50 p-8 min-[300px]:flex-row min-[300px]:items-center"
                             >
-                                <div className="shrink-0 border border-black">
-                                    <img src={principle.image} alt={principle.title} className="h-10 w-auto" />
+                                <div className="aspect-square shrink-0 border border-black">
+                                    <img src={principle.image} alt={principle.title} className="h-10 w-auto object-cover" />
                                 </div>
                                 <p className="text-lg font-medium min-[300px]:text-xl">{principle.title}</p>
                             </div>
                         ))}
+                    </div>
+                </div>
+            </div>
+            <div className="container my-32">
+                <div className="text-center">
+                    <p className="kicker">Il nostro team</p>
+                    <h2 className="section__title">Siamo Coiné: ci presentiamo</h2>
+                    <p className="mx-auto max-w-lg text-balance">
+                        Siamo un team dinamico che si costruisce su misura in base ai progetti che ci vengono affidati.
+                    </p>
+                </div>
+                <div className="relative mt-8 grid gap-px bg-mercury-200 p-px lg:grid-cols-2">
+                    <BordersDecorations />
+                    <div className="flex items-center justify-start gap-8 bg-white p-4">
+                        <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
+                            <img
+                                src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3b39/68a6e5ff7b59be67bb3ac207_john-carter-avatar-quantum-webflow-template.jpg"
+                                alt=""
+                                className="h-full w-auto object-cover"
+                            />
+                        </div>
+                        <div className="grow">
+                            <div className="flex items-baseline gap-2">
+                                <p className="text-xl font-semibold">Luca Barbi</p>
+                                <p className="kicker text-xs">Sviluppo e Marketing</p>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center justify-start gap-8 bg-white p-4">
+                        <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
+                            <img
+                                src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3b39/68a6e5d29b2f76acd088f052_sophie-moore-avatar-quantum-webflow-template.jpg"
+                                alt=""
+                                className="h-full w-auto object-cover"
+                            />
+                        </div>
+                        <div className="grow">
+                            <div className="flex items-baseline gap-2">
+                                <p className="text-xl font-semibold">Silvia Pallai</p>
+                                <p className="kicker text-xs">Content e Marketing</p>
+                            </div>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </div>
                     </div>
                 </div>
             </div>
