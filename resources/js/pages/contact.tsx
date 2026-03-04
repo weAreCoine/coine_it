@@ -1,9 +1,9 @@
 import { Head, useForm } from '@inertiajs/react';
-import React, { useState } from 'react';
+import React from 'react';
 import { store } from '@/actions/App/Http/Controllers/Pages/ContactPageController';
 import Colophon from '@/components/colophon';
+import FaqAccordion from '@/components/faqAccordion';
 import Navigation from '@/components/navigation';
-import { clsx } from 'clsx';
 import Faq = App.Entities.Faq;
 
 type ContactPageProps = {
@@ -11,8 +11,6 @@ type ContactPageProps = {
 };
 
 export default function Contact({ faqs }: ContactPageProps) {
-    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
         firstName: '',
         lastName: '',
@@ -231,41 +229,8 @@ export default function Contact({ faqs }: ContactPageProps) {
                 <div className="mx-auto mt-24 max-w-3xl">
                     <p className="kicker text-center">FAQ</p>
                     <h2 className="section__title text-center">Domande frequenti</h2>
-                    <p className="text-center">Le cose che ci chiedono più spesso</p>
-                    <div className="mt-8 divide-y divide-mercury-200 border border-y border-mercury-200">
-                        {faqs.map((faq, index) => (
-                            <div key={index} className="p-4">
-                                <button
-                                    type="button"
-                                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                                    className={clsx({
-                                        'flex w-full cursor-pointer items-center justify-between py-5 text-left font-medium duration-300': true,
-                                        'text-black': openFaqIndex === index,
-                                        'text-mercury-400': openFaqIndex !== index,
-                                    })}
-                                >
-                                    {faq.question}
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        strokeWidth={1.5}
-                                        stroke="currentColor"
-                                        className={`size-4 shrink-0 transition-transform duration-300 ${openFaqIndex === index ? 'rotate-180' : ''}`}
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </button>
-                                <div
-                                    className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openFaqIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
-                                >
-                                    <div className="overflow-hidden">
-                                        <p className="pb-5 text-sm text-mercury-500">{faq.answer}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                    <p className="mb-12 text-center">Le cose che ci chiedono più spesso</p>
+                    <FaqAccordion faqs={faqs} />
                 </div>
             </div>
 
