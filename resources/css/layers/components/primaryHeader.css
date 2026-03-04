@@ -39,7 +39,7 @@
                 }
 
                 .primary__navigation {
-                    @apply block lg:flex
+                    @apply block lg:flex bg-white z-10
                 }
             }
 
