@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { store } from '@/actions/App/Http/Controllers/Pages/ContactPageController';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
+import { clsx } from 'clsx';
 import Faq = App.Entities.Faq;
 
 type ContactPageProps = {
@@ -228,14 +229,20 @@ export default function Contact({ faqs }: ContactPageProps) {
                 </div>
 
                 <div className="mx-auto mt-24 max-w-3xl">
-                    <h2 className="text-xl font-semibold">Domande frequenti</h2>
-                    <div className="mt-8 divide-y divide-mercury-200 border-y border-mercury-200">
+                    <p className="kicker text-center">FAQ</p>
+                    <h2 className="section__title text-center">Domande frequenti</h2>
+                    <p className="text-center">Le cose che ci chiedono più spesso</p>
+                    <div className="mt-8 divide-y divide-mercury-200 border border-y border-mercury-200">
                         {faqs.map((faq, index) => (
-                            <div key={index}>
+                            <div key={index} className="p-4">
                                 <button
                                     type="button"
                                     onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
-                                    className="flex w-full items-center justify-between py-5 text-left text-sm font-medium"
+                                    className={clsx({
+                                        'flex w-full cursor-pointer items-center justify-between py-5 text-left font-medium duration-300': true,
+                                        'text-black': openFaqIndex === index,
+                                        'text-mercury-400': openFaqIndex !== index,
+                                    })}
                                 >
                                     {faq.question}
                                     <svg
@@ -244,7 +251,7 @@ export default function Contact({ faqs }: ContactPageProps) {
                                         viewBox="0 0 24 24"
                                         strokeWidth={1.5}
                                         stroke="currentColor"
-                                        className={`size-4 shrink-0 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                                        className={`size-4 shrink-0 transition-transform duration-300 ${openFaqIndex === index ? 'rotate-180' : ''}`}
                                     >
                                         <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
                                     </svg>
