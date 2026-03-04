@@ -1,0 +1,31 @@
+@layer components {
+    .coine__input {
+        @apply relative;
+
+        input, textarea {
+            @apply w-full border border-mercury-200 bg-white px-4 py-6 text-sm transition-colors outline-none focus:border-black;
+
+            &:focus, &:not(:placeholder-shown) {
+                & ~ label {
+                    @apply text-xs top-2 translate-y-0 font-semibold;
+                }
+            }
+        }
+
+        textarea {
+            @apply resize-none  ;
+        }
+
+        label {
+            @apply mb-2 block text-sm font-medium absolute left-4 top-1/2 -translate-y-1/2 duration-300;
+        }
+
+        textarea ~ label {
+            @apply top-8;
+        }
+
+        .error__message {
+            @apply text-xs text-red-600 absolute bottom-2 left-4;
+        }
+    }
+}
