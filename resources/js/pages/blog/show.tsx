@@ -89,43 +89,41 @@ export default function Show({
                 </header>
 
                 {/* Cover image full-width */}
-                {cover && (
-                    <figure className="relative container mb-12">
-                        <div className="absolute bottom-full left-0 z-[-1] -translate-x-1/4 translate-y-1/2 text-mercury-200">
-                            <div>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 381 382" fill="none">
-                                    <rect x="0.509766" y="305" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="0.509766" y="229" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="0.509766" y="153" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="0.509766" y="77" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="0.509766" y="1" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="76.5098" y="305" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="76.5098" y="229" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="76.5098" y="153" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="76.5098" y="77" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="76.5098" y="1" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="152.51" y="305" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="152.51" y="229" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="152.51" y="153" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="152.51" y="77" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="152.51" y="1" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="228.51" y="305" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="228.51" y="229" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="228.51" y="153" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="228.51" y="77" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="228.51" y="1" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="304.51" y="305" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="304.51" y="229" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="304.51" y="153" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="304.51" y="77" width="76" height="76" stroke="currentColor"></rect>
-                                    <rect x="304.51" y="1" width="76" height="76" stroke="currentColor"></rect>
-                                </svg>
-                            </div>
-                            <div className="absolute top-0 left-0 h-full w-full bg-radial from-transparent to-white to-80%"></div>
+                <figure className="relative container mb-12">
+                    <div className="absolute bottom-full left-0 z-[-1] -translate-x-1/4 translate-y-1/2 text-mercury-200">
+                        <div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 381 382" fill="none">
+                                <rect x="0.509766" y="305" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="0.509766" y="229" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="0.509766" y="153" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="0.509766" y="77" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="0.509766" y="1" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="76.5098" y="305" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="76.5098" y="229" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="76.5098" y="153" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="76.5098" y="77" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="76.5098" y="1" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="152.51" y="305" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="152.51" y="229" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="152.51" y="153" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="152.51" y="77" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="152.51" y="1" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="228.51" y="305" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="228.51" y="229" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="228.51" y="153" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="228.51" y="77" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="228.51" y="1" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="304.51" y="305" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="304.51" y="229" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="304.51" y="153" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="304.51" y="77" width="76" height="76" stroke="currentColor"></rect>
+                                <rect x="304.51" y="1" width="76" height="76" stroke="currentColor"></rect>
+                            </svg>
                         </div>
-                        <img src={cover} alt={title} className="w-full rounded" />
-                    </figure>
-                )}
+                        <div className="absolute top-0 left-0 h-full w-full bg-radial from-transparent to-white to-80%"></div>
+                    </div>
+                    <img src={cover ?? '/images/placeholder_image.webp'} alt={title} className="w-full rounded" />
+                </figure>
 
                 {/* Content */}
                 <div className="container">

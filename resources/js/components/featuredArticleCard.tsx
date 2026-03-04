@@ -7,11 +7,9 @@ export default function FeaturedArticleCard({ article }: { article: BlogArticleC
         <Link href={show.url({ slug: article.slug })} prefetch className="group flex border border-mercury-200">
             <article className="flex w-full flex-col justify-between gap-2">
                 <div className="p-5">
-                    {article.cover && (
-                        <figure className="mb-6 bg-mercury-50">
-                            <img src={article.cover} alt={article.title} loading="lazy" className="w-full" />
-                        </figure>
-                    )}
+                    <figure className="mb-6 bg-mercury-50">
+                        <img src={article.cover ?? '/images/placeholder_image.webp'} alt={article.title} loading="lazy" className="w-full" />
+                    </figure>
                     <div className="mb-3 text-sm uppercase">
                         <time dateTime={article.createdAtIso}>{article.createdAt}</time>
                         {article.categories.length > 0 && (
