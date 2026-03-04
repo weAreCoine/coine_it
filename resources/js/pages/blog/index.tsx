@@ -47,7 +47,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
             {/* Featured Articles */}
             {featuredArticles.length > 0 && (
                 <section className="container mb-16">
-                    <div className="mt-8 grid gap-6 md:grid-cols-2">
+                    <div className="blog-index__featured-grid">
                         {featuredArticles.map((article) => (
                             <FeaturedArticleCard key={article.slug} article={article} />
                         ))}
@@ -64,16 +64,12 @@ export default function Index({ featuredArticles, articles, categories, currentC
                             <h2 className="section__title">Tutti gli articoli</h2>
                         </div>
                         {/* Category Filters */}
-                        <div className="scrollbar-hidden max-w-90 overflow-x-auto">
-                            <nav className="flex snap-x snap-mandatory gap-2">
+                        <div className="blog-index__filters">
+                            <nav className="blog-index__filters-nav">
                                 <Link
                                     href={index.url()}
                                     preserveState
-                                    className={`snap-start snap-always px-4 py-2 text-sm font-medium uppercase transition-colors ${
-                                        !currentCategory
-                                            ? 'bg-black text-white'
-                                            : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
-                                    }`}
+                                    className={`blog-index__filter ${!currentCategory ? 'blog-index__filter--active' : ''}`}
                                 >
                                     Tutti
                                 </Link>
@@ -82,11 +78,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
                                         key={category.slug}
                                         href={index.url({ query: { category: category.slug } })}
                                         preserveState
-                                        className={`snap-start snap-always px-4 py-2 text-sm font-medium whitespace-nowrap uppercase transition-colors ${
-                                            currentCategory === category.slug
-                                                ? 'bg-black text-white'
-                                                : 'border border-mercury-200 text-mercury-600 hover:border-mercury-400'
-                                        }`}
+                                        className={`blog-index__filter ${currentCategory === category.slug ? 'blog-index__filter--active' : ''}`}
                                     >
                                         {category.name}
                                     </Link>
@@ -95,7 +87,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
                         </div>
                     </div>
 
-                    <div className="mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
+                    <div className="blog-index__grid">
                         {articles.data.map((article) => (
                             <ArticleCard key={article.slug} article={article} />
                         ))}
@@ -103,48 +95,34 @@ export default function Index({ featuredArticles, articles, categories, currentC
                 </section>
             )}
 
-            {/* Pagination */}
-            {articles.last_page > 1 && (
-                <nav className="container mb-32 flex items-center justify-center gap-4">
-                    {articles.current_page > 1 ? (
-                        <Link href={articles.links[0].url!} preserveState className="button__primary reverse__motion">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="-rotate-180">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </Link>
-                    ) : (
-                        <span className="inline-flex items-center justify-center bg-mercury-100 px-4 py-2 text-sm font-medium text-mercury-400 uppercase md:py-4">
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="size-4 -rotate-180"
-                            >
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </span>
-                    )}
+            <div className="px-6">
+                {/* Pagination */}
+                {articles.last_page > 1 && (
+                    <nav className="blog-index__pagination">
+                        <div className="left__decoration" />
+                        <div className="right__decoration" />
+                        {articles.current_page > 1 && (
+                            <Link href={articles.links[0].url!} preserveState className="blog-index__pagination_button">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="-rotate-180">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </Link>
+                        )}
 
-                    <span className="text-sm font-medium">
-                        {articles.current_page} / {articles.last_page}
-                    </span>
-
-                    {articles.current_page < articles.last_page ? (
-                        <Link href={articles.links[articles.links.length - 1].url!} preserveState className="button__primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-                        </Link>
-                    ) : (
-                        <span className="inline-flex items-center justify-center bg-mercury-100 px-4 py-2 text-sm font-medium text-mercury-400 uppercase md:py-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="size-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
+                        <span className="blog-index__pagination-counter">
+                            {articles.current_page} / {articles.last_page}
                         </span>
-                    )}
-                </nav>
-            )}
+
+                        {articles.current_page < articles.last_page && (
+                            <Link href={articles.links[articles.links.length - 1].url!} preserveState className="blog-index__pagination_button">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                </svg>
+                            </Link>
+                        )}
+                    </nav>
+                )}
+            </div>
 
             <Colophon />
         </>

@@ -1,0 +1,72 @@
+@layer components {
+    .blog-index__filters {
+        @apply scrollbar-hidden max-w-90 overflow-x-auto;
+    }
+
+    .blog-index__filters-nav {
+        @apply flex snap-x snap-mandatory gap-2;
+    }
+
+    .blog-index__filter {
+        @apply snap-start snap-always px-4 py-2 text-sm font-medium whitespace-nowrap uppercase transition-colors
+        border border-mercury-200 text-mercury-600 hover:border-mercury-400;
+
+        &.blog-index__filter--active {
+            @apply bg-black text-white border-transparent;
+        }
+    }
+
+    .blog-index__featured-grid {
+        @apply mt-8 grid gap-6 md:grid-cols-2;
+    }
+
+    .blog-index__grid {
+        @apply mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x;
+    }
+
+    .blog-index__pagination {
+        @apply mb-32  flex items-center justify-center border-y border-mercury-200 max-w-90 mx-auto relative;
+
+        .left__decoration, .right__decoration {
+            @apply sm:block from-mercury-200 to-transparent -top-px -bottom-px w-0 sm:w-40 md:w-60 lg:w-80 absolute duration-300;
+
+            &::after {
+                @apply content-[''] absolute top-px bottom-px left-0 right-0 bg-white
+            }
+
+        }
+
+        .left__decoration {
+            @apply bg-linear-to-l right-full
+        }
+
+        .right__decoration {
+            @apply bg-linear-to-r left-full
+        }
+
+        .blog-index__pagination_button {
+            @apply p-4 text-xl flex items-center justify-center aspect-square border-x border-x-mercury-200 outline outline-transparent duration-300 ;
+
+            > svg {
+                @apply size-4 stroke-[1.5];
+            }
+
+            &:hover {
+                @apply bg-black text-white outline-black border-black
+            }
+        }
+
+        .blog-index__pagination-counter {
+            @apply text-sm font-medium whitespace-nowrap grow text-center py-4 ;
+        }
+
+        .blog-index__pagination-disabled {
+            @apply inline-flex items-center justify-center bg-mercury-100 px-4 py-2 text-sm font-medium text-mercury-400 uppercase md:py-4;
+
+            svg {
+                @apply size-4;
+            }
+        }
+    }
+
+}
