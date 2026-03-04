@@ -50,6 +50,7 @@ class ResetPassword extends Command
 
         if ($passwordConfirmation !== $password) {
             $this->error('Password does not match. Retry.');
+            return static::FAILURE;
         }
 
         if ($user->update(['password' => Hash::make($password)])) {
