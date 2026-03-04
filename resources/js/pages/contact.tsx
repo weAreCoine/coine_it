@@ -114,7 +114,7 @@ export default function Contact() {
                             {errors.message && <p className="error__message">{errors.message}</p>}
                         </div>
                     </div>
-                    <div className="mt-8 flex items-center justify-between gap-6">
+                    <div className="mt-8 block gap-6 sm:flex sm:items-center sm:justify-between">
                         <div>
                             <label className="flex items-start gap-3">
                                 <input
@@ -130,7 +130,7 @@ export default function Contact() {
                             {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
                         </div>
 
-                        <div>
+                        <div className="mt-8 sm:mt-0">
                             <button type="submit" disabled={processing} className="button__primary">
                                 {processing ? 'Invio in corso...' : 'Invia messaggio'}
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
