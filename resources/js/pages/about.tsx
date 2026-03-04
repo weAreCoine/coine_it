@@ -3,12 +3,27 @@ import BordersDecorations from '@/components/bordersDecorations';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 
-export default function About(props: object) {
+interface NumberItem {
+    scalar: string;
+    description: string;
+}
+
+interface PrincipleItem {
+    image: string;
+    title: string;
+}
+
+interface AboutProps {
+    numbers: NumberItem[];
+    principles: PrincipleItem[];
+}
+
+export default function About({ numbers, principles }: AboutProps) {
     return (
         <>
             <Head title="Chi siamo" />
             <Navigation />
-            <div className="md::flex container mt-20 items-end justify-between">
+            <div className="container mt-20 items-end justify-between md:flex">
                 <div>
                     <p className="kicker mb-2">Chi siamo</p>
                     <h1 className="page__title">Siamo Coiné</h1>
@@ -23,8 +38,8 @@ export default function About(props: object) {
                 <img src="/svg/land.svg" alt="land" />
             </div>
             <div className="container mt-8 grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:flex md:justify-between">
-                {props.numbers &&
-                    props.numbers.map((number, index) => (
+                {numbers &&
+                    numbers.map((number, index) => (
                         <div key={index}>
                             <div className="flex items-center justify-start gap-2">
                                 <p className="text-5xl font-semibold">{number.scalar}</p>
@@ -43,73 +58,21 @@ export default function About(props: object) {
                 <div className="container">
                     <div className="px-4">
                         <p className="kicker">Valori</p>
-                        <h2 className="section__title">I valori dietro Coiné</h2>
+                        <h2 className="section__title">I valori che guidano Coiné</h2>
                         <p>Crediamo che la collaborazione sana porti valore a tutte le persone coinvolte.</p>
                     </div>
 
-                    <div className="relative mt-12 grid grid-cols-3 gap-px bg-mercury-200 p-px">
+                    <div className="relative mt-12 grid grid-cols-4 gap-px bg-mercury-200 p-px">
                         <BordersDecorations bg="bg-mercury-50" />
 
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
+                        {principles.map((principle, index) => (
+                            <div key={index} className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                                <div className="border border-black">
+                                    <img src={principle.image} alt={principle.title} className="h-10 w-auto" />
+                                </div>
+                                <p className="text-xl font-medium">{principle.title}</p>
                             </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
-                            </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
-                            </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
-                            </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
-                            </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
-                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
-                            <div className="border border-black">
-                                <img
-                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
-                                    alt="accuratezza"
-                                    className="h-10 w-auto"
-                                />
-                            </div>
-                            <p className="text-xl font-medium">Accuratezza</p>
-                        </div>
+                        ))}
                     </div>
                 </div>
             </div>
