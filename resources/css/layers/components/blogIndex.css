@@ -1,10 +1,10 @@
 @layer components {
     .blog-index__filters {
-        @apply scrollbar-hidden max-w-90 overflow-x-auto;
+        @apply max-w-90;
     }
 
     .blog-index__filters-nav {
-        @apply flex snap-x snap-mandatory gap-2;
+        @apply scrollbar-hidden flex snap-x snap-mandatory gap-2 overflow-x-auto;
     }
 
     .blog-index__filter {
