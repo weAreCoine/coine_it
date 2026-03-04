@@ -56,7 +56,7 @@ class ResetPassword extends Command
             $this->info('Password reset successful.');
             return static::SUCCESS;
         }
-        
+
         $this->error('Something went wrong.');
         return static::FAILURE;
 
