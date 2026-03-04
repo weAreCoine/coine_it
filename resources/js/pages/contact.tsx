@@ -13,13 +13,13 @@ export default function Contact() {
         termsAccepted: false,
     });
 
-    function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
         post(store().url, {
             onSuccess: () => reset(),
         });
     }
-    
+
     return (
         <>
             <Head title="Contatti" />
@@ -41,7 +41,7 @@ export default function Contact() {
                 )}
 
                 <form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-3xl">
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2">
                         <div className="coine__input">
                             <input
                                 id="firstName"
@@ -99,14 +99,20 @@ export default function Contact() {
                             <label htmlFor="phone">Telefono</label>
                             {errors.phone && <p className="error__message">{errors.phone}</p>}
                         </div>
-                    </div>
 
-                    <div className="coine__input mt-6">
-                        <textarea id="message" rows={6} value={data.message} onChange={(e) => setData('message', e.target.value)} placeholder=" " />
-                        <label htmlFor="message">
-                            Raccontaci del tuo progetto... <span className="text-mercury-400">*</span>
-                        </label>
-                        {errors.message && <p className="error__message">{errors.message}</p>}
+                        <div className="coine__input col-span-2">
+                            <textarea
+                                id="message"
+                                rows={6}
+                                value={data.message}
+                                onChange={(e) => setData('message', e.target.value)}
+                                placeholder=" "
+                            />
+                            <label htmlFor="message">
+                                Raccontaci del tuo progetto... <span className="text-mercury-400">*</span>
+                            </label>
+                            {errors.message && <p className="error__message">{errors.message}</p>}
+                        </div>
                     </div>
 
                     <div className="mt-6">
