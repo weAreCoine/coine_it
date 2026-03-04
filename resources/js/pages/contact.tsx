@@ -1,9 +1,17 @@
 import { Head, useForm } from '@inertiajs/react';
+import React, { useState } from 'react';
 import { store } from '@/actions/App/Http/Controllers/Pages/ContactPageController';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
+import Faq = App.Entities.Faq;
 
-export default function Contact() {
+type ContactPageProps = {
+    faqs: Faq[];
+};
+
+export default function Contact({ faqs }: ContactPageProps) {
+    const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
         firstName: '',
         lastName: '',
@@ -216,6 +224,40 @@ export default function Contact() {
                                 <p className="text-sm font-medium">Modena e Milano</p>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div className="mx-auto mt-24 max-w-3xl">
+                    <h2 className="text-xl font-semibold">Domande frequenti</h2>
+                    <div className="mt-8 divide-y divide-mercury-200 border-y border-mercury-200">
+                        {faqs.map((faq, index) => (
+                            <div key={index}>
+                                <button
+                                    type="button"
+                                    onClick={() => setOpenFaqIndex(openFaqIndex === index ? null : index)}
+                                    className="flex w-full items-center justify-between py-5 text-left text-sm font-medium"
+                                >
+                                    {faq.question}
+                                    <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        strokeWidth={1.5}
+                                        stroke="currentColor"
+                                        className={`size-4 shrink-0 transition-transform ${openFaqIndex === index ? 'rotate-180' : ''}`}
+                                    >
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+                                    </svg>
+                                </button>
+                                <div
+                                    className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${openFaqIndex === index ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}
+                                >
+                                    <div className="overflow-hidden">
+                                        <p className="pb-5 text-sm text-mercury-500">{faq.answer}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>

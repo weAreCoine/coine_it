@@ -13,6 +13,11 @@ export type BlogCategoryItem = {
 name: string;
 slug: string;
 };
+export type Faq = {
+question: string;
+answer: string;
+opened: boolean;
+};
 export type NavigationItem = {
 href: string;
 isCurrent: boolean;
