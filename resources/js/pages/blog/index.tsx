@@ -2,7 +2,6 @@ import { Head, Link } from '@inertiajs/react';
 import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import ArticleCard from '@/components/articleCard';
 import Colophon from '@/components/colophon';
-import FeaturedArticleCard from '@/components/featuredArticleCard';
 import Navigation from '@/components/navigation';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 import BlogCategoryItem = App.Entities.BlogCategoryItem;
@@ -49,7 +48,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
                 <section className="container mb-16">
                     <div className="blog-index__featured-grid">
                         {featuredArticles.map((article) => (
-                            <FeaturedArticleCard key={article.slug} article={article} />
+                            <ArticleCard key={article.slug} article={article} />
                         ))}
                     </div>
                 </section>
