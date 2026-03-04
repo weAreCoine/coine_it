@@ -17,7 +17,7 @@
     }
 
     .blog-index__featured-grid {
-        @apply mt-8 ;
+        @apply mt-8 bg-mercury-200 grid grid-cols-1 gap-px p-px relative;
     }
 
     .blog-index__grid {
@@ -25,10 +25,10 @@
     }
 
     .blog-index__pagination {
-        @apply mb-32  flex items-center justify-center border-y border-mercury-200 max-w-90 mx-auto relative;
+        @apply mb-32 flex bg-mercury-200 gap-px p-px justify-center max-w-90 mx-auto relative;
 
         .left__decoration, .right__decoration {
-            @apply sm:block from-mercury-200 to-transparent -top-px -bottom-px w-0 sm:w-40 md:w-60 lg:w-80 absolute duration-300;
+            @apply sm:block from-mercury-200 to-transparent top-0 bottom-0 w-0 sm:w-40 md:w-60 lg:w-80 absolute duration-300;
 
             &::after {
                 @apply content-[''] absolute top-px bottom-px left-0 right-0 bg-white
@@ -44,28 +44,21 @@
             @apply bg-linear-to-r left-full
         }
 
+
         .blog-index__pagination_button {
-            @apply p-4 text-xl flex items-center justify-center aspect-square border-x border-x-mercury-200 outline outline-transparent duration-300 ;
+            @apply p-4 text-xl flex items-center justify-center aspect-square  duration-300 bg-white ;
 
             > svg {
                 @apply size-4 stroke-[1.5];
             }
 
             &:hover {
-                @apply bg-black text-white outline-black border-black
+                @apply bg-black text-white
             }
         }
 
         .blog-index__pagination-counter {
-            @apply text-sm font-medium whitespace-nowrap grow text-center py-4 ;
-        }
-
-        .blog-index__pagination-disabled {
-            @apply inline-flex items-center justify-center bg-mercury-100 px-4 py-2 text-sm font-medium text-mercury-400 uppercase md:py-4;
-
-            svg {
-                @apply size-4;
-            }
+            @apply text-sm font-medium whitespace-nowrap grow text-center py-4 bg-white ;
         }
     }
 

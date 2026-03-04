@@ -3,6 +3,7 @@ import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageControlle
 import ArticleCard from '@/components/articleCard';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
+import BordersDecorations from '@/components/bordersDecorations';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 import BlogCategoryItem = App.Entities.BlogCategoryItem;
 
@@ -47,13 +48,9 @@ export default function Index({ featuredArticles, articles, categories, currentC
             {featuredArticles.length > 0 && (
                 <section className="container mb-16">
                     <div className="blog-index__featured-grid">
+                        <BordersDecorations />
                         {featuredArticles.map((article) => (
-                            <ArticleCard
-                                key={article.slug}
-                                article={article}
-                                className="border-x border-mercury-200 first:border-t last:border-y"
-                                isLandscape={true}
-                            />
+                            <ArticleCard key={article.slug} article={article} className="bg-white" isLandscape={true} />
                         ))}
                     </div>
                 </section>
