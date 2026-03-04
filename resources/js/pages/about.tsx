@@ -1,7 +1,13 @@
 import { Head } from '@inertiajs/react';
+import { useCallback, useEffect, useRef } from 'react';
 import BordersDecorations from '@/components/bordersDecorations';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
+
+const EXTRACTIONS_PER_SECOND = 120;
+const LAND_COLORS = ['#e3e3e3', '#a3a3a3', '#535353', '#000000'] as const;
+const LAND_COLOR_BLACK = '#000000';
+const LAND_COLOR_INITIAL = '#e3e3e3';
 
 interface NumberItem {
     scalar: string;
@@ -19,6 +25,59 @@ interface AboutProps {
 }
 
 export default function About({ numbers, principles }: AboutProps) {
+    const landRef = useRef<HTMLDivElement | null>(null);
+    const landIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+    const startLandAnimation = useCallback(() => {
+        const container = landRef.current;
+        if (!container) return;
+
+        const paths = Array.from(container.querySelectorAll<SVGPathElement>('path'));
+        if (!paths.length) return;
+
+        paths.forEach((p) => p.setAttribute('fill', LAND_COLOR_INITIAL));
+
+        const colorMap = new Map<SVGPathElement, string>();
+        paths.forEach((p) => colorMap.set(p, LAND_COLOR_INITIAL));
+
+        landIntervalRef.current = setInterval(() => {
+            const nonBlack = paths.filter((p) => colorMap.get(p) !== LAND_COLOR_BLACK);
+            if (!nonBlack.length) {
+                if (landIntervalRef.current) clearInterval(landIntervalRef.current);
+                return;
+            }
+
+            const dot = nonBlack[Math.floor(Math.random() * nonBlack.length)];
+            const currentColor = colorMap.get(dot)!;
+            const available = LAND_COLORS.filter((c) => c !== currentColor);
+            const nextColor = available[Math.floor(Math.random() * available.length)];
+
+            dot.setAttribute('fill', nextColor);
+            colorMap.set(dot, nextColor);
+        }, 1000 / EXTRACTIONS_PER_SECOND);
+    }, []);
+
+    useEffect(() => {
+        const container = landRef.current;
+        if (!container) return;
+
+        fetch('/svg/land.svg')
+            .then((res) => res.text())
+            .then((svgText) => {
+                container.innerHTML = svgText;
+                const svg = container.querySelector('svg');
+                if (svg) {
+                    svg.style.width = '100%';
+                    svg.style.height = '100%';
+                }
+                startLandAnimation();
+            });
+
+        return () => {
+            if (landIntervalRef.current) clearInterval(landIntervalRef.current);
+        };
+    }, [startLandAnimation]);
+
     return (
         <>
             <Head title="Chi siamo" />
@@ -26,7 +85,7 @@ export default function About({ numbers, principles }: AboutProps) {
             <div className="container mt-20 items-end justify-between md:flex">
                 <div>
                     <p className="kicker mb-2">Chi siamo</p>
-                    <h1 className="page__title">Siamo Coiné</h1>
+                    <h1 className="page__title">We Are Coiné</h1>
                 </div>
                 <div className="mt-2 max-w-md md:mt-0">
                     <p className="text-balance">
@@ -35,7 +94,7 @@ export default function About({ numbers, principles }: AboutProps) {
                 </div>
             </div>
             <div className="container mt-12">
-                <img src="/svg/land.svg" alt="land" />
+                <div ref={landRef} />
             </div>
             <div className="container mt-8 grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:flex md:justify-between">
                 {numbers &&
@@ -79,7 +138,7 @@ export default function About({ numbers, principles }: AboutProps) {
                     </div>
                 </div>
             </div>
-            <div className="container my-32">
+            <div className="container my-24">
                 <div className="text-center">
                     <p className="kicker">Il nostro team</p>
                     <h2 className="section__title">Siamo Coiné: ci presentiamo</h2>

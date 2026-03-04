@@ -57,8 +57,8 @@ class WelcomePageController extends Controller
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn ($file) => [
+                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -102,17 +102,6 @@ class WelcomePageController extends Controller
     {
         try {
             return File::get(public_path('svg/'.$filename));
-        } catch (Throwable $exception) {
-            ExceptionHandler::handle($exception);
-
-            return '';
-        }
-    }
-
-    private function renderPartial(string $view): string
-    {
-        try {
-            return view($view)->render();
         } catch (Throwable $exception) {
             ExceptionHandler::handle($exception);
 
@@ -179,16 +168,16 @@ class WelcomePageController extends Controller
     {
         return [
             'kicker' => 'Blog',
-            'title' => 'Our latest articles',
-            'subtitle' => 'Lorem ipsum dolor sit amet consectetur nec quis suspendisse nulla',
+            'title' => 'I nostri ultimi articoli',
+            'subtitle' => 'Scopri le ultime strategie, trend e consigli per far crescere il tuo business digitale.',
             'articles' => Article::query()
                 ->where('is_published', true)
                 ->orderByDesc('created_at')
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
-            'link' => $this->callToAction,
+                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
+            'link' => new NavigationItem('Sfoglia', 'blog.index'),
         ];
     }
 
@@ -225,5 +214,16 @@ class WelcomePageController extends Controller
                 ],
             ],
         ];
+    }
+
+    private function renderPartial(string $view): string
+    {
+        try {
+            return view($view)->render();
+        } catch (Throwable $exception) {
+            ExceptionHandler::handle($exception);
+
+            return '';
+        }
     }
 }
