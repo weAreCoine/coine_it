@@ -1,0 +1,119 @@
+import { Head } from '@inertiajs/react';
+import BordersDecorations from '@/components/bordersDecorations';
+import Colophon from '@/components/colophon';
+import Navigation from '@/components/navigation';
+
+export default function About(props: object) {
+    return (
+        <>
+            <Head title="Chi siamo" />
+            <Navigation />
+            <div className="md::flex container mt-20 items-end justify-between">
+                <div>
+                    <p className="kicker mb-2">Chi siamo</p>
+                    <h1 className="page__title">Siamo Coiné</h1>
+                </div>
+                <div className="mt-2 max-w-md md:mt-0">
+                    <p className="text-balance">
+                        Siamo un team di professionisti freelance specializzati in eCommerce, performance marketing e tecnologie digitali.
+                    </p>
+                </div>
+            </div>
+            <div className="container mt-12">
+                <img src="/svg/land.svg" alt="land" />
+            </div>
+            <div className="container mt-8 grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:flex md:justify-between">
+                {props.numbers &&
+                    props.numbers.map((number, index) => (
+                        <div key={index}>
+                            <div className="flex items-center justify-start gap-2">
+                                <p className="text-5xl font-semibold">{number.scalar}</p>
+                                <div className="inline-flex items-center justify-center rounded-full bg-mercury-100 p-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 15 14" fill="none" className="size-3">
+                                        <path d="M7.40431 13.0625L7.4043 2" stroke="currentColor" stroke-width="1.5"></path>
+                                        <path d="M13.8141 8.40703L7.40703 2L1 8.40703" stroke="currentColor" stroke-width="1.5"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                            <p className="">{number.description}</p>
+                        </div>
+                    ))}
+            </div>
+            <div className="my-24 bg-mercury-50 py-24">
+                <div className="container">
+                    <div className="px-4">
+                        <p className="kicker">Valori</p>
+                        <h2 className="section__title">I valori dietro Coiné</h2>
+                        <p>Crediamo che la collaborazione sana porti valore a tutte le persone coinvolte.</p>
+                    </div>
+
+                    <div className="relative mt-12 grid grid-cols-3 gap-px bg-mercury-200 p-px">
+                        <BordersDecorations bg="bg-mercury-50" />
+
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                        <div className="flex items-center justify-start gap-6 bg-mercury-50 p-8">
+                            <div className="border border-black">
+                                <img
+                                    src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3af1/68a598eeb838c974f3def70a_accuracy-icon-quantum-webflow-template-1.svg"
+                                    alt="accuratezza"
+                                    className="h-10 w-auto"
+                                />
+                            </div>
+                            <p className="text-xl font-medium">Accuratezza</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <Colophon />
+        </>
+    );
+}

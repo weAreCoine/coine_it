@@ -45,6 +45,8 @@ class HandleInertiaRequests extends Middleware
             'navigationItems' => [
                 new NavigationItem('Home', 'home'),
 
+                new NavigationItem('Chi siamo', 'about'),
+
                 new NavigationItem('Blog', 'blog.index'),
 
                 new NavigationItem('Scrivici', 'contact.show', isCallToAction: true),

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
 use App\Http\Controllers\Pages\ContactPageController;
@@ -19,6 +20,9 @@ Route::prefix('blog')->group(function () {
     Route::get('/category/{category:slug}', [CategoryPageController::class, 'show'])
         ->name('blog.category');
 });
+
+Route::get('/chi-shiamo', [AboutPageController::class, 'show'])
+    ->name('about');
 
 Route::prefix('contact')->group(function () {
     Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
