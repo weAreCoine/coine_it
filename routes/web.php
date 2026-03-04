@@ -2,17 +2,25 @@
 
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
+use App\Http\Controllers\Pages\ContactPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomePageController::class, 'show'])
     ->name('home');
 
-Route::get('/blog', [ArticlePageController::class, 'index'])
-    ->name('blog.index');
+Route::prefix('blog')->group(function () {
+    Route::get('/', [ArticlePageController::class, 'index'])
+        ->name('blog.index');
 
-Route::get('/blog/{article:slug}', [ArticlePageController::class, 'show'])
-    ->name('blog.show');
+    Route::get('/{article:slug}', [ArticlePageController::class, 'show'])
+        ->name('blog.show');
 
-Route::get('/blog/category/{category:slug}', [CategoryPageController::class, 'show'])
-    ->name('blog.category');
+    Route::get('/category/{category:slug}', [CategoryPageController::class, 'show'])
+        ->name('blog.category');
+});
+
+Route::prefix('contact')->group(function () {
+    Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
+    Route::post('/', [ContactPageController::class, 'store'])->name('contact.store');
+});

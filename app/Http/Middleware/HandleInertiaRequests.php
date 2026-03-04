@@ -47,7 +47,7 @@ class HandleInertiaRequests extends Middleware
 
                 new NavigationItem('Blog', 'blog.index'),
 
-                new NavigationItem('Contact', null, isPlaceholder: true, isCallToAction: true)
+                new NavigationItem('Contact', 'contact.show', isCallToAction: true),
             ],
         ];
     }
