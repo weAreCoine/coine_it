@@ -1,9 +1,9 @@
 import { Head, Link } from '@inertiajs/react';
-import Navigation from '@/components/navigation';
-import Colophon from '@/components/colophon';
-import ArticleCard from '@/components/articleCard';
-import FeaturedArticleCard from '@/components/featuredArticleCard';
 import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
+import ArticleCard from '@/components/articleCard';
+import Colophon from '@/components/colophon';
+import FeaturedArticleCard from '@/components/featuredArticleCard';
+import Navigation from '@/components/navigation';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 import BlogCategoryItem = App.Entities.BlogCategoryItem;
 
