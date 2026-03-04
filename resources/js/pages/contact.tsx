@@ -28,7 +28,7 @@ export default function Contact({ faqs }: ContactPageProps) {
                 <ContactForm />
 
                 <div className="mx-auto mt-24 max-w-3xl">
-                    <div className="grid grid-cols-1 gap-px border border-mercury-200 bg-mercury-200 md:grid-cols-3">
+                    <div className="grid grid-cols-1 gap-px bg-mercury-200 p-px md:grid-cols-3">
                         <div className="flex items-center gap-4 bg-white px-6 py-6">
                             <div className="inline-block shrink-0 bg-mercury-50 p-3">
                                 <svg
@@ -104,14 +104,17 @@ export default function Contact({ faqs }: ContactPageProps) {
                         </div>
                     </div>
                 </div>
-
-                <div className="mx-auto mt-24 max-w-3xl">
+            </div>
+            <div className="bg-mercury-50 py-24">
+                <div className="container max-w-3xl">
                     <p className="kicker text-center">FAQ</p>
                     <h2 className="section__title text-center">Domande frequenti</h2>
                     <p className="mb-12 text-center">Le cose che ci chiedono più spesso</p>
                     <FaqAccordion faqs={faqs} />
                 </div>
             </div>
+
+            <div></div>
 
             <Colophon />
         </>

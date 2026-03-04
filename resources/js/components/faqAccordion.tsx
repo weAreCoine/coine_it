@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { useState } from 'react';
+import BordersDecorations from '@/components/bordersDecorations';
 import Faq = App.Entities.Faq;
 
 type FaqAccordionProps = {
@@ -10,9 +11,10 @@ export default function FaqAccordion({ faqs }: FaqAccordionProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
-        <div className="divide-y divide-mercury-200 border border-y border-mercury-200">
+        <div className="relative grid grid-cols-1 gap-px bg-mercury-200 p-px">
+            <BordersDecorations bg="bg-mercury-50" />
             {faqs.map((faq, index) => (
-                <div key={index} className="p-4">
+                <div key={index} className="bg-mercury-50 p-4">
                     <button
                         type="button"
                         onClick={() => setOpenIndex(openIndex === index ? null : index)}

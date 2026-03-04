@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
 import type { CardGridData } from '@/types/dto/sections';
+import BordersDecorations from '@/components/bordersDecorations';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -53,21 +54,10 @@ export default function CardGrid(props: CardGridData) {
                 <p>{props.subtitle}</p>
             </div>
             <div className="relative">
-                <div className="absolute right-full bottom-full h-20 w-32 translate-x-px translate-y-px bg-linear-to-br from-transparent to-mercury-200">
-                    <div className="absolute right-px bottom-px h-full w-full bg-white"></div>
-                </div>
-                <div className="absolute bottom-full left-full h-24 w-18 -translate-x-px translate-y-px bg-linear-to-bl from-transparent from-40% to-mercury-200">
-                    <div className="absolute bottom-px left-px h-full w-full bg-white"></div>
-                </div>
-                <div className="absolute top-full right-full h-32 w-20 translate-x-px -translate-y-px bg-linear-to-tr from-transparent to-mercury-200">
-                    <div className="absolute top-px right-px h-full w-full bg-white"></div>
-                </div>
-                <div className="absolute top-full left-full h-24 w-36 -translate-x-px -translate-y-px bg-linear-to-tl from-transparent to-mercury-200">
-                    <div className="absolute top-px left-px h-full w-full bg-white"></div>
-                </div>
-                <div className="relative mt-12 grid grid-cols-1 divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x">
+                <BordersDecorations />
+                <div className="relative mt-12 grid grid-cols-1 gap-px bg-mercury-200 p-px md:grid-cols-3">
                     {props.columns.map((column, index) => (
-                        <div key={index} className="grid grid-cols-3 items-center gap-8 p-8 md:grid-cols-1">
+                        <div key={index} className="grid grid-cols-3 items-center gap-8 bg-white p-8 md:grid-cols-1">
                             <div className="card-grid-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
                             <div className="col-span-2 md:col-span-1">
                                 <p className="mb-2 text-xl font-medium">{column.title}</p>
