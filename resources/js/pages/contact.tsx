@@ -25,7 +25,7 @@ export default function Contact() {
             <Head title="Contatti" />
             <Navigation />
 
-            <div className="container my-32">
+            <div className="container mt-16 mb-32">
                 <div className="mx-auto max-w-3xl text-center">
                     <p className="kicker">Mettiamoci in contatto</p>
                     <h1 className="page__title my-2">Contattaci</h1>
