@@ -19,10 +19,9 @@ answer: string;
 opened: boolean;
 };
 export type NavigationItem = {
-href: string;
 isCurrent: boolean;
 title: string;
-routeName: string | null;
+href: string;
 isExternal: boolean;
 targetBlank: boolean;
 isPlaceholder: boolean;

@@ -21,7 +21,7 @@ class WelcomePageController extends Controller
 
     public function show(): Response
     {
-        $this->callToAction = new NavigationItem('Scopri di più', null, isCallToAction: true);
+        $this->callToAction = new NavigationItem('Scopri di più', isCallToAction: true);
 
         return Inertia::render('welcome', [
             'hero' => $this->heroData(),
@@ -57,8 +57,8 @@ class WelcomePageController extends Controller
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => $this->callToAction,
             'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn($file) => [
+                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                ->map(fn ($file) => [
                     'logoUrl' => asset('images/clients/'.$file->getFilename()),
                     'title' => Str::headline($file->getFilenameWithoutExtension()),
                     'link' => $this->callToAction,
@@ -176,8 +176,8 @@ class WelcomePageController extends Controller
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
-            'link' => new NavigationItem('Sfoglia', 'blog.index'),
+                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
+            'link' => new NavigationItem('Sfoglia', route('blog.index')),
         ];
     }
 

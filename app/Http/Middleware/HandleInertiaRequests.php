@@ -43,13 +43,13 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
             ],
             'navigationItems' => [
-                new NavigationItem('Home', 'home'),
+                new NavigationItem('Home', route('home')),
 
-                new NavigationItem('Chi siamo', 'about'),
+                new NavigationItem('Chi siamo', route('about')),
 
-                new NavigationItem('Blog', 'blog.index'),
+                new NavigationItem('Blog', route('blog.index')),
 
-                new NavigationItem('Scrivici', 'contact.show', isCallToAction: true),
+                new NavigationItem('Scrivici', route('contact.show'), isCallToAction: true),
             ],
         ];
     }
