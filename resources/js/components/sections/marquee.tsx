@@ -1,5 +1,6 @@
 import { gsap } from 'gsap';
 import { useEffect, useRef } from 'react';
+import AppLink from '@/components/appLink';
 import type { MarqueeData } from '@/types/dto/sections';
 
 export default function Marquee(props: MarqueeData) {
@@ -44,7 +45,7 @@ export default function Marquee(props: MarqueeData) {
             <div className="mt-10 overflow-hidden border-y border-mercury-200" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                 <div ref={trackRef} className="flex w-max">
                     {[...props.slides, ...props.slides].map((slide, index) => (
-                        <a
+                        <AppLink
                             key={index}
                             href={slide.link.href}
                             title={slide.link.title}
@@ -56,17 +57,17 @@ export default function Marquee(props: MarqueeData) {
                                 alt={slide.title}
                                 className="relative h-auto max-h-12 w-full object-contain mix-blend-darken grayscale group-hover:mix-blend-lighten group-hover:invert"
                             />
-                        </a>
+                        </AppLink>
                     ))}
                 </div>
             </div>
             <div className="container mt-12 text-center">
-                <a href={props.link.href} title={props.link.title} className="button__primary relative">
+                <AppLink href={props.link.href} title={props.link.title} className="button__primary relative">
                     <span> {props.link.title}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
-                </a>
+                </AppLink>
             </div>
         </div>
     );

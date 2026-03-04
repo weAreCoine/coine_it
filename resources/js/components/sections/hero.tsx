@@ -1,3 +1,4 @@
+import AppLink from '@/components/appLink';
 import GameOfLife from '@/components/gameOfLife';
 import type { HeroData } from '@/types/dto/sections';
 
@@ -42,12 +43,12 @@ export default function Hero(props: HeroData) {
                         {props.title}
                     </h1>
                     <p className="relative mb-8">{props.description}</p>
-                    <a href={props.link.href} title={props.link.title} className="button__primary relative">
+                    <AppLink href={props.link.href} title={props.link.title} className="button__primary relative">
                         <span> {props.link.title}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
-                    </a>
+                    </AppLink>
                 </div>
                 <div className="aspect-square">
                     <GameOfLife />

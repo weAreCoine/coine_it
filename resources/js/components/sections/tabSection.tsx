@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import AppLink from '@/components/appLink';
 import type { TabSectionData } from '@/types/dto/sections';
 
 export default function TabSection(props: TabSectionData) {
@@ -35,12 +36,12 @@ export default function TabSection(props: TabSectionData) {
                             <h3 className="tab-section__panel-title">{activeService.title}</h3>
                             <div className="rich__text" dangerouslySetInnerHTML={{ __html: activeService.html }} />
                             <div className="tab-section__panel-cta">
-                                <a href={activeService.link.href} title={activeService.link.title} className="button__primary relative">
+                                <AppLink href={activeService.link.href} title={activeService.link.title} className="button__primary relative">
                                     <span>{activeService.link.title}</span>
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                     </svg>
-                                </a>
+                                </AppLink>
                             </div>
                         </div>
                     </div>

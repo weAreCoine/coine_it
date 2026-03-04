@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import AppLink from '@/components/appLink';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 
@@ -37,12 +38,12 @@ export default function ErrorPage({ status }: { status: number }) {
                 <p className="kicker">Errore {status}</p>
                 <h1 className="page__title my-2">{title}</h1>
                 <p className="max-w-md text-mercury-500">{description}</p>
-                <a href="/" className="button__primary mt-8">
+                <AppLink href="/" className="button__primary mt-8">
                     Torna alla homepage
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
-                </a>
+                </AppLink>
             </div>
             <Colophon />
         </>

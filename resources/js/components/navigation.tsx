@@ -1,6 +1,7 @@
 import { usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
 import { useEffect, useState } from 'react';
+import AppLink from '@/components/appLink';
 
 export default function Navigation() {
     const { navigationItems } = usePage<{ navigationItems: App.Entities.NavigationItem[] }>().props;
@@ -16,9 +17,9 @@ export default function Navigation() {
     return (
         <div className="primary__header">
             <div className="px-6">
-                <a href="/" title="Home">
+                <AppLink href="/" title="Home">
                     <span className="text-5xl font-semibold">Coiné</span>
-                </a>
+                </AppLink>
             </div>
             <nav className={clsx({ open: open, header__navigation: true })}>
                 <div
@@ -48,9 +49,10 @@ export default function Navigation() {
                                 })}
                             >
                                 <div>
-                                    <a
+                                    <AppLink
                                         href={menuItem.href}
                                         title={menuItem.title}
+                                        external={menuItem.isExternal || menuItem.targetBlank}
                                         className={clsx({
                                             current: menuItem.isCurrent,
                                             has__subitems: hasSubItems,
@@ -61,7 +63,7 @@ export default function Navigation() {
                                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                                         </svg>
                                         <span>{menuItem.title}</span>
-                                    </a>
+                                    </AppLink>
                                 </div>
                                 {hasSubItems && (
                                     <div
@@ -73,9 +75,9 @@ export default function Navigation() {
                                         <ul>
                                             {menuItem.subItems.map((subItem, subIndex) => (
                                                 <li key={subIndex} className={clsx({})}>
-                                                    <a href={subItem.href} title={subItem.title}>
+                                                    <AppLink href={subItem.href} title={subItem.title} external={subItem.isExternal}>
                                                         <span>{subItem.title}</span>
-                                                    </a>
+                                                    </AppLink>
                                                 </li>
                                             ))}
                                         </ul>

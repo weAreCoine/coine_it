@@ -1,19 +1,21 @@
+import AppLink from '@/components/appLink';
+
 export default function Colophon() {
     return (
         <div className="colophon">
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">
-                    <a href="/">
+                    <AppLink href="/">
                         <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 text-5xl font-semibold">
                             Coiné
                         </span>
-                    </a>
-                    <a
+                    </AppLink>
+                    <AppLink
                         href="/"
                         className="hidden items-center justify-center border-x border-mercury-700/60 bg-mercury-800/20 px-18 py-10 text-sm font-semibold uppercase md:flex"
                     >
                         Scrivici
-                    </a>
+                    </AppLink>
                 </div>
                 <div className="grid grid-cols-1 divide-x divide-y divide-mercury-800 border border-mercury-700/60 md:grid-cols-3 md:text-sm lg:text-base">
                     <div className="flex items-center justify-start gap-4 px-10 py-8">

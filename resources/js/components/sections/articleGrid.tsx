@@ -1,4 +1,5 @@
 import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
+import AppLink from '@/components/appLink';
 import ArticleCard from '@/components/articleCard';
 import type { ArticleGridData } from '@/types/dto/sections';
 import BlogArticleCard = App.Entities.BlogArticleCard;
@@ -38,12 +39,12 @@ export default function ArticleGrid(props: ArticleGridData) {
                     <p>{props.subtitle}</p>
                 </div>
                 <div>
-                    <a href={props.link.href} title={props.link.title} className="button__primary relative flex text-center md:py-6">
+                    <AppLink href={props.link.href} title={props.link.title} className="button__primary relative flex text-center md:py-6">
                         <span>{props.link.title}</span>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
-                    </a>
+                    </AppLink>
                 </div>
             </div>
 

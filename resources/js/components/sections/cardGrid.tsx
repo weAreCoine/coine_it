@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
+import AppLink from '@/components/appLink';
 import type { CardGridData } from '@/types/dto/sections';
 import BordersDecorations from '@/components/bordersDecorations';
 
@@ -68,12 +69,12 @@ export default function CardGrid(props: CardGridData) {
                 </div>
             </div>
             <div className="mt-12 text-center">
-                <a href={props.link.href} title={props.link.title} className="button__primary relative">
+                <AppLink href={props.link.href} title={props.link.title} className="button__primary relative">
                     <span> {props.link.title}</span>
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
-                </a>
+                </AppLink>
             </div>
         </div>
     );
