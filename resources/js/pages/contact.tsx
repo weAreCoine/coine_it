@@ -1,7 +1,6 @@
-import { Head, useForm } from '@inertiajs/react';
-import React from 'react';
-import { store } from '@/actions/App/Http/Controllers/Pages/ContactPageController';
+import { Head } from '@inertiajs/react';
 import Colophon from '@/components/colophon';
+import ContactForm from '@/components/contactForm';
 import FaqAccordion from '@/components/faqAccordion';
 import Navigation from '@/components/navigation';
 import Faq = App.Entities.Faq;
@@ -11,22 +10,6 @@ type ContactPageProps = {
 };
 
 export default function Contact({ faqs }: ContactPageProps) {
-    const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
-        firstName: '',
-        lastName: '',
-        email: '',
-        phone: '',
-        message: '',
-        termsAccepted: false,
-    });
-
-    function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
-        e.preventDefault();
-        post(store().url, {
-            onSuccess: () => reset(),
-        });
-    }
-
     return (
         <>
             <Head title="Contatti" />
@@ -34,119 +17,15 @@ export default function Contact({ faqs }: ContactPageProps) {
 
             <div className="container mt-16 mb-32">
                 <div className="mx-auto max-w-3xl text-center">
-                    <p className="kicker">Mettiamoci in contatto</p>
-                    <h1 className="page__title my-2">Contattaci</h1>
+                    <p className="kicker">Raccontaci il tuo progetto e i tuoi obiettivi</p>
+                    <h1 className="page__title my-2">Mettiamoci in contatto</h1>
                     <p className="mx-auto max-w-lg text-mercury-500">
-                        Hai un progetto in mente o vuoi saperne di più sui nostri servizi? Compila il modulo e ti risponderemo al più presto.
+                        Costruiamo basi digitali solide per supportare una crescita concreta e misurabile. Inizia oggi il tuo percorso di crescita
+                        digitale.
                     </p>
                 </div>
 
-                {wasSuccessful && (
-                    <div className="mx-auto mt-12 max-w-3xl border border-mercury-200 bg-mercury-50 px-6 py-4 text-center text-sm">
-                        Grazie per averci contattato! Ti risponderemo al più presto.
-                    </div>
-                )}
-
-                <form onSubmit={handleSubmit} className="mx-auto mt-16 max-w-3xl">
-                    <div className="grid grid-cols-1 gap-px border border-mercury-200 bg-mercury-200 md:grid-cols-2">
-                        <div className="coine__input">
-                            <input
-                                id="firstName"
-                                type="text"
-                                value={data.firstName}
-                                onChange={(e) => setData('firstName', e.target.value)}
-                                placeholder=" "
-                                className=""
-                            />
-                            <label htmlFor="firstName">
-                                Nome <span className="text-mercury-400">*</span>
-                            </label>
-                            {errors.firstName && <p className="error__message">{errors.firstName}</p>}
-                        </div>
-
-                        <div className="coine__input">
-                            <input
-                                id="lastName"
-                                type="text"
-                                value={data.lastName}
-                                onChange={(e) => setData('lastName', e.target.value)}
-                                placeholder=" "
-                                className=""
-                            />
-                            <label htmlFor="lastName">
-                                Cognome <span className="text-mercury-400">*</span>
-                            </label>
-                            {errors.lastName && <p className="error__message">{errors.lastName}</p>}
-                        </div>
-
-                        <div className="coine__input">
-                            <input
-                                id="email"
-                                type="email"
-                                value={data.email}
-                                onChange={(e) => setData('email', e.target.value)}
-                                placeholder=" "
-                                className=""
-                            />
-                            <label htmlFor="email">
-                                Email <span className="text-mercury-400">*</span>
-                            </label>
-                            {errors.email && <p className="error__message">{errors.email}</p>}
-                        </div>
-
-                        <div className="coine__input">
-                            <input
-                                id="phone"
-                                type="tel"
-                                value={data.phone}
-                                onChange={(e) => setData('phone', e.target.value)}
-                                placeholder=" "
-                                className=""
-                            />
-                            <label htmlFor="phone">Telefono</label>
-                            {errors.phone && <p className="error__message">{errors.phone}</p>}
-                        </div>
-
-                        <div className="coine__input md:col-span-2">
-                            <textarea
-                                id="message"
-                                rows={6}
-                                value={data.message}
-                                onChange={(e) => setData('message', e.target.value)}
-                                placeholder=" "
-                            />
-                            <label htmlFor="message">
-                                Raccontaci del tuo progetto... <span className="text-mercury-400">*</span>
-                            </label>
-                            {errors.message && <p className="error__message">{errors.message}</p>}
-                        </div>
-                    </div>
-                    <div className="mt-8 block gap-6 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <label className="flex items-start gap-3">
-                                <input
-                                    type="checkbox"
-                                    checked={data.termsAccepted}
-                                    onChange={(e) => setData('termsAccepted', e.target.checked)}
-                                    className="mt-0.5 size-4 shrink-0 accent-black"
-                                />
-                                <span className="text-sm text-mercury-500">
-                                    Accetto il trattamento dei dati personali ai sensi del GDPR. <span className="text-mercury-400">*</span>
-                                </span>
-                            </label>
-                            {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
-                        </div>
-
-                        <div className="mt-8 sm:mt-0">
-                            <button type="submit" disabled={processing} className="button__primary">
-                                {processing ? 'Invio in corso...' : 'Invia messaggio'}
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </form>
+                <ContactForm />
 
                 <div className="mx-auto mt-24 max-w-3xl">
                     <div className="grid grid-cols-1 gap-px border border-mercury-200 bg-mercury-200 md:grid-cols-3">
