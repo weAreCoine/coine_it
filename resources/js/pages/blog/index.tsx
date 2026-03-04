@@ -48,7 +48,12 @@ export default function Index({ featuredArticles, articles, categories, currentC
                 <section className="container mb-16">
                     <div className="blog-index__featured-grid">
                         {featuredArticles.map((article) => (
-                            <ArticleCard key={article.slug} article={article} />
+                            <ArticleCard
+                                key={article.slug}
+                                article={article}
+                                className="border-x border-mercury-200 first:border-t last:border-y"
+                                isLandscape={true}
+                            />
                         ))}
                     </div>
                 </section>
@@ -88,7 +93,11 @@ export default function Index({ featuredArticles, articles, categories, currentC
 
                     <div className="blog-index__grid">
                         {articles.data.map((article) => (
-                            <ArticleCard key={article.slug} article={article} />
+                            <ArticleCard
+                                key={article.slug}
+                                article={article}
+                                className={`border-y border-mercury-200 first:border-l! last:border-r! odd:border-l even:border-l md:even:border-l-0 lg:odd:border-l-0 lg:nth-[4]:border-l`}
+                            />
                         ))}
                     </div>
                 </section>

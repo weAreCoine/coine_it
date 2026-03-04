@@ -2,7 +2,7 @@ export default function Colophon() {
     return (
         <div className="colophon">
             <div className="container">
-                <div className="flex justify-between">
+                <div className="flex flex-col justify-between md:flex-row">
                     <a href="/">
                         <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 text-5xl font-semibold">
                             Coiné
@@ -10,12 +10,12 @@ export default function Colophon() {
                     </a>
                     <a
                         href="/"
-                        className="flex items-center justify-center border-x border-mercury-700/60 bg-mercury-800/20 px-18 py-10 text-sm font-semibold uppercase"
+                        className="hidden items-center justify-center border-x border-mercury-700/60 bg-mercury-800/20 px-18 py-10 text-sm font-semibold uppercase md:flex"
                     >
                         Scrivici
                     </a>
                 </div>
-                <div className="grid grid-cols-3 divide-x divide-mercury-800 border border-mercury-700/60">
+                <div className="grid grid-cols-1 divide-x divide-y divide-mercury-800 border border-mercury-700/60 md:grid-cols-3 md:text-sm lg:text-base">
                     <div className="flex items-center justify-start gap-4 px-10 py-8">
                         <div className="inline-block aspect-square shrink-0 bg-mercury-800/50 p-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" className="size-6">

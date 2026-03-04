@@ -17,11 +17,11 @@
     }
 
     .blog-index__featured-grid {
-        @apply mt-8 grid gap-6 md:grid-cols-2;
+        @apply mt-8 ;
     }
 
     .blog-index__grid {
-        @apply mt-8 grid divide-y divide-mercury-200 border border-mercury-200 md:grid-cols-3 md:divide-x;
+        @apply mt-8 grid  md:grid-cols-2 lg:grid-cols-3 gap-y-8 divide-x;
     }
 
     .blog-index__pagination {
