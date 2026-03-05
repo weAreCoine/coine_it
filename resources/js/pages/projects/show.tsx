@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import Navigation from '@/components/navigation';
 import Colophon from '@/components/colophon';
+import ContactForm from '@/components/contactForm';
 import ProjectCardComponent from '@/components/projectCard';
 import { index } from '@/actions/App/Http/Controllers/Pages/ProjectPageController';
 import ProjectCard = App.Entities.ProjectCard;
@@ -137,13 +138,13 @@ export default function Show({
                         <div className="grid gap-8 md:grid-cols-3">
                             {goal && (
                                 <div>
-                                    <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-mercury-400">Obiettivo</h2>
+                                    <h2 className="mb-2 text-sm font-semibold tracking-wider text-mercury-400 uppercase">Obiettivo</h2>
                                     <div className="rich__text" dangerouslySetInnerHTML={{ __html: goal }} />
                                 </div>
                             )}
                             {tools.length > 0 && (
                                 <div>
-                                    <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-mercury-400">Strumenti</h2>
+                                    <h2 className="mb-2 text-sm font-semibold tracking-wider text-mercury-400 uppercase">Strumenti</h2>
                                     <ul className="list-inside list-disc text-mercury-600">
                                         {tools.map((tool) => (
                                             <li key={tool}>{tool}</li>
@@ -153,7 +154,7 @@ export default function Show({
                             )}
                             {results && (
                                 <div>
-                                    <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-mercury-400">Risultati</h2>
+                                    <h2 className="mb-2 text-sm font-semibold tracking-wider text-mercury-400 uppercase">Risultati</h2>
                                     <div className="rich__text" dangerouslySetInnerHTML={{ __html: results }} />
                                 </div>
                             )}
@@ -179,6 +180,16 @@ export default function Show({
                     </footer>
                 )}
             </article>
+
+            {/* Contact */}
+            <section className="container my-32">
+                <div className="mb-8 text-center">
+                    <p className="kicker">Hai un progetto simile?</p>
+                    <h2 className="section__title">Parliamone insieme</h2>
+                    <p className="mx-auto mt-2 max-w-lg text-mercury-500">Raccontaci la tua idea e scopri come possiamo aiutarti a realizzarla.</p>
+                </div>
+                <ContactForm />
+            </section>
 
             {/* Related Projects */}
             {relatedProjects.length > 0 && (
