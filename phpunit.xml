@@ -16,6 +16,12 @@
         <include>
             <directory>app</directory>
         </include>
+        <exclude>
+            <directory>app/Filament</directory>
+            <file>app/Services/Iubenda.php</file>
+            <file>app/Helpers/IubendaHelper.php</file>
+            <file>app/TypeScript/EloquentModelTransformer.php</file>
+        </exclude>
     </source>
     <php>
         <env name="APP_ENV" value="testing"/>
