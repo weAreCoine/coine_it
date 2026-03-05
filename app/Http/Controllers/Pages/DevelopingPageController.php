@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
-use App\Exceptions\ExceptionHandler;
-use App\Http\Controllers\Controller;
+use App\Abstracts\AbstractPageController;
 use App\Services\ClientsLogosService;
-use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 use Inertia\Response;
-use Throwable;
 
-class DevelopingPageController extends Controller
+class DevelopingPageController extends AbstractPageController
 {
     public function show(): Response
     {
@@ -79,16 +76,5 @@ class DevelopingPageController extends Controller
                 ],
             ],
         ]);
-    }
-
-    private function loadSvg(string $filename): string
-    {
-        try {
-            return File::get(public_path('svg/'.$filename));
-        } catch (Throwable $exception) {
-            ExceptionHandler::handle($exception);
-
-            return '';
-        }
     }
 }

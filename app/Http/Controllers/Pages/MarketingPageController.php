@@ -3,48 +3,80 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
 
-use App\Exceptions\ExceptionHandler;
-use App\Http\Controllers\Controller;
+use App\Abstracts\AbstractPageController;
 use App\Services\ClientsLogosService;
-use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 use Inertia\Response;
-use Throwable;
 
-class MarketingPageController extends Controller
+class MarketingPageController extends AbstractPageController
 {
     public function show(): Response
     {
         return Inertia::render('services/marketing', [
             'faqs' => [
                 [
-                    'question' => __('Quanto tempo ci vuole per sviluppare un sito web o un\'app?'),
-                    'answer' => __('La durata media dei progetti può variare in base alla complessità e alle funzionalità richieste. Ci piace in fase di consulenza analizzare ogni progetto per garantire soluzioni su misura.'),
+                    'question' => __('Cos\'è l\'online advertising e come può aiutare il mio business?'),
+                    'answer' => __('L\'online advertising consiste nella promozione di prodotti o servizi attraverso piattaforme digitali come Google Ads, Facebook Ads, Instagram e altre, per raggiungere target specifici e aumentare la visibilità.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Quali tecnologie utilizzate per lo sviluppo?'),
-                    'answer' => __('Utilizziamo diverse tecnologie in base alle tue esigenze. Diamo molta importanza alle fasi di analisi e progettazione, che ci permettono di comprendere a fondo le specifiche del progetto e individuare gli strumenti più indicati.'),
+                    'question' => __('Quali piattaforme di advertising utilizzate?'),
+                    'answer' => __('Le principali piattaforme su cui operiamo sono: Google Ads, Facebook, Instagram, LinkedIn, YouTube, e altre, a seconda delle necessità del cliente.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Quali sono i costi per lo sviluppo di un sito o un\'app?'),
-                    'answer' => __('I costi variano a seconda delle caratteristiche, delle personalizzazioni e delle integrazioni richieste. Partiamo dalle tue esigenze e dal budget che hai a disposizione per realizzare un preventivo ad hoc.'),
+                    'question' => __('Quanto budget devo investire in una campagna pubblicitaria?'),
+                    'answer' => __('Il budget dipende dagli obiettivi, dal settore e dalla piattaforma scelta. Offriamo consulenza per ottimizzare l\'investimento pubblicitario in modo efficiente.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Offrite assistenza e manutenzione post-lancio?'),
-                    'answer' => __('Assicuriamo servizi di supporto, aggiornamenti e manutenzione, garantendo la continuità del progetto anche dopo la consegna.'),
+                    'question' => __('Come misurate il successo di una campagna di online advertising?'),
+                    'answer' => __('Analizziamo le diverse metriche (KPI) come il ROI (ritorno sull\'investimento), il CTR (click-through rate), le conversioni e altre metriche personalizzate per ogni campagna.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Posso integrare funzionalità specifiche come pagamenti online o CRM?'),
-                    'answer' => __('È possibile aggiungere funzionalità come e-commerce, pagamenti, gestione dei contatti (CRM), e altre integrazioni personalizzate.'),
+                    'question' => __('Quanto tempo ci vuole per vedere i risultati delle campagne?'),
+                    'answer' => __('I primi risultati possono essere visibili già dopo pochi giorni dall\'avvio della campagna, una piena ottimizzazione può richiedere settimane di monitoraggio e aggiustamenti.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Cosa succede se voglio apportare modifiche durante lo sviluppo?'),
-                    'answer' => __('Gestiamo le richieste di modifica con una discreta tolleranza. Valutiamo in base alla richiesta eventuali costi aggiuntivi che ti comunichiamo prima di procedere con il lavoro.'),
+                    'question' => __('Posso fare pubblicità anche se ho un piccolo budget?'),
+                    'answer' => __('Dipende sempre dall\'obiettivo. È possibile avviare campagne anche con budget ridotti, ottimizzando ogni centesimo per ottenere il massimo impatto dalle risorse disponibili.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Come scegliete il target per le mie campagne pubblicitarie?'),
+                    'answer' => __('Il target viene scelto in base a una combinazione di analisi di mercato, dati demografici, interessi e comportamento online del pubblico, per raggiungere gli utenti più rilevanti.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Potete anticipare il budget per le campagne?'),
+                    'answer' => __('Sì, anche se consigliamo e supportiamo l\'apertura di un tuo account. Tuttavia possiamo anticipare il budget e poi fatturare al cliente.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Avete esperienze in settori specifici?'),
+                    'answer' => __('Abbiamo esperienze in settori specifici come e-commerce, servizi professionali, prodotti di consumo, ecc.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Gestite anche la creazione dei contenuti per gli annunci (testi, grafica, video)?'),
+                    'answer' => __('Forniamo un servizio completo, inclusa la creazione di testi pubblicitari, design grafico, e video per ottimizzare le performance della campagna. Tuttavia se il cliente preferisce, può fornirci il materiale.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Come posso sapere se il mio investimento pubblicitario sta funzionando?'),
+                    'answer' => __('Forniamo report dettagliati e regolari sull\'andamento delle campagne, mostrando le performance delle metriche chiave e consigliando ottimizzazioni costanti.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Potete gestire solo una campagna o devo sottoscrivere un contratto a lungo termine?'),
+                    'answer' => __('La flessibilità è la nostra caratteristica. Offriamo sia la gestione di campagne singole che piani continuativi per un monitoraggio e ottimizzazione costante delle attività pubblicitarie.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Cosa significa ottimizzazione della campagna?'),
+                    'answer' => __('Monitoriamo e analizziamo le campagne attive per migliorare continuamente le performance, regolando budget, targeting, e creatività per massimizzare i risultati.'),
                     'opened' => false,
                 ],
             ],
@@ -57,8 +89,8 @@ class MarketingPageController extends Controller
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
-                'title' => __('Creiamo un asset per il tuo business'),
-                'subtitle' => __('Non realizziamo solo semplici siti o app. Costruiamo strumenti digitali progettati per funzionare nel tempo, integrarsi con il marketing e supportare decisioni concrete.'),
+                'title' => __('Advertising orientato a decisioni.'),
+                'subtitle' => __('Le campagne pubblicitarie funzionano davvero solo quando sono inserite in un sistema chiaro. Il focus non è "fare advertising", ma capire se l\'investimento sta generando valore.'),
                 'columns' => [
                     [
                         'icon' => $this->loadSvg('feature-3.svg'),
@@ -80,14 +112,4 @@ class MarketingPageController extends Controller
         ]);
     }
 
-    private function loadSvg(string $filename): string
-    {
-        try {
-            return File::get(public_path('svg/'.$filename));
-        } catch (Throwable $exception) {
-            ExceptionHandler::handle($exception);
-
-            return '';
-        }
-    }
 }

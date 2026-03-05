@@ -21,7 +21,7 @@ export default function ContactForm() {
     }
 
     return (
-        <div className="relative">
+        <div id="contactForm" className="relative">
             <DevLabel name="ContactForm" />
             {wasSuccessful && (
                 <div className="mx-auto mt-12 max-w-3xl border border-mercury-200 bg-mercury-50 px-6 py-4 text-center text-sm">
