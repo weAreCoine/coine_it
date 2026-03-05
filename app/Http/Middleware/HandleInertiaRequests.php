@@ -52,7 +52,7 @@ class HandleInertiaRequests extends Middleware
                     new NavigationItem('Marketing', route('service.marketing')),
                     new NavigationItem('Creazione Contenuti', route('service.content')),
                 ]),
-
+                new NavigationItem('Progetti', route('projects.index')),
                 new NavigationItem('Blog', route('blog.index')),
 
                 new NavigationItem('Scrivici', route('contact.show'), isCallToAction: true),
