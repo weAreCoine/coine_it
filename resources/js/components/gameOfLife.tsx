@@ -1,5 +1,6 @@
 import { clsx } from 'clsx';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import DevLabel from '@/components/devLabel';
 
 const CELLS = 32;
 const FRAME_RATE = 2.5;
@@ -128,7 +129,8 @@ export default function GameOfLife() {
     }, []);
 
     return (
-        <>
+        <div className="relative">
+            <DevLabel name="GameOfLife" />
             <div className="relative">
                 <div ref={containerRef} className="border-2 border-transparent" style={!isPlaying ? { touchAction: 'none' } : undefined} onTouchMove={handleTouchMove}>
                     {board.map((row, rowIndex) => (
@@ -205,6 +207,6 @@ export default function GameOfLife() {
                 </button>
                 </div>
             </div>
-        </>
+        </div>
     );
 }

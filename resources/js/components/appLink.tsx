@@ -25,7 +25,15 @@ type AppLinkProps = InertiaLinkProps & {
 };
 
 function isExternalHref(href: string): boolean {
-    return href.startsWith('mailto:') || href.startsWith('tel:') || /^https?:\/\//.test(href);
+    if (href.startsWith('mailto:') || href.startsWith('tel:')) return true;
+    if (/^https?:\/\//.test(href)) {
+        try {
+            return new URL(href).origin !== window.location.origin;
+        } catch {
+            return true;
+        }
+    }
+    return false;
 }
 
 export default function AppLink({ external, href, prefetch = 'click', ...props }: AppLinkProps) {

@@ -1,6 +1,7 @@
 import { show } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import AppLink from '@/components/appLink';
 import ArticleCard from '@/components/articleCard';
+import DevLabel from '@/components/devLabel';
 import type { ArticleGridData } from '@/types/dto/sections';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
@@ -27,7 +28,8 @@ export default function ArticleGrid(props: ArticleGridData) {
     };
 
     return (
-        <section aria-labelledby="blogTitle" className="container my-32">
+        <section aria-labelledby="blogTitle" className="container relative my-32">
+            <DevLabel name="ArticleGrid" />
             <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
             <div className="flex flex-col items-start justify-between sm:flex-row sm:items-end gap-4">

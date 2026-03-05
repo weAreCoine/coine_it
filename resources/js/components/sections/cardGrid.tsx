@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import type { CardGridData } from '@/types/dto/sections';
 import BordersDecorations from '@/components/bordersDecorations';
 
@@ -48,7 +49,8 @@ export default function CardGrid(props: CardGridData) {
     }, []);
 
     return (
-        <div ref={containerRef} className="container my-24">
+        <div ref={containerRef} className="container relative my-24">
+            <DevLabel name="CardGrid" />
             <div className="text-center">
                 <p className="kicker">{props.kicker}</p>
                 <h2 className="section__title">{props.title}</h2>

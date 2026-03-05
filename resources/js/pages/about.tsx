@@ -104,8 +104,8 @@ export default function About({ numbers, principles }: AboutProps) {
                                 <p className="text-4xl font-semibold xs:text-5xl">{number.scalar}</p>
                                 <div className="inline-flex items-center justify-center rounded-full bg-mercury-100 p-2">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 15 14" fill="none" className="size-2 xs:size-3">
-                                        <path d="M7.40431 13.0625L7.4043 2" stroke="currentColor" stroke-width="1.5"></path>
-                                        <path d="M13.8141 8.40703L7.40703 2L1 8.40703" stroke="currentColor" stroke-width="1.5"></path>
+                                        <path d="M7.40431 13.0625L7.4043 2" stroke="currentColor" strokeWidth="1.5"></path>
+                                        <path d="M13.8141 8.40703L7.40703 2L1 8.40703" stroke="currentColor" strokeWidth="1.5"></path>
                                     </svg>
                                 </div>
                             </div>

@@ -126,7 +126,7 @@ class WelcomePageController extends Controller
             'kicker' => __('Chi siamo'),
             'title' => __('Advertising e sviluppo e-commerce. Senza passaggi di consegna.'),
             'subtitle' => __('Professionisti senior su advertising, sviluppo e contenuti. Zero fornitori da coordinare, zero tempo perso in traduzioni tra chi fa marketing e chi tocca il codice.'),
-            'link' => $this->callToAction,
+            'link' => new NavigationItem('Il nostro team', route('about')),
             'svg' => '',
             'skills' => [
                 [

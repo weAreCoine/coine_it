@@ -2,6 +2,7 @@ import { usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
 import { useEffect, useState } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import NavigationItem = App.Entities.NavigationItem;
 
 export default function Navigation() {
@@ -16,7 +17,8 @@ export default function Navigation() {
     }, []);
 
     return (
-        <div className="primary__header">
+        <div className="primary__header relative">
+            <DevLabel name="Navigation" />
             <div className="px-6">
                 <AppLink href="/" title="Home">
                     <span className="text-5xl font-black text-black">Coiné</span>

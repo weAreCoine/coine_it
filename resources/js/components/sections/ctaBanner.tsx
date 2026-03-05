@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import { useEffect, useRef } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import type { CtaBannerData } from '@/types/dto/sections';
 
 const SWEEP_DURATION = 2;
@@ -155,7 +156,8 @@ export default function CtaBanner(props: CtaBannerData) {
     }, []);
 
     return (
-        <div className="my-32 bg-black pt-10 text-white">
+        <div className="relative my-32 bg-black pt-10 text-white">
+            <DevLabel name="CtaBanner" />
             <div className="relative">
                 <div ref={mountainsRef} className="absolute inset-x-0 top-10 bottom-0 overflow-hidden text-mercury-400" />
                 <div className="relative container pt-24 pb-48">

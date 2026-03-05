@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import type { TabSectionData } from '@/types/dto/sections';
 
 export default function TabSection(props: TabSectionData) {
@@ -7,7 +8,8 @@ export default function TabSection(props: TabSectionData) {
     const activeService = props.services[activeIndex];
 
     return (
-        <section className="tab-section">
+        <section className="tab-section relative">
+            <DevLabel name="TabSection" />
             <div className="tab-section__header">
                 <p className="kicker">{props.kicker}</p>
                 <h2 className="section__title">{props.title}</h2>

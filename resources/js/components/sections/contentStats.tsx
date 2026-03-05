@@ -2,6 +2,7 @@ import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useCallback, useEffect, useRef } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import type { ContentStatsData } from '@/types/dto/sections';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -107,7 +108,8 @@ export default function ContentStats(props: ContentStatsData) {
     }, []);
 
     return (
-        <section ref={sectionRef} className="container my-32">
+        <section ref={sectionRef} className="container relative my-32">
+            <DevLabel name="ContentStats" />
             <div className="grid grid-cols-1 divide-y divide-mercury-200 border border-mercury-200 lg:grid-cols-12 lg:divide-x lg:divide-y-0">
                 <div className="bg-mercury-50 lg:col-span-7">
                     <div className="flex h-full flex-col justify-between px-4 pt-16 pb-8 sm:px-10">

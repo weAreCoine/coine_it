@@ -1,10 +1,12 @@
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import { home } from '@/routes';
 import { show as contact } from '@/routes/contact';
 
 export default function Colophon() {
     return (
-        <div className="colophon">
+        <div className="colophon relative">
+            <DevLabel name="Colophon" />
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">
                     <AppLink href={home.url()}>
@@ -22,8 +24,8 @@ export default function Colophon() {
                         <div className="inline-block aspect-square shrink-0 bg-mercury-800/50 p-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" className="size-6">
                                 <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
                                     d="M0 2H24V4.31556L12.0001 10.861L0 4.31546V2ZM0 6.59364V22H24V6.59373L12.0001 13.1391L0 6.59364Z"
                                     fill="currentColor"
                                 ></path>
@@ -40,8 +42,8 @@ export default function Colophon() {
                         <div className="inline-block aspect-square shrink-0 bg-mercury-800/50 p-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" className="size-6">
                                 <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
                                     d="M0 2H24V4.31556L12.0001 10.861L0 4.31546V2ZM0 6.59364V22H24V6.59373L12.0001 13.1391L0 6.59364Z"
                                     fill="currentColor"
                                 ></path>
@@ -58,8 +60,8 @@ export default function Colophon() {
                         <div className="inline-block aspect-square shrink-0 bg-mercury-800/50 p-4">
                             <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 24 24" fill="none" className="size-6">
                                 <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
+                                    fillRule="evenodd"
+                                    clipRule="evenodd"
                                     d="M0 2H24V4.31556L12.0001 10.861L0 4.31546V2ZM0 6.59364V22H24V6.59373L12.0001 13.1391L0 6.59364Z"
                                     fill="currentColor"
                                 ></path>

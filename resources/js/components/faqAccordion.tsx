@@ -1,6 +1,7 @@
 import { clsx } from 'clsx';
 import { useState } from 'react';
 import BordersDecorations from '@/components/bordersDecorations';
+import DevLabel from '@/components/devLabel';
 import Faq = App.Entities.Faq;
 
 type FaqAccordionProps = {
@@ -12,6 +13,7 @@ export default function FaqAccordion({ faqs }: FaqAccordionProps) {
 
     return (
         <div className="relative grid grid-cols-1 gap-px bg-mercury-200 p-px">
+            <DevLabel name="FaqAccordion" />
             <BordersDecorations bg="bg-mercury-50" />
             {faqs.map((faq, index) => (
                 <div key={index} className="bg-mercury-50 p-4">

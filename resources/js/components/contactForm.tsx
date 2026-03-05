@@ -1,6 +1,7 @@
 import { useForm } from '@inertiajs/react';
 import React from 'react';
 import { store } from '@/actions/App/Http/Controllers/ContactFormController';
+import DevLabel from '@/components/devLabel';
 
 export default function ContactForm() {
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
@@ -20,7 +21,8 @@ export default function ContactForm() {
     }
 
     return (
-        <>
+        <div className="relative">
+            <DevLabel name="ContactForm" />
             {wasSuccessful && (
                 <div className="mx-auto mt-12 max-w-3xl border border-mercury-200 bg-mercury-50 px-6 py-4 text-center text-sm">
                     Grazie per averci contattato! Ti risponderemo al più presto.
@@ -121,6 +123,6 @@ export default function ContactForm() {
                     </div>
                 </div>
             </form>
-        </>
+        </div>
     );
 }

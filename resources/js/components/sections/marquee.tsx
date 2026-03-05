@@ -1,6 +1,7 @@
 import { gsap } from 'gsap';
 import { useEffect, useRef } from 'react';
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import type { MarqueeData } from '@/types/dto/sections';
 
 export default function Marquee(props: MarqueeData) {
@@ -32,7 +33,8 @@ export default function Marquee(props: MarqueeData) {
     const handleMouseLeave = () => tweenRef.current?.resume();
 
     return (
-        <div className="my-32 bg-mercury-50 py-10">
+        <div className="relative my-32 bg-mercury-50 py-10">
+            <DevLabel name="Marquee" />
             <div className="container grid grid-cols-1 items-end gap-2 md:grid-cols-2 md:gap-32 lg:gap-64">
                 <div>
                     <p className="kicker">{props.kicker}</p>

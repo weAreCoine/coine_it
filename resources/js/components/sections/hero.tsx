@@ -1,10 +1,12 @@
 import AppLink from '@/components/appLink';
+import DevLabel from '@/components/devLabel';
 import GameOfLife from '@/components/gameOfLife';
 import type { HeroData } from '@/types/dto/sections';
 
 export default function Hero(props: HeroData) {
     return (
         <section id="hero" aria-labelledby="heroLabel" className="relative">
+            <DevLabel name="Hero" />
             <div className="relative container my-20 grid grid-cols-1 items-center gap-12 md:grid-cols-2">
                 <div className="relative">
                     <div className="absolute top-full left-0 z-[-1] -translate-x-1/4 -translate-y-1/2 text-mercury-200">
