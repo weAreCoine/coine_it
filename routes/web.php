@@ -6,6 +6,7 @@ use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
 use App\Http\Controllers\Pages\ContactPageController;
 use App\Http\Controllers\Pages\DevelopingPageController;
+use App\Http\Controllers\Pages\MarketingPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,8 +28,10 @@ Route::get('/chi-shiamo', [AboutPageController::class, 'show'])
     ->name('about');
 
 Route::prefix('servizi')->group(function () {
-    Route::get('sviluppo', [DevelopingPageController::class, 'show'])
+    Route::get('sviluppo-app-siti-web', [DevelopingPageController::class, 'show'])
         ->name('service.developing');
+    Route::get('marketing', [MarketingPageController::class, 'show'])
+        ->name('service.marketing');
 });
 
 Route::prefix('contact')->group(function () {
