@@ -22,6 +22,7 @@ type InertiaOnlyProps =
 
 type AppLinkProps = InertiaLinkProps & {
     external?: boolean;
+    prevent?: boolean;
 };
 
 function isExternalHref(href: string): boolean {
@@ -36,8 +37,13 @@ function isExternalHref(href: string): boolean {
     return false;
 }
 
-export default function AppLink({ external, href, prefetch = 'click', ...props }: AppLinkProps) {
+export default function AppLink({ external, href, prefetch = 'click', prevent = false, ...props }: AppLinkProps) {
     const hrefString = typeof href === 'string' ? href : href?.url;
+
+    if (prevent) {
+        const anchorProps = props as Omit<typeof props, InertiaOnlyProps> as ComponentProps<'a'>;
+        return <a href={hrefString} onClick={(e) => e.preventDefault()} {...anchorProps} />;
+    }
 
     if (!hrefString || external || isExternalHref(hrefString)) {
         const anchorProps = props as Omit<typeof props, InertiaOnlyProps> as ComponentProps<'a'>;

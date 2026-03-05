@@ -55,6 +55,7 @@ export default function Navigation() {
                                     <AppLink
                                         href={menuItem.href}
                                         title={menuItem.title}
+                                        prevent={menuItem.isPlaceholder}
                                         external={menuItem.isExternal || menuItem.targetBlank}
                                         className={clsx({
                                             current: menuItem.isCurrent,
