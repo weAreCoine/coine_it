@@ -6,17 +6,18 @@ import Faq = App.Entities.Faq;
 
 type FaqAccordionProps = {
     faqs: Faq[];
+    bg?: string;
 };
 
-export default function FaqAccordion({ faqs }: FaqAccordionProps) {
+export default function FaqAccordion({ faqs, bg = 'bg-mercury-50' }: FaqAccordionProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
         <div className="relative grid grid-cols-1 gap-px bg-mercury-200 p-px">
             <DevLabel name="FaqAccordion" />
-            <BordersDecorations bg="bg-mercury-50" />
+            <BordersDecorations bg={bg} />
             {faqs.map((faq, index) => (
-                <div key={index} className="bg-mercury-50 p-4">
+                <div key={index} className={`${bg} p-4`}>
                     <button
                         type="button"
                         onClick={() => setOpenIndex(openIndex === index ? null : index)}

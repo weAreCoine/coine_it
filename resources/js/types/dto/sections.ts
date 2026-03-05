@@ -44,11 +44,11 @@ export type MarqueeData = {
     kicker: string;
     title: string;
     subtitle: string;
-    link: NavigationItem;
+    link: NavigationItem | null;
     slides: {
         logoUrl: string;
         title: string;
-        link: NavigationItem;
+        link: NavigationItem | null;
     }[];
 };
 

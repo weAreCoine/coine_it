@@ -9,8 +9,8 @@ use App\Entities\NavigationItem;
 use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
+use App\Services\ClientsLogosService;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 use Throwable;
@@ -56,15 +56,7 @@ class WelcomePageController extends Controller
             'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => $this->callToAction,
-            'slides' => collect(File::files(public_path('images/clients')))
-                ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
-                ->map(fn ($file) => [
-                    'logoUrl' => asset('images/clients/'.$file->getFilename()),
-                    'title' => Str::headline($file->getFilenameWithoutExtension()),
-                    'link' => $this->callToAction,
-                ])
-                ->values()
-                ->all(),
+            'slides' => ClientsLogosService::all()
         ];
     }
 
@@ -176,7 +168,7 @@ class WelcomePageController extends Controller
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
+                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
             'link' => new NavigationItem('Sfoglia', route('blog.index')),
         ];
     }
