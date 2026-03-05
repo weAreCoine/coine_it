@@ -49,12 +49,12 @@ export default function CardGrid(props: CardGridData) {
     }, []);
 
     return (
-        <div ref={containerRef} className="container relative my-24">
+        <div ref={containerRef} className="relative container my-24">
             <DevLabel name="CardGrid" />
             <div className="text-center">
                 <p className="kicker">{props.kicker}</p>
                 <h2 className="section__title">{props.title}</h2>
-                <p>{props.subtitle}</p>
+                <p className="mx-auto max-w-lg">{props.subtitle}</p>
             </div>
             <div className="relative">
                 <BordersDecorations />
@@ -70,14 +70,16 @@ export default function CardGrid(props: CardGridData) {
                     ))}
                 </div>
             </div>
-            <div className="mt-12 text-center">
-                <AppLink href={props.link.href} title={props.link.title} className="button__primary relative">
-                    <span> {props.link.title}</span>
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                    </svg>
-                </AppLink>
-            </div>
+            {props.link && (
+                <div className="mt-12 text-center">
+                    <AppLink href={props.link.href} title={props.link.title} className="button__primary relative">
+                        <span> {props.link.title}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                        </svg>
+                    </AppLink>
+                </div>
+            )}
         </div>
     );
 }

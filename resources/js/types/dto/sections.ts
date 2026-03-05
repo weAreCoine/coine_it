@@ -17,7 +17,7 @@ export type CardGridData = {
     kicker: string;
     subtitle: string;
     title: string;
-    link: NavigationItem;
+    link?: NavigationItem | null;
     columns: CardGridColumn[];
 };
 
