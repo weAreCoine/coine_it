@@ -12,7 +12,7 @@ type ProjectPageProps = {
     excerpt: string;
     cover: string | null;
     goal: string | null;
-    tools: string | null;
+    tools: string[];
     results: string | null;
     categories: string[];
     tags: string[];
@@ -132,7 +132,7 @@ export default function Show({
                 </figure>
 
                 {/* Goal, Tools, Results */}
-                {(goal || tools || results) && (
+                {(goal || tools.length > 0 || results) && (
                     <section className="container mx-auto mb-12 max-w-160">
                         <div className="grid gap-8 md:grid-cols-3">
                             {goal && (
@@ -141,10 +141,14 @@ export default function Show({
                                     <div className="rich__text" dangerouslySetInnerHTML={{ __html: goal }} />
                                 </div>
                             )}
-                            {tools && (
+                            {tools.length > 0 && (
                                 <div>
                                     <h2 className="mb-2 text-sm font-semibold uppercase tracking-wider text-mercury-400">Strumenti</h2>
-                                    <div className="rich__text" dangerouslySetInnerHTML={{ __html: tools }} />
+                                    <ul className="list-inside list-disc text-mercury-600">
+                                        {tools.map((tool) => (
+                                            <li key={tool}>{tool}</li>
+                                        ))}
+                                    </ul>
                                 </div>
                             )}
                             {results && (

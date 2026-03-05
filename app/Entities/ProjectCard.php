@@ -20,7 +20,7 @@ class ProjectCard implements Arrayable
 
     public ?string $cover;
 
-    /** @var BlogCategoryItem[] */
+    /** @var ProjectCategoryItem[] */
     public array $categories;
 
     public string $createdAt;
@@ -37,7 +37,7 @@ class ProjectCard implements Arrayable
         $instance->excerpt = $project->excerpt;
         $instance->cover = $project->cover ? Storage::disk(Project::$disk)->url($project->cover) : null;
         $instance->categories = $project->categories
-            ->map(fn ($category) => BlogCategoryItem::fromCategory($category))
+            ->map(fn ($category) => ProjectCategoryItem::fromCategory($category))
             ->all();
         $instance->createdAt = $project->created_at->format('d M Y');
         $instance->createdAtIso = $project->created_at->toIso8601String();

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Pages;
 
 use App\Abstracts\AbstractPageController;
-use App\Entities\BlogCategoryItem;
 use App\Entities\ProjectCard;
-use App\Models\Category;
+use App\Entities\ProjectCategoryItem;
 use App\Models\Project;
+use App\Models\ProjectCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
@@ -24,7 +24,7 @@ class ProjectPageController extends AbstractPageController
         $currentCategorySlug = $request->query('category');
 
         $currentCategory = $currentCategorySlug
-            ? Category::query()->where('slug', $currentCategorySlug)->first()
+            ? ProjectCategory::query()->where('slug', $currentCategorySlug)->first()
             : null;
 
         $featuredQuery = Project::query()
@@ -34,7 +34,7 @@ class ProjectPageController extends AbstractPageController
             ->latest();
 
         if ($currentCategory) {
-            $featuredQuery->whereHas('categories', fn ($q) => $q->where('categories.id', $currentCategory->id));
+            $featuredQuery->whereHas('categories', fn ($q) => $q->where('project_categories.id', $currentCategory->id));
         }
 
         $featured = $featuredQuery->limit(2)->get();
@@ -50,7 +50,7 @@ class ProjectPageController extends AbstractPageController
                 ->latest();
 
             if ($currentCategory) {
-                $fillQuery->whereHas('categories', fn ($q) => $q->where('categories.id', $currentCategory->id));
+                $fillQuery->whereHas('categories', fn ($q) => $q->where('project_categories.id', $currentCategory->id));
             }
 
             $fill = $fillQuery->limit($fillCount)->get();
@@ -66,16 +66,16 @@ class ProjectPageController extends AbstractPageController
             ->latest();
 
         if ($currentCategory) {
-            $projectsQuery->whereHas('categories', fn ($q) => $q->where('categories.id', $currentCategory->id));
+            $projectsQuery->whereHas('categories', fn ($q) => $q->where('project_categories.id', $currentCategory->id));
         }
 
         $projects = $projectsQuery->paginate(6)->withQueryString();
 
-        $categories = Category::query()
+        $categories = ProjectCategory::query()
             ->whereHas('projects', fn ($q) => $q->where('is_published', true))
             ->orderBy('name')
             ->get()
-            ->map(fn (Category $category) => BlogCategoryItem::fromCategory($category))
+            ->map(fn (ProjectCategory $category) => ProjectCategoryItem::fromCategory($category))
             ->all();
 
         return Inertia::render('projects/index', [
@@ -96,14 +96,14 @@ class ProjectPageController extends AbstractPageController
     {
         abort_unless($project->is_published, 404);
 
-        $project->load(['categories', 'tags', 'user']);
+        $project->load(['categories', 'tags', 'tools', 'user']);
 
         $categoryIds = $project->categories->pluck('id');
 
         $relatedProjects = Project::query()
             ->where('is_published', true)
             ->where('id', '!=', $project->id)
-            ->whereHas('categories', fn ($q) => $q->whereIn('categories.id', $categoryIds))
+            ->whereHas('categories', fn ($q) => $q->whereIn('project_categories.id', $categoryIds))
             ->with(['categories', 'user'])
             ->latest()
             ->limit(3)
@@ -118,7 +118,7 @@ class ProjectPageController extends AbstractPageController
             'excerpt' => $project->excerpt,
             'cover' => $project->cover ? Storage::disk(Project::$disk)->url($project->cover) : null,
             'goal' => $project->goal,
-            'tools' => $project->tools,
+            'tools' => $project->tools->pluck('name')->all(),
             'results' => $project->results,
             'categories' => $project->categories->pluck('name')->all(),
             'tags' => $project->tags->pluck('name')->all(),

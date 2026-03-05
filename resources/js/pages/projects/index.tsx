@@ -5,7 +5,7 @@ import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 import BordersDecorations from '@/components/bordersDecorations';
 import ProjectCard = App.Entities.ProjectCard;
-import BlogCategoryItem = App.Entities.BlogCategoryItem;
+import ProjectCategoryItem = App.Entities.ProjectCategoryItem;
 
 type PaginatedProjects = {
     data: ProjectCard[];
@@ -17,7 +17,7 @@ type PaginatedProjects = {
 type ProjectsIndexProps = {
     featuredProjects: ProjectCard[];
     projects: PaginatedProjects;
-    categories: BlogCategoryItem[];
+    categories: ProjectCategoryItem[];
     currentCategory: string | null;
     seoTitle: string;
     seoDescription: string;

@@ -30,7 +30,6 @@ class ProjectFactory extends Factory
             'is_published' => fake()->boolean(80),
             'is_featured' => fake()->boolean(20),
             'goal' => fake()->optional()->sentence(),
-            'tools' => fake()->optional()->words(5, true),
             'results' => fake()->optional()->sentence(),
         ];
     }

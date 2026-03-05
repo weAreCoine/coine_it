@@ -31,7 +31,7 @@ class Project extends Model
 
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(Tag::class);
+        return $this->belongsToMany(ProjectTag::class, 'project_project_tag', 'project_id');
     }
 
     public function user(): BelongsTo
@@ -41,7 +41,12 @@ class Project extends Model
 
     public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(ProjectCategory::class, 'project_project_category');
+    }
+
+    public function tools(): BelongsToMany
+    {
+        return $this->belongsToMany(ProjectTool::class, 'project_project_tool');
     }
 
     protected function casts(): array

@@ -58,11 +58,23 @@ class ProjectForm
                             ->required()
                             ->maxLength(255),
                     ]),
+                Select::make('tools')
+                    ->label('Strumenti')
+                    ->multiple()
+                    ->relationship('tools', 'name')
+                    ->createOptionForm([
+                        TextInput::make('name')
+                            ->label('Nome Tool')
+                            ->required()
+                            ->maxLength(255),
+
+                        Textarea::make('description')
+                            ->label('Descrizione')
+                            ->required()
+                            ->maxLength(255),
+                    ]),
                 TextInput::make('goal')
                     ->label('Obiettivo')
-                    ->maxLength(255),
-                TextInput::make('tools')
-                    ->label('Strumenti')
                     ->maxLength(255),
                 TextInput::make('results')
                     ->label('Risultati')
