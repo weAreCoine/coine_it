@@ -6,6 +6,7 @@ namespace App\Abstracts;
 use App\Exceptions\ExceptionHandler;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
+use Throwable;
 
 class AbstractPageController extends Controller
 {

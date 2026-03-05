@@ -5,6 +5,7 @@ use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
 use App\Http\Controllers\Pages\ContactPageController;
+use App\Http\Controllers\Pages\ContentPageController;
 use App\Http\Controllers\Pages\DevelopingPageController;
 use App\Http\Controllers\Pages\MarketingPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
@@ -32,6 +33,7 @@ Route::prefix('servizi')->group(function () {
         ->name('service.developing');
     Route::get('marketing', [MarketingPageController::class, 'show'])
         ->name('service.marketing');
+    Route::get('creazione-contenuti', [ContentPageController::class, 'show'])->name('service.content');
 });
 
 Route::prefix('contact')->group(function () {

@@ -9,18 +9,18 @@ import Marquee from '@/components/sections/marquee';
 import type { CardGridData, MarqueeData } from '@/types/dto/sections';
 import Faq = App.Entities.Faq;
 
-export default function Developing({ cardGrid, faqs, marquee }: { cardGrid: CardGridData; faqs: Faq[]; marquee: MarqueeData }) {
+export default function Content({ cardGrid, faqs, marquee }: { cardGrid: CardGridData; faqs: Faq[]; marquee: MarqueeData }) {
     return (
         <>
-            <Head title="Marketing e Advertising" />
+            <Head title="Marketing e Asdvertising" />
             <Navigation />
             <div className="container mt-20 items-end justify-between md:flex">
                 <div>
                     <p className="kicker mb-2">Servizi</p>
-                    <h1 className="page__title text-balance">Advertising orientato alla vendita</h1>
+                    <h1 className="page__title text-balance">Content Marketing che funziona.</h1>
                 </div>
                 <div className="mt-2 max-w-md md:mt-0">
-                    <p className="text-balance">Non gestiamo annunci come attività isolate, ma come parte di una strategia misurabile.</p>
+                    <p className="text-balance">Creiamo contenuti che hanno un ruolo preciso all’interno della strategia.</p>
                 </div>
             </div>
             <AnimatedLand className="container mt-12" />

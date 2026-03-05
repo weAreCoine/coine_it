@@ -60,7 +60,7 @@ export default function CardGrid(props: CardGridData) {
                 <BordersDecorations />
                 <div className="relative mt-12 grid grid-cols-1 gap-px bg-mercury-200 p-px md:grid-cols-3">
                     {props.columns.map((column, index) => (
-                        <div key={index} className="grid grid-cols-3 items-center gap-8 bg-white p-8 md:grid-cols-1">
+                        <div key={index} className="grid grid-cols-3 items-center gap-8 bg-white p-8 md:flex md:flex-col">
                             <div className="card-grid-icon" dangerouslySetInnerHTML={{ __html: column.icon }} />
                             <div className="col-span-2 md:col-span-1">
                                 <p className="mb-2 text-xl font-medium">{column.title}</p>
