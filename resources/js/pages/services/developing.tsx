@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
-import Navigation from '@/components/navigation';
+import AnimatedLand from '@/components/animatedLand';
 import Colophon from '@/components/colophon';
+import Navigation from '@/components/navigation';
 import CardGrid from '@/components/sections/cardGrid';
 import type { CardGridData } from '@/types/dto/sections';
 
@@ -18,6 +19,7 @@ export default function Developing({ cardGrid }: { cardGrid: CardGridData }) {
                     <p className="text-balance">Sviluppiamo piattaforme digitali pensate per supportare la crescita del tuo business.</p>
                 </div>
             </div>
+            <AnimatedLand className="container mt-12" />
             <CardGrid {...cardGrid} />
             <Colophon />
         </>

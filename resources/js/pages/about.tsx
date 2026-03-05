@@ -1,14 +1,9 @@
 import { Head } from '@inertiajs/react';
-import { useCallback, useEffect, useRef } from 'react';
+import AnimatedLand from '@/components/animatedLand';
 import BordersDecorations from '@/components/bordersDecorations';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 import PrinciplesGrid from '@/components/sections/principlesGrid';
-
-const EXTRACTIONS_PER_SECOND = 120;
-const LAND_COLORS = ['#e3e3e3', '#a3a3a3', '#535353', '#000000'] as const;
-const LAND_COLOR_BLACK = '#000000';
-const LAND_COLOR_INITIAL = '#e3e3e3';
 
 interface NumberItem {
     scalar: string;
@@ -26,59 +21,6 @@ interface AboutProps {
 }
 
 export default function About({ numbers, principles }: AboutProps) {
-    const landRef = useRef<HTMLDivElement | null>(null);
-    const landIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
-
-    const startLandAnimation = useCallback(() => {
-        const container = landRef.current;
-        if (!container) return;
-
-        const paths = Array.from(container.querySelectorAll<SVGPathElement>('path'));
-        if (!paths.length) return;
-
-        paths.forEach((p) => p.setAttribute('fill', LAND_COLOR_INITIAL));
-
-        const colorMap = new Map<SVGPathElement, string>();
-        paths.forEach((p) => colorMap.set(p, LAND_COLOR_INITIAL));
-
-        landIntervalRef.current = setInterval(() => {
-            const nonBlack = paths.filter((p) => colorMap.get(p) !== LAND_COLOR_BLACK);
-            if (!nonBlack.length) {
-                if (landIntervalRef.current) clearInterval(landIntervalRef.current);
-                return;
-            }
-
-            const dot = nonBlack[Math.floor(Math.random() * nonBlack.length)];
-            const currentColor = colorMap.get(dot)!;
-            const available = LAND_COLORS.filter((c) => c !== currentColor);
-            const nextColor = available[Math.floor(Math.random() * available.length)];
-
-            dot.setAttribute('fill', nextColor);
-            colorMap.set(dot, nextColor);
-        }, 1000 / EXTRACTIONS_PER_SECOND);
-    }, []);
-
-    useEffect(() => {
-        const container = landRef.current;
-        if (!container) return;
-
-        fetch('/svg/land.svg')
-            .then((res) => res.text())
-            .then((svgText) => {
-                container.innerHTML = svgText;
-                const svg = container.querySelector('svg');
-                if (svg) {
-                    svg.style.width = 'auto';
-                    svg.style.height = '100%';
-                }
-                startLandAnimation();
-            });
-
-        return () => {
-            if (landIntervalRef.current) clearInterval(landIntervalRef.current);
-        };
-    }, [startLandAnimation]);
-
     return (
         <>
             <Head title="Chi siamo" />
@@ -94,9 +36,7 @@ export default function About({ numbers, principles }: AboutProps) {
                     </p>
                 </div>
             </div>
-            <div className="container mt-12">
-                <div ref={landRef} className="overflow-hidden" />
-            </div>
+            <AnimatedLand className="container mt-12" />
             <div className="container mt-8 grid grid-cols-2 items-center gap-6 md:flex md:justify-between">
                 {numbers &&
                     numbers.map((number, index) => (

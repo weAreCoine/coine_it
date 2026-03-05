@@ -34,7 +34,7 @@ class DevelopingPageController extends Controller
                     [
                         'icon' => $this->loadSvg('feature-2.svg'),
                         'title' => 'Supporto',
-                        'description' => 'Restiamo sempre al tuo fianco: supporto evolutivo, miglioramenti e aggiornamenti per far crescere il progetto insieme a te.',
+                        'description' => 'Restiamo sempre al tuo fianco: supporto evolutivo, con contatto diretto, miglioramenti e aggiornamenti per far crescere il progetto insieme a te.',
                     ],
                 ],
             ],
