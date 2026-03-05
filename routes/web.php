@@ -5,6 +5,7 @@ use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
 use App\Http\Controllers\Pages\ContactPageController;
+use App\Http\Controllers\Pages\DevelopingPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +25,11 @@ Route::prefix('blog')->group(function () {
 
 Route::get('/chi-shiamo', [AboutPageController::class, 'show'])
     ->name('about');
+
+Route::prefix('servizi')->group(function () {
+    Route::get('sviluppo', [DevelopingPageController::class, 'show'])
+        ->name('service.developing');
+});
 
 Route::prefix('contact')->group(function () {
     Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
