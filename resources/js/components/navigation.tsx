@@ -21,7 +21,7 @@ export default function Navigation() {
             <DevLabel name="Navigation" />
             <div className="px-6">
                 <AppLink href="/" title="Home">
-                    <span className="text-5xl font-black text-black">Coiné</span>
+                    <span className="font-display text-3xl font-black text-black">Coiné</span>
                 </AppLink>
             </div>
             <nav className={clsx({ open: open, header__navigation: true })}>
