@@ -1,9 +1,27 @@
-import { Link } from '@inertiajs/react';
+import { type InertiaLinkProps, Link } from '@inertiajs/react';
 import type { ComponentProps } from 'react';
 
-type AppLinkProps = ComponentProps<'a'> & {
+type InertiaOnlyProps =
+    | 'data'
+    | 'only'
+    | 'except'
+    | 'headers'
+    | 'method'
+    | 'preserveScroll'
+    | 'preserveState'
+    | 'replace'
+    | 'async'
+    | 'queryStringArrayFormat'
+    | 'onBefore'
+    | 'onStart'
+    | 'onProgress'
+    | 'onFinish'
+    | 'onCancel'
+    | 'onSuccess'
+    | 'onError';
+
+type AppLinkProps = InertiaLinkProps & {
     external?: boolean;
-    prefetch?: ComponentProps<typeof Link>['prefetch'];
 };
 
 function isExternalHref(href: string): boolean {
@@ -11,8 +29,11 @@ function isExternalHref(href: string): boolean {
 }
 
 export default function AppLink({ external, href, prefetch = 'click', ...props }: AppLinkProps) {
-    if (!href || external || isExternalHref(href)) {
-        return <a href={href} {...props} />;
+    const hrefString = typeof href === 'string' ? href : href?.url;
+
+    if (!hrefString || external || isExternalHref(hrefString)) {
+        const anchorProps = props as Omit<typeof props, InertiaOnlyProps> as ComponentProps<'a'>;
+        return <a href={hrefString} {...anchorProps} />;
     }
 
     return <Link href={href} prefetch={prefetch} {...props} />;
