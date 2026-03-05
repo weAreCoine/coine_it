@@ -67,7 +67,7 @@ export default function About({ numbers, principles }: AboutProps) {
                 container.innerHTML = svgText;
                 const svg = container.querySelector('svg');
                 if (svg) {
-                    svg.style.width = '100%';
+                    svg.style.width = 'auto';
                     svg.style.height = '100%';
                 }
                 startLandAnimation();
@@ -94,22 +94,22 @@ export default function About({ numbers, principles }: AboutProps) {
                 </div>
             </div>
             <div className="container mt-12">
-                <div ref={landRef} />
+                <div ref={landRef} className="overflow-hidden" />
             </div>
-            <div className="container mt-8 grid grid-cols-1 items-center gap-6 sm:grid-cols-2 md:flex md:justify-between">
+            <div className="container mt-8 grid grid-cols-2 items-center gap-6 md:flex md:justify-between">
                 {numbers &&
                     numbers.map((number, index) => (
                         <div key={index}>
                             <div className="flex items-center justify-start gap-2">
-                                <p className="text-5xl font-semibold">{number.scalar}</p>
+                                <p className="text-4xl font-semibold xs:text-5xl">{number.scalar}</p>
                                 <div className="inline-flex items-center justify-center rounded-full bg-mercury-100 p-2">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 15 14" fill="none" className="size-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 15 14" fill="none" className="size-2 xs:size-3">
                                         <path d="M7.40431 13.0625L7.4043 2" stroke="currentColor" stroke-width="1.5"></path>
                                         <path d="M13.8141 8.40703L7.40703 2L1 8.40703" stroke="currentColor" stroke-width="1.5"></path>
                                     </svg>
                                 </div>
                             </div>
-                            <p className="">{number.description}</p>
+                            <p className="text-sm xs:text-base">{number.description}</p>
                         </div>
                     ))}
             </div>
