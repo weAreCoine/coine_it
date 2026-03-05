@@ -22,6 +22,8 @@ class ProjectToolResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Tool Progetto';
 
+    protected static ?int $navigationSort = 2;
+
     public static function getNavigationLabel(): string
     {
         return __('Tools');

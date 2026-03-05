@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Project;
+use App\Models\ProjectCategory;
+use App\Models\ProjectTag;
 use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -48,17 +50,21 @@ class DatabaseSeeder extends Seeder
                 );
             });
 
+        // Create project categories and tags
+        $projectCategories = ProjectCategory::factory(8)->create();
+        $projectTags = ProjectTag::factory(15)->create();
+
         // Create projects with relationships
         Project::factory(15)
             ->recycle($allUsers)
             ->create()
-            ->each(function (Project $project) use ($categories, $tags) {
+            ->each(function (Project $project) use ($projectCategories, $projectTags) {
                 $project->categories()->attach(
-                    $categories->random(rand(1, 3))->pluck('id')
+                    $projectCategories->random(rand(1, 3))->pluck('id')
                 );
 
                 $project->tags()->attach(
-                    $tags->random(rand(2, 5))->pluck('id')
+                    $projectTags->random(rand(2, 5))->pluck('id')
                 );
             });
     }

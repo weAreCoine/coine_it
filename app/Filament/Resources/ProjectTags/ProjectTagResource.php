@@ -22,6 +22,8 @@ class ProjectTagResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Tag Progetto';
 
+    protected static ?int $navigationSort = 4;
+
     public static function getNavigationLabel(): string
     {
         return __('Tags');

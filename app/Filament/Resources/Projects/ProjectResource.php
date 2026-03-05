@@ -24,6 +24,8 @@ class ProjectResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'Progetto';
 
+    protected static ?int $navigationSort = 1;
+
     public static function getNavigationGroup(): string
     {
         return __('Projects');
