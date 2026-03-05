@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import React from 'react';
-import { store } from '@/actions/App/Http/Controllers/Pages/ContactPageController';
+import { store } from '@/actions/App/Http/Controllers/ContactFormController';
 
 export default function ContactForm() {
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
@@ -88,13 +88,7 @@ export default function ContactForm() {
                     </div>
 
                     <div className="coine__input md:col-span-2">
-                        <textarea
-                            id="message"
-                            rows={6}
-                            value={data.message}
-                            onChange={(e) => setData('message', e.target.value)}
-                            placeholder=" "
-                        />
+                        <textarea id="message" rows={6} value={data.message} onChange={(e) => setData('message', e.target.value)} placeholder=" " />
                         <label htmlFor="message">
                             Raccontaci del tuo progetto... <span className="text-mercury-400">*</span>
                         </label>

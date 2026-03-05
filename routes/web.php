@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
@@ -26,5 +27,5 @@ Route::get('/chi-shiamo', [AboutPageController::class, 'show'])
 
 Route::prefix('contact')->group(function () {
     Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
-    Route::post('/', [ContactPageController::class, 'store'])->name('contact.store');
+    Route::post('/', [ContactFormController::class, 'store'])->name('contact.store');
 });

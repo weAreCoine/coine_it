@@ -6,7 +6,6 @@ namespace App\Http\Controllers\Pages;
 
 use App\Entities\Faq;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 
 class ContactPageController extends Controller
@@ -31,15 +30,4 @@ class ContactPageController extends Controller
         ]);
     }
 
-    public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'firstName' => 'required',
-            'lastName' => 'required',
-            'email' => 'required|email',
-            'phone' => 'sometimes|nullable',
-            'message' => 'required',
-            'termsAccepted' => 'accepted',
-        ]);
-    }
 }
