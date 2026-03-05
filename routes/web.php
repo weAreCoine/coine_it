@@ -8,6 +8,7 @@ use App\Http\Controllers\Pages\ContactPageController;
 use App\Http\Controllers\Pages\ContentPageController;
 use App\Http\Controllers\Pages\DevelopingPageController;
 use App\Http\Controllers\Pages\MarketingPageController;
+use App\Http\Controllers\Pages\ProjectPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +40,9 @@ Route::prefix('servizi')->group(function () {
 Route::prefix('contact')->group(function () {
     Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
     Route::post('/', [ContactFormController::class, 'store'])->name('contact.store');
+});
+
+Route::prefix('progetti')->group(function () {
+    Route::get('/', [ProjectPageController::class, 'index'])->name('projects.index');
+    Route::get('/{project:slug}', [ProjectPageController::class, 'show'])->name('projects.show');
 });
