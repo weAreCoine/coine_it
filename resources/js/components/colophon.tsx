@@ -10,7 +10,7 @@ export default function Colophon() {
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">
                     <AppLink href={home.url()}>
-                        <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 font-display text-3xl font-black">
+                        <span className="flex items-center justify-center border-x border-mercury-700/60 px-12 py-10 font-display text-5xl font-black">
                             Coiné
                         </span>
                     </AppLink>
