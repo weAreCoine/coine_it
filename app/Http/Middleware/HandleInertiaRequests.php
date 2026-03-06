@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Entities\NavigationItem;
+use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -36,6 +38,18 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $eventId = Str::uuid()->toString();
+        $request->attributes->set('meta_pixel_event_id', $eventId);
+
+        $flashEvents = collect(session()->get(MetaPixel::sessionKey(), []))
+            ->map(fn (array $event, string $eventName) => [
+                'eventName' => $eventName,
+                'data' => $event['data'] ?? [],
+                'eventId' => $event['event_id'] ?? null,
+            ])
+            ->values()
+            ->all();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
@@ -56,6 +70,12 @@ class HandleInertiaRequests extends Middleware
                 new NavigationItem('Blog', route('blog.index')),
 
                 new NavigationItem('Scrivici', route('contact.show'), isCallToAction: true),
+            ],
+            'metaPixel' => [
+                'eventId' => $eventId,
+                'pixelId' => MetaPixel::pixelId(),
+                'enabled' => MetaPixel::isEnabled(),
+                'flashEvents' => $flashEvents,
             ],
         ];
     }
