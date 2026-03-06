@@ -78,7 +78,10 @@ export default function About({ numbers, principles }: AboutProps) {
                                 <p className="text-xl font-semibold">Luca Barbi</p>
                                 <p className="kicker text-xs">Sviluppo e Marketing</p>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p>
+                                Sviluppatore e performance marketer senior: lucido, diretto, concreto. Unisce visione tecnica e strategica per
+                                costruire e ottimizzare progetti digitali senza giri di parole.
+                            </p>
                         </div>
                     </div>
                     <div className="flex items-center justify-start gap-8 bg-white p-4">
@@ -94,7 +97,10 @@ export default function About({ numbers, principles }: AboutProps) {
                                 <p className="text-xl font-semibold">Silvia Pallai</p>
                                 <p className="kicker text-xs">Content e Marketing</p>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <p>
+                                Digital Strategist tra ascolto e direzione: mette in ordine le idee per costruire percorsi con senso e logica. Cura
+                                parole e strategie social con sensibilità, trasformando la comprensione delle persone in visione concreta.
+                            </p>
                         </div>
                     </div>
                 </div>

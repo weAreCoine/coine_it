@@ -61,17 +61,17 @@ class DevelopingPageController extends AbstractPageController
                     [
                         'icon' => $this->loadSvg('feature-3.svg'),
                         'title' => 'Analisi',
-                        'description' => "Partiamo dagli obiettivi di business, non dalla tecnologia e creiamo una UX e flussi pensati per semplificare l'esperienza e favorire l'azione.",
+                        'description' => "Partiamo dal tuo business, non dalla tecnologia. Progettiamo percorsi chiari e immediati, studiati per facilitare la navigazione e guidare l'utente verso l'acquisto.",
                     ],
                     [
                         'icon' => $this->loadSvg('feature-1.svg'),
                         'title' => 'Sviluppo',
-                        'description' => 'Creiamo codice pulito, manutenibile e scalabile. Utilizzando i coding agents per ridurre i tempi di sviluppo, non per demandare il lavoro.',
+                        'description' => 'Creiamo piattaforme veloci, facili da aggiornare e pronte a crescere. Integriamo i coding agents per accelerare lo sviluppo e la precisione, senza mai delegare la qualità tecnica.',
                     ],
                     [
                         'icon' => $this->loadSvg('feature-2.svg'),
                         'title' => 'Supporto',
-                        'description' => 'Restiamo sempre al tuo fianco: supporto evolutivo, con contatto diretto, miglioramenti e aggiornamenti per far crescere il progetto insieme a te.',
+                        'description' => 'Restiamo al tuo fianco con supporto diretto e costante. Non solo manutenzione, ma aggiornamenti strategici per far evolvere il progetto insieme a te.',
                     ],
                 ],
             ],

@@ -12,7 +12,7 @@ import Faq = App.Entities.Faq;
 export default function Content({ cardGrid, faqs, marquee }: { cardGrid: CardGridData; faqs: Faq[]; marquee: MarqueeData }) {
     return (
         <>
-            <Head title="Marketing e Asdvertising" />
+            <Head title="Content creation" />
             <Navigation />
             <div className="container mt-20 items-end justify-between md:flex">
                 <div>

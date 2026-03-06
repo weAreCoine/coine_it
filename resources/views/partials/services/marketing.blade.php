@@ -1,7 +1,7 @@
 <p class="font-medium">{{ __('Traffico che diventa fatturato') }}</p>
-<p>{{ __('Campagne Google Ads, Meta Ads e LinkedIn Ads gestite da chi conosce anche il codice su cui atterrano. Quando qualcosa non converte, non rimbalziamo il problema — lo risolviamo.') }}</p>
+<p class=text-balance">{{ __('Campagne Google, Meta e LinkedIn Ads gestite da chi sa mettere mano anche al codice del sito. Se un’attività non converte, non deleghiamo il problema: lo risolviamo.') }}</p>
 <ul role="list">
-    <li>{{ __('Campagne search, shopping, social e retargeting') }}</li>
-    <li>{{ __('Ottimizzazione continua su dati reali, non metriche di vanità') }}</li>
-    <li>{{ __('Report mensili con numeri che capisci e decisioni che puoi prendere') }}</li>
+    <li>{{ __('Strategie Search, Shopping, Social e Retargeting') }}</li>
+    <li>{{ __('Ottimizzazione su dati reali, non su metriche di vanità') }}</li>
+    <li>{{ __('Report chiari con dati concreti e decisioni strategiche') }}</li>
 </ul>

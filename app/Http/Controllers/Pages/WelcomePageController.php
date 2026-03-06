@@ -17,12 +17,9 @@ use Throwable;
 
 class WelcomePageController extends Controller
 {
-    private NavigationItem $callToAction;
 
     public function show(): Response
     {
-        $this->callToAction = new NavigationItem('Scopri di più', isCallToAction: true);
-
         return Inertia::render('welcome', [
             'hero' => $this->heroData(),
             'marquee' => $this->marqueeData(),
@@ -42,7 +39,7 @@ class WelcomePageController extends Controller
         return [
             'title' => __('Costruiamo insieme la tua presenza digitale'),
             'description' => 'Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.',
-            'link' => $this->callToAction,
+            'link' => new NavigationItem('Raccontaci la tua idea', route('contact.show')),
         ];
     }
 
@@ -55,7 +52,7 @@ class WelcomePageController extends Controller
             'kicker' => __('Portfolio'),
             'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
-            'link' => $this->callToAction,
+            'link' => new NavigationItem('I nostri case studies', route('projects.index')),
             'slides' => ClientsLogosService::all()
         ];
     }
@@ -69,7 +66,7 @@ class WelcomePageController extends Controller
             'kicker' => __('Il nostro metodo'),
             'title' => __('Decisioni basate sui dati.'),
             'subtitle' => __('Un metodo chiaro, basato su dati e conversioni.'),
-            'link' => $this->callToAction,
+            'link' => new NavigationItem('Raccontaci la tua idea', route('contact.show')),
             'columns' => [
                 [
                     'icon' => $this->loadSvg('feature-1.svg'),
@@ -117,7 +114,7 @@ class WelcomePageController extends Controller
         return [
             'kicker' => __('Chi siamo'),
             'title' => __('Advertising e sviluppo e-commerce. Senza passaggi di consegna.'),
-            'subtitle' => __('Professionisti senior su advertising, sviluppo e contenuti. Zero fornitori da coordinare, zero tempo perso in traduzioni tra chi fa marketing e chi tocca il codice.'),
+            'subtitle' => __('Professionisti senior su advertising, sviluppo e contenuti. Zero fornitori da coordinare, zero tempo perso in traduzioni a fare da interprete tra chi fa marketing e chi tocca il codice.'),
             'link' => new NavigationItem('Il nostro team', route('about')),
             'svg' => '',
             'skills' => [
@@ -148,8 +145,8 @@ class WelcomePageController extends Controller
         return [
             'kicker' => 'Approccio Data-Driven',
             'title' => 'Sviluppiamo strategie basate su dati concreti.',
-            'subtitle' => 'Ogni strategia nasce dall\'analisi dei dati realmente utili, così ti aiutiamo a misurare ciò che conta e a interpretare correttamente i risultati.',
-            'link' => $this->callToAction,
+            'subtitle' => 'Ogni strategia nasce dall\'analisi dei dati realmente utili. T aiutiamo a misurare ciò che conta e a interpretare correttamente i risultati.',
+            'link' => new NavigationItem('Raccontaci la tua idea', route('contact.show')),
         ];
     }
 
@@ -185,14 +182,14 @@ class WelcomePageController extends Controller
                     'tabLabel' => __('Sviluppo'),
                     'icon' => asset('svg/flash.svg'),
                     'title' => __('Sviluppo'),
-                    'link' => $this->callToAction,
+                    'link' => new NavigationItem('Scopri di più', route('service.developing')),
                     'html' => $this->renderPartial('partials.services.sviluppo'),
                 ],
                 [
                     'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.8539 0.700195C7.69882 0.700195 6.56967 1.04272 5.60925 1.68445C4.64883 2.32618 3.90027 3.2383 3.45824 4.30546C3.0162 5.37263 2.90055 6.5469 3.12589 7.6798C3.35124 8.81269 3.90747 9.85332 4.72424 10.6701C5.54101 11.4869 6.58164 12.0431 7.71453 12.2684C8.84742 12.4938 10.0217 12.3781 11.0889 11.9361C12.156 11.4941 13.0681 10.7455 13.7099 9.78508C14.3516 8.82466 14.6941 7.69551 14.6941 6.54042C14.6924 4.99203 14.0765 3.50756 12.9816 2.41268C11.8868 1.3178 10.4023 0.701934 8.8539 0.700195Z" fill="currentColor"></path><path d="M9.58235 9.12158V12.8187H8.12229V9.12158L6.25707 7.87981L7.0674 6.66504L8.85232 7.85498L10.6372 6.66577L11.4476 7.88054L9.58235 9.12158Z" fill="white"></path><path d="M6.66406 14.5704H8.12412V15.3004H9.58418V14.5704H11.0442V13.1104H6.66406V14.5704Z" fill="currentColor"></path></svg>',
                     'tabLabel' => __('Marketing'),
                     'icon' => asset('svg/bulb.svg'),
-                    'link' => $this->callToAction,
+                    'link' => new NavigationItem('Scopri di più', route('service.marketing')),
                     'title' => __('Marketing & Advertising'),
                     'html' => $this->renderPartial('partials.services.marketing'),
                 ],
@@ -200,7 +197,7 @@ class WelcomePageController extends Controller
                     'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.75722 0.972769C8.76758 0.856733 8.93715 0.856733 8.9475 0.972769C9.27623 4.65642 12.1958 7.57595 15.8794 7.90468C15.9955 7.91504 15.9955 8.08461 15.8794 8.09496C12.1958 8.42369 9.27623 11.3432 8.9475 15.0269C8.93715 15.1429 8.76758 15.1429 8.75722 15.0269C8.42849 11.3432 5.50896 8.42369 1.82531 8.09496C1.70927 8.08461 1.70927 7.91504 1.82531 7.90468C5.50896 7.57595 8.42849 4.65642 8.75722 0.972769Z" fill="currentColor"></path></svg>',
                     'tabLabel' => __('Content'),
                     'icon' => asset('svg/star.svg'),
-                    'link' => $this->callToAction,
+                    'link' => new NavigationItem('Scopri di più', route('service.content')),
                     'title' => __('Content'),
                     'html' => $this->renderPartial('partials.services.content'),
                 ],
