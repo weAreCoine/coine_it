@@ -1,6 +1,6 @@
 @layer base {
-    html {
-        overscroll-behavior-y: none;
+    html, body {
+        overscroll-behavior: none;
     }
 
     @font-face {
