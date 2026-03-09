@@ -89,23 +89,23 @@ class MarketingPageController extends AbstractPageController
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
-                'title' => __('Advertising orientato a decisioni.'),
-                'subtitle' => __('Le campagne pubblicitarie funzionano davvero solo quando sono inserite in un sistema chiaro. Il focus non è "fare advertising", ma capire se l\'investimento sta generando valore.'),
+                'title' => __('Advertising per guidare le scelte'),
+                'subtitle' => __('Le campagne funzionano solo se inserite in un sistema chiaro. L\'obiettivo non è "fare pubblicità", ma verificare che ogni euro investito generi valore reale'),
                 'columns' => [
                     [
                         'icon' => $this->loadSvg('feature-3.svg'),
-                        'title' => 'Comprensione del contesto',
-                        'description' => "Iniziamo sempre dall'analisi del contesto e dalla comprensione degli obiettivi aziendali così da rendere misurabile il rendimento dell'investimento pubblicitario.",
+                        'title' => 'Contesto e obiettivi',
+                        'description' => "Analizziamo lo scenario aziendale per rendere il rendimento dell'investimento totalmente misurabile.",
                     ],
                     [
                         'icon' => $this->loadSvg('feature-1.svg'),
-                        'title' => 'Strategia',
-                        'description' => 'Colleghiamo le campagne ai dati reali di vendita: L’obiettivo è rendere il percorso più fluido e ridurre i punti di frizione che bloccano la vendita.',
+                        'title' => 'Strategia e dati di vendita',
+                        'description' => 'Colleghiamo le campagne ai dati reali per rendere il percorso d’acquisto più fluido e intuitivo.',
                     ],
                     [
                         'icon' => $this->loadSvg('feature-2.svg'),
                         'title' => 'Operatività e reporting',
-                        'description' => 'Ottimizzazione continua delle campagne, guidati dai dati raccolti invece che da tentativi, fornendo report dettagliati e analisi per migliorare le performance.',
+                        'description' => 'Ottimizzazione continua basata su evidenze, non su tentativi. Report chiari con i dati che servono per migliorare le performance.',
                     ],
                 ],
             ],

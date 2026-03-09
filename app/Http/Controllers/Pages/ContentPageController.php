@@ -84,23 +84,23 @@ class ContentPageController extends AbstractPageController
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
-                'title' => __('Contenuti che lasciano il segno.'),
-                'subtitle' => __('Il content marketing non serve solamente a generare traffico. Serve a costruire fiducia, rispondere ai dubbi e a supportare il percorso decisionale.'),
+                'title' => __('Contenuti che costruiscono fiducia'),
+                'subtitle' => __('Il content marketing non serve solo a generare traffico. Serve a rispondere ai dubbi, creare autorevolezza e supportare concretamente il percorso d’acquisto.'),
                 'columns' => [
                     [
                         'icon' => $this->loadSvg('feature-3.svg'),
                         'title' => 'Ricerca e pianificazione',
-                        'description' => "Identifichiamo temi e formati efficaci per il tuo pubblico e li inseriamo la comunicazione in un contesto strategico per aumentare la qualità delle interazioni.",
+                        'description' => 'Identifichiamo temi e formati strategici per il tuo pubblico, trasformando la comunicazione in uno strumento per aumentare la qualità delle interazioni.',
                     ],
                     [
                         'icon' => $this->loadSvg('feature-1.svg'),
                         'title' => 'Creazione dei contenuti',
-                        'description' => 'Scriviamo articoli, post i tuoi account social e produciamo contenuti multimediali che coinvolgano il tuo target di riferimento.',
+                        'description' => 'Scriviamo articoli, gestiamo i tuoi canali social e produciamo contenuti multimediali studiati per coinvolgere il tuo target.',
                     ],
                     [
                         'icon' => $this->loadSvg('feature-2.svg'),
-                        'title' => 'Promozione e analisi',
-                        'description' => 'Ottimizziamo la pubblicazione dei contenuti sulle piattaforme più efficaci, analizzando le performance per migliorare ogni giorno.',
+                        'title' => 'Distribuzione e analisi',
+                        'description' => 'Pubblichiamo dove conta davvero e analizziamo i risultati per ottimizzare la strategia giorno dopo giorno.',
                     ],
                 ],
             ],
