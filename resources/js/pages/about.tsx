@@ -4,6 +4,7 @@ import BordersDecorations from '@/components/bordersDecorations';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
 import PrinciplesGrid from '@/components/sections/principlesGrid';
+import ContactForm from '@/components/contactForm';
 
 interface NumberItem {
     scalar: string;
@@ -65,9 +66,13 @@ export default function About({ numbers, principles }: AboutProps) {
                 </div>
                 <div className="relative mt-8 grid gap-px bg-mercury-200 p-px lg:grid-cols-2">
                     <BordersDecorations />
-                    <div className="flex items-center justify-start gap-8 bg-white p-4">
-                        <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
-                            <img src={'/images/luca.webp'} alt="Luca Barbi" className="h-full w-auto object-cover" />
+                    <div className="group flex items-center justify-start gap-8 bg-white p-4">
+                        <div className="aspect-square max-w-40 shrink-0 overflow-clip lg:aspect-9/12 xl:aspect-square">
+                            <img
+                                src={'/images/luca.webp'}
+                                alt="Luca Barbi"
+                                className="h-full w-auto scale-100 object-cover brightness-125 grayscale duration-300 group-hover:scale-110 group-hover:brightness-100 group-hover:grayscale-0"
+                            />
                         </div>
                         <div className="grow">
                             <div className="flex items-baseline gap-2">
@@ -80,9 +85,13 @@ export default function About({ numbers, principles }: AboutProps) {
                             </p>
                         </div>
                     </div>
-                    <div className="flex items-center justify-start gap-8 bg-white p-4">
-                        <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
-                            <img src={'/images/silvia.webp'} alt="Silvia Pallai" className="h-full w-auto object-cover" />
+                    <div className="group flex items-center justify-start gap-8 bg-white p-4">
+                        <div className="aspect-square max-w-40 shrink-0 overflow-clip lg:aspect-9/12 xl:aspect-square">
+                            <img
+                                src={'/images/silvia.webp'}
+                                alt="Silvia Pallai"
+                                className="h-full w-auto scale-100 object-cover brightness-125 grayscale duration-300 group-hover:scale-110 group-hover:brightness-100 group-hover:grayscale-0"
+                            />
                         </div>
                         <div className="grow">
                             <div className="flex items-baseline gap-2">
@@ -97,6 +106,18 @@ export default function About({ numbers, principles }: AboutProps) {
                     </div>
                 </div>
             </div>
+            <div className="container my-24">
+                <div className="mx-auto max-w-3xl text-center">
+                    <p className="kicker">Ora tocca a te presentarti</p>
+                    <h1 className="page__title my-2">Non vediamo l'ora di conoscerti</h1>
+                    <p className="mx-auto max-w-lg text-mercury-500">
+                        Parlaci delle tue idee e dei tuoi obiettivi. Ti risponderemo entro 24 ore e capiremo insieme come potremo esserti utili.
+                    </p>
+                </div>
+
+                <ContactForm />
+            </div>
+
             <Colophon />
         </>
     );
