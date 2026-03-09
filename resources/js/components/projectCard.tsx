@@ -26,13 +26,17 @@ export default function ProjectCardComponent({ project, className, isLandscape =
                         <time dateTime={project.createdAtIso} className="text-sm uppercase">
                             {project.createdAt}
                         </time>{' '}
-                        <span className="text-sm font-semibold text-mercury-400">/</span>{' '}
-                        {project.categories.map((category, index) => (
-                            <span key={category.slug} className="text-sm uppercase">
-                                {index > 0 && ', '}
-                                {category.name}
-                            </span>
-                        ))}
+                        {project.categories.length > 0 && (
+                            <>
+                                <span className="text-sm font-semibold text-mercury-400">/</span>{' '}
+                                {project.categories.map((category, index: number) => (
+                                    <span key={category.slug} className="text-sm uppercase">
+                                        {index > 0 && ', '}
+                                        {category.name}
+                                    </span>
+                                ))}
+                            </>
+                        )}
                     </div>
 
                     <div className="flex justify-end">

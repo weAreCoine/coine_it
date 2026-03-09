@@ -89,6 +89,11 @@
         > *:last-child {
             @apply mb-0;
         }
+
+        table {
+            @apply w-full;
+
+        }
     }
 
     .game-of-life__button {
