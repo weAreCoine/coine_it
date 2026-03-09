@@ -195,7 +195,7 @@ class WelcomePageController extends Controller
                 ],
                 [
                     'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><path d="M8.75722 0.972769C8.76758 0.856733 8.93715 0.856733 8.9475 0.972769C9.27623 4.65642 12.1958 7.57595 15.8794 7.90468C15.9955 7.91504 15.9955 8.08461 15.8794 8.09496C12.1958 8.42369 9.27623 11.3432 8.9475 15.0269C8.93715 15.1429 8.76758 15.1429 8.75722 15.0269C8.42849 11.3432 5.50896 8.42369 1.82531 8.09496C1.70927 8.08461 1.70927 7.91504 1.82531 7.90468C5.50896 7.57595 8.42849 4.65642 8.75722 0.972769Z" fill="currentColor"></path></svg>',
-                    'tabLabel' => __('Content'),
+                    'tabLabel' => __('Contenuti'),
                     'icon' => asset('svg/star.svg'),
                     'link' => new NavigationItem('Scopri di più', route('service.content')),
                     'title' => __('Content'),
