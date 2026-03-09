@@ -1,6 +1,6 @@
 import AppLink from '@/components/appLink';
 import DevLabel from '@/components/devLabel';
-import { home } from '@/routes';
+import { cookiePolicy, home, privacyPolicy } from '@/routes';
 import { show as contact } from '@/routes/contact';
 
 export default function Colophon() {
@@ -79,9 +79,42 @@ export default function Colophon() {
                 </div>
 
                 <div className="border-x border-mercury-700/60 bg-mercury-800/20 px-6 py-8">
-                    <p className="text-xs">
-                        © 2014-{new Date().getFullYear()} <a href="https://coine.it">coine.it</a> - Tutti i diritti riservati // P.IVA: IT03615310368
-                    </p>
+                    <div className="sm: justify-between sm:flex sm:items-center">
+                        <p className="text-xs">
+                            © 2014-{new Date().getFullYear().toString().slice(-2)} <a href="https://coine.it">coine.it</a> - Tutti i diritti riservati{' '}
+                            <br />
+                            P.IVA: IT03615310368 <span className="mx-1 text-mercury-600"></span>
+                        </p>
+                        <nav>
+                            <ul className="mt-2 items-center gap-4 sm:mt-0 sm:flex">
+                                <li>
+                                    <AppLink
+                                        href={privacyPolicy.url()}
+                                        className="text-xs text-mercury-400 underline underline-offset-2 transition-colors hover:text-mercury-200"
+                                    >
+                                        PRIVACY POLICY
+                                    </AppLink>
+                                </li>
+                                <li>
+                                    <AppLink
+                                        href={cookiePolicy.url()}
+                                        className="text-xs text-mercury-400 underline underline-offset-2 transition-colors hover:text-mercury-200"
+                                    >
+                                        COOKIE POLICY
+                                    </AppLink>
+                                </li>
+                                <li>
+                                    <button
+                                        type="button"
+                                        onClick={() => window.dispatchEvent(new Event('open-consent-settings'))}
+                                        className="cursor-pointer text-xs text-mercury-400 underline underline-offset-2 transition-colors hover:text-mercury-200"
+                                    >
+                                        PREFERENZE GDPR
+                                    </button>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
                 </div>
             </div>
         </div>

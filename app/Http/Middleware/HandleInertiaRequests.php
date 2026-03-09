@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use App\Entities\NavigationItem;
+use App\Helpers\CookieConsent;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -70,6 +71,10 @@ class HandleInertiaRequests extends Middleware
                 new NavigationItem('Blog', route('blog.index')),
 
                 new NavigationItem('Scrivici', route('contact.show'), isCallToAction: true),
+            ],
+            'consent' => [
+                'given' => CookieConsent::hasConsent(),
+                'marketing' => CookieConsent::hasMarketingConsent(),
             ],
             'metaPixel' => [
                 'eventId' => $eventId,

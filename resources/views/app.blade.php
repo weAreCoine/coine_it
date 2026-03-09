@@ -18,7 +18,28 @@
         :article="$seoArticle ?? null"
         :breadcrumbs="$seoBreadcrumbs ?? []"
     />
-    <x-metapixel-head />
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'wait_for_update': 500
+        });
+        @if(\App\Helpers\CookieConsent::hasMarketingConsent())
+        gtag('consent', 'update', {
+            'ad_storage': 'granted',
+            'ad_user_data': 'granted',
+            'ad_personalization': 'granted',
+            'analytics_storage': 'granted'
+        });
+        @endif
+    </script>
+    @if(\App\Helpers\CookieConsent::hasMarketingConsent())
+        <x-metapixel-head />
+    @endif
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter-tight:400,400i,500,500i,600,600i|press-start-2p:400"
           rel="stylesheet" />
@@ -27,7 +48,9 @@
     @inertiaHead
 </head>
 <body class="font-sans antialiased md:subpixel-antialiased scroll-smooth overflow-x-clip">
-<x-metapixel-body />
+@if(\App\Helpers\CookieConsent::hasMarketingConsent())
+    <x-metapixel-body />
+@endif
 @inertia
 </body>
 </html>

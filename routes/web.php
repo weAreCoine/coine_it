@@ -6,8 +6,10 @@ use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
 use App\Http\Controllers\Pages\ContactPageController;
 use App\Http\Controllers\Pages\ContentPageController;
+use App\Http\Controllers\Pages\CookiePolicyPageController;
 use App\Http\Controllers\Pages\DevelopingPageController;
 use App\Http\Controllers\Pages\MarketingPageController;
+use App\Http\Controllers\Pages\PrivacyPolicyPageController;
 use App\Http\Controllers\Pages\ProjectPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
 use Illuminate\Support\Facades\Route;
@@ -41,6 +43,12 @@ Route::prefix('contact')->group(function () {
     Route::get('/', [ContactPageController::class, 'show'])->name('contact.show');
     Route::post('/', [ContactFormController::class, 'store'])->name('contact.store');
 });
+
+Route::get('/cookie-policy', [CookiePolicyPageController::class, 'show'])
+    ->name('cookie-policy');
+
+Route::get('/privacy-policy', [PrivacyPolicyPageController::class, 'show'])
+    ->name('privacy-policy');
 
 Route::prefix('progetti')->group(function () {
     Route::get('/', [ProjectPageController::class, 'index'])->name('projects.index');

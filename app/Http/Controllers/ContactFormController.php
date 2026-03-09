@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Exceptions\ExceptionHandler;
+use App\Helpers\CookieConsent;
 use App\Http\Requests\ContactFormRequest;
 use App\Models\Lead;
 use Combindma\FacebookPixel\Facades\MetaPixel;
@@ -29,7 +30,7 @@ class ContactFormController extends Controller
 
     private function trackLeadEvent(): void
     {
-        if (!MetaPixel::isEnabled()) {
+        if (! MetaPixel::isEnabled() || ! CookieConsent::hasMarketingConsent()) {
             return;
         }
 

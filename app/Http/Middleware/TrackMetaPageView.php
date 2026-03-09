@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
+use App\Helpers\CookieConsent;
 use Closure;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -20,7 +21,7 @@ class TrackMetaPageView
     {
         $response = $next($request);
 
-        if (! MetaPixel::isEnabled()) {
+        if (! MetaPixel::isEnabled() || ! CookieConsent::hasMarketingConsent()) {
             return $response;
         }
 

@@ -99,8 +99,7 @@
         }
 
         table {
-            @apply w-full;
-
+            @apply w-full my-4;
         }
     }
 

@@ -37,6 +37,11 @@ function trackEvent(eventName: string, data: Record<string, unknown> = {}, event
 export function handleMetaPixelNavigation(pageProps: Record<string, unknown>): void {
     const metaPixel = pageProps.metaPixel as MetaPixelProps | undefined;
 
+    const consent = pageProps.consent as { marketing?: boolean } | undefined;
+    if (!consent?.marketing) {
+        return;
+    }
+
     if (!metaPixel?.enabled) {
         return;
     }

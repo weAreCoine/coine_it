@@ -11,6 +11,11 @@ interface MetaPixelSharedProps {
     }>;
 }
 
+interface ConsentProps {
+    given: boolean;
+    marketing: boolean;
+}
+
 declare module '@inertiajs/core' {
     export interface InertiaConfig {
         sharedPageProps: {
@@ -18,6 +23,7 @@ declare module '@inertiajs/core' {
             env: string;
             auth: Auth;
             sidebarOpen: boolean;
+            consent: ConsentProps;
             metaPixel: MetaPixelSharedProps;
             [key: string]: unknown;
         };
