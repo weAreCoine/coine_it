@@ -83,7 +83,9 @@ export default function Show({
                 {/* Hero / Header */}
                 <header className="container mt-16 mb-8 max-w-180 text-balance">
                     <div className="mb-4 text-center text-sm uppercase">
-                        <time dateTime={createdAtIso}>{createdAt}</time>
+                        <time className="hidden" dateTime={createdAtIso}>
+                            {createdAt}
+                        </time>
                         {categories.length > 0 && (
                             <>
                                 <span className="mx-2 font-semibold text-mercury-200">/</span>
@@ -92,7 +94,7 @@ export default function Show({
                         )}
                     </div>
                     <h1 className="page__title text-center">{title}</h1>
-                    <p className="mt-4 text-center text-mercury-500">{authorName}</p>
+                    {/*<p className="mt-4 text-center text-mercury-500">{authorName}</p>*/}
                 </header>
 
                 {/* Cover image full-width */}
@@ -134,10 +136,10 @@ export default function Show({
 
                 {/* Goal, Tools, Results */}
                 {(goal || tools.length > 0 || results) && (
-                    <section className="mx-auto mb-12 max-w-160 text-sm">
+                    <section className="mx-auto mb-12 max-w-200 text-sm">
                         <div className="relative grid grid-cols-2 gap-px bg-mercury-200 p-px">
                             {goal && (
-                                <div className="col-span-2 bg-white p-4">
+                                <div className="bg-white p-4">
                                     <div className="mb-4 flex items-center gap-4 pb-2">
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
@@ -156,33 +158,6 @@ export default function Show({
                                         <h2 className="text-base font-semibold tracking-wider">Obiettivi</h2>
                                     </div>
                                     <div className="rich__text" dangerouslySetInnerHTML={{ __html: goal }} />
-                                </div>
-                            )}
-                            {tools.length > 0 && (
-                                <div className="bg-white p-4">
-                                    <div className="mb-4 flex items-center gap-4 pb-2">
-                                        <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            fill="none"
-                                            viewBox="0 0 24 24"
-                                            strokeWidth={1.5}
-                                            stroke="currentColor"
-                                            className="size-6"
-                                        >
-                                            <path
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
-                                            />
-                                        </svg>
-
-                                        <h2 className="text-base font-semibold tracking-wider">Strumenti</h2>
-                                    </div>
-                                    <ul className="list-inside list-disc">
-                                        {tools.map((tool) => (
-                                            <li key={tool}>{tool}</li>
-                                        ))}
-                                    </ul>
                                 </div>
                             )}
                             {results && (
@@ -206,6 +181,33 @@ export default function Show({
                                         <h2 className="text-base font-semibold tracking-wider">Risultati</h2>
                                     </div>
                                     <div className="rich__text" dangerouslySetInnerHTML={{ __html: results }} />
+                                </div>
+                            )}
+                            {tools.length > 0 && (
+                                <div className="col-span-2 bg-white p-4">
+                                    <div className="mb-4 flex items-center gap-4 pb-2">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            strokeWidth={1.5}
+                                            stroke="currentColor"
+                                            className="size-6"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                d="M11.42 15.17 17.25 21A2.652 2.652 0 0 0 21 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 1 1-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 0 0 4.486-6.336l-3.276 3.277a3.004 3.004 0 0 1-2.25-2.25l3.276-3.276a4.5 4.5 0 0 0-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437 1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008Z"
+                                            />
+                                        </svg>
+
+                                        <h2 className="text-base font-semibold tracking-wider">Strumenti utilizzati</h2>
+                                    </div>
+                                    <ul className="project__tools_list">
+                                        {tools.map((tool) => (
+                                            <li key={tool}>{tool}</li>
+                                        ))}
+                                    </ul>
                                 </div>
                             )}
                         </div>
