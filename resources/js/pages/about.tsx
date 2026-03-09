@@ -67,11 +67,7 @@ export default function About({ numbers, principles }: AboutProps) {
                     <BordersDecorations />
                     <div className="flex items-center justify-start gap-8 bg-white p-4">
                         <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
-                            <img
-                                src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3b39/68a6e5ff7b59be67bb3ac207_john-carter-avatar-quantum-webflow-template.jpg"
-                                alt=""
-                                className="h-full w-auto object-cover"
-                            />
+                            <img src={'/images/luca.webp'} alt="Luca Barbi" className="h-full w-auto object-cover" />
                         </div>
                         <div className="grow">
                             <div className="flex items-baseline gap-2">
@@ -86,11 +82,7 @@ export default function About({ numbers, principles }: AboutProps) {
                     </div>
                     <div className="flex items-center justify-start gap-8 bg-white p-4">
                         <div className="aspect-square max-w-40 shrink-0 lg:aspect-9/12 xl:aspect-square">
-                            <img
-                                src="https://cdn.prod.website-files.com/68a342b7066c56fa60eb3b39/68a6e5d29b2f76acd088f052_sophie-moore-avatar-quantum-webflow-template.jpg"
-                                alt=""
-                                className="h-full w-auto object-cover"
-                            />
+                            <img src={'/images/silvia.webp'} alt="Silvia Pallai" className="h-full w-auto object-cover" />
                         </div>
                         <div className="grow">
                             <div className="flex items-baseline gap-2">
