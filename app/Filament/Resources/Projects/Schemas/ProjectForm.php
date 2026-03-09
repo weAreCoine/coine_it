@@ -10,6 +10,8 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 
 class ProjectForm
 {
@@ -26,6 +28,19 @@ class ProjectForm
                     ->required(),
                 TextInput::make('slug')
                     ->required(),
+                Select::make('client_logo')
+                    ->label('Logo Cliente')
+                    ->options(function () {
+                        return collect(File::files(public_path('images/clients')))
+                            ->filter(fn ($file) => in_array($file->getExtension(), ['png', 'jpg', 'jpeg', 'svg', 'webp']))
+                            ->mapWithKeys(fn ($file) => [
+                                $file->getFilename() => Str::headline($file->getFilenameWithoutExtension()),
+                            ])
+                            ->all();
+                    })
+                    ->searchable()
+                    ->nullable()
+                    ->helperText('Associa questo progetto a un logo cliente nel marquee'),
                 Select::make('user_id')
                     ->relationship('user', 'name')
                     ->default(auth()->id())

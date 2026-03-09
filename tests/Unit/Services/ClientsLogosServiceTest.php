@@ -1,7 +1,9 @@
 <?php
 
-uses(Tests\TestCase::class);
+uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 
+use App\Entities\NavigationItem;
+use App\Models\Project;
 use App\Services\ClientsLogosService;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
@@ -12,24 +14,17 @@ beforeEach(function () {
 
 test('returns array of logos with correct structure', function () {
     $testDir = public_path('images/clients');
+    File::ensureDirectoryExists($testDir);
+    File::put($testDir.'/test-client.png', 'fake');
 
-    if (! File::isDirectory($testDir) || count(File::files($testDir)) === 0) {
-        File::ensureDirectoryExists($testDir);
-        File::put($testDir.'/test-client.png', 'fake');
+    $logos = ClientsLogosService::all();
 
-        $logos = ClientsLogosService::all();
+    expect($logos)->toBeArray()
+        ->and(collect($logos)->firstWhere('title', 'Test Client'))
+        ->not->toBeNull()
+        ->toHaveKeys(['logoUrl', 'title', 'link']);
 
-        File::delete($testDir.'/test-client.png');
-    } else {
-        $logos = ClientsLogosService::all();
-    }
-
-    expect($logos)->toBeArray();
-
-    if (count($logos) > 0) {
-        expect($logos[0])->toHaveKeys(['logoUrl', 'title', 'link'])
-            ->and($logos[0]['link'])->toBeNull();
-    }
+    File::delete($testDir.'/test-client.png');
 });
 
 test('filters by allowed image extensions', function () {
@@ -99,4 +94,44 @@ test('returns empty array when directory has no image files', function () {
     }
 
     expect($logos)->toBeArray()->toBeEmpty();
+});
+
+test('links logo to published project with matching client_logo', function () {
+    $testDir = public_path('images/clients');
+    File::ensureDirectoryExists($testDir);
+    File::put($testDir.'/linked-client.png', 'fake');
+
+    $project = Project::factory()->create([
+        'is_published' => true,
+        'client_logo' => 'linked-client.png',
+    ]);
+
+    $logos = ClientsLogosService::all();
+    $linkedLogo = collect($logos)->firstWhere('title', 'Linked Client');
+
+    expect($linkedLogo)->not->toBeNull()
+        ->and($linkedLogo['link'])->toBeInstanceOf(NavigationItem::class)
+        ->and($linkedLogo['link']->title)->toBe($project->title)
+        ->and($linkedLogo['link']->href)->toBe(route('projects.show', $project));
+
+    File::delete($testDir.'/linked-client.png');
+});
+
+test('does not link logo to unpublished project', function () {
+    $testDir = public_path('images/clients');
+    File::ensureDirectoryExists($testDir);
+    File::put($testDir.'/unpublished-client.png', 'fake');
+
+    Project::factory()->create([
+        'is_published' => false,
+        'client_logo' => 'unpublished-client.png',
+    ]);
+
+    $logos = ClientsLogosService::all();
+    $logo = collect($logos)->firstWhere('title', 'Unpublished Client');
+
+    expect($logo)->not->toBeNull()
+        ->and($logo['link'])->toBeNull();
+
+    File::delete($testDir.'/unpublished-client.png');
 });

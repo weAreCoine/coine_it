@@ -14,6 +14,12 @@ class Project extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected static function booted(): void
+    {
+        static::saved(fn () => cache()->forget('clientsLogos'));
+        static::deleted(fn () => cache()->forget('clientsLogos'));
+    }
+
     public static string $disk = 'public';
 
     public string $excerpt {
