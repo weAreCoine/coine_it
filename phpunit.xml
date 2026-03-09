@@ -18,8 +18,6 @@
         </include>
         <exclude>
             <directory>app/Filament</directory>
-            <file>app/Services/Iubenda.php</file>
-            <file>app/Helpers/IubendaHelper.php</file>
             <file>app/TypeScript/EloquentModelTransformer.php</file>
         </exclude>
     </source>

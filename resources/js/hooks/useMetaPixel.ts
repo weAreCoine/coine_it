@@ -17,34 +17,8 @@ interface FlashEvent {
     eventId: string;
 }
 
-/**
- * Reads the Iubenda consent cookie and checks if purpose 3 (experience) is accepted.
- */
-function hasIubendaConsent(): boolean {
-    const cookies = document.cookie.split(';');
-
-    for (const cookie of cookies) {
-        const trimmed = cookie.trim();
-
-        if (trimmed.startsWith('_iub_cs-s=') || trimmed.startsWith('_iub_cs=')) {
-            try {
-                const value = decodeURIComponent(trimmed.split('=').slice(1).join('='));
-                const data = JSON.parse(value);
-
-                if (data?.purposes && typeof data.purposes === 'object') {
-                    return data.purposes[3] === true;
-                }
-            } catch {
-                // Invalid cookie format
-            }
-        }
-    }
-
-    return false;
-}
-
 function trackEvent(eventName: string, data: Record<string, unknown> = {}, eventId?: string): void {
-    if (!window.fbq || !hasIubendaConsent()) {
+    if (!window.fbq) {
         return;
     }
 

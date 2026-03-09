@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Helpers\IubendaHelper;
 use Closure;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -25,11 +24,7 @@ class TrackMetaPageView
             return $response;
         }
 
-        if (! IubendaHelper::hasExperienceConsent()) {
-            return $response;
-        }
-
-        if ($request->is('api/*') || IubendaHelper::bot_detected()) {
+        if ($request->is('api/*')) {
             return $response;
         }
 

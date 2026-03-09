@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Helpers\IubendaHelper;
+use App\Exceptions\ExceptionHandler;
 use App\Http\Requests\ContactFormRequest;
 use App\Models\Lead;
 use Combindma\FacebookPixel\Facades\MetaPixel;
@@ -29,7 +29,7 @@ class ContactFormController extends Controller
 
     private function trackLeadEvent(): void
     {
-        if (! MetaPixel::isEnabled() || ! IubendaHelper::hasExperienceConsent()) {
+        if (!MetaPixel::isEnabled()) {
             return;
         }
 
@@ -38,7 +38,7 @@ class ContactFormController extends Controller
         try {
             MetaPixel::send('Lead', $leadEventId, new CustomData);
         } catch (\Exception $e) {
-            \Illuminate\Support\Facades\Log::error('Meta Pixel CAPI Lead failed', ['error' => $e->getMessage()]);
+            ExceptionHandler::handle($e);
         }
 
         MetaPixel::flashEvent('Lead', [], $leadEventId);
