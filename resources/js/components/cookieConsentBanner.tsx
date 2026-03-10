@@ -7,16 +7,17 @@ function setCookie(name: string, value: string, days: number): void {
     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
 }
 
-function saveConsent(marketing: boolean): void {
-    const consent = JSON.stringify({ necessary: true, marketing });
-    setCookie('cookie_consent', consent, 365);
-    router.reload();
-}
-
 export default function CookieConsentBanner() {
     const [visible, setVisible] = useState(false);
     const [showSettings, setShowSettings] = useState(false);
     const [marketing, setMarketing] = useState(false);
+
+    function saveConsent(marketingConsent: boolean): void {
+        const consent = JSON.stringify({ necessary: true, marketing: marketingConsent });
+        setCookie('cookie_consent', consent, 365);
+        setVisible(false);
+        router.reload();
+    }
 
     useEffect(() => {
         const consent = getConsentFromCookie();
@@ -100,14 +101,14 @@ export default function CookieConsentBanner() {
                             <button
                                 type="button"
                                 onClick={() => saveConsent(false)}
-                                className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
+                                className="cursor-pointer rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
                             >
                                 Solo necessari
                             </button>
                             <button
                                 type="button"
                                 onClick={() => saveConsent(true)}
-                                className="rounded-lg bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
+                                className="rounded-lg cursor-pointer bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
                             >
                                 Accetta tutti
                             </button>
