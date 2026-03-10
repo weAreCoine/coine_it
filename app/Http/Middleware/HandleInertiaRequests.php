@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Entities\NavigationItem;
 use App\Helpers\CookieConsent;
+use App\Services\GoogleAnalytics\GoogleAnalyticsService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -81,6 +82,11 @@ class HandleInertiaRequests extends Middleware
                 'pixelId' => MetaPixel::pixelId(),
                 'enabled' => MetaPixel::isEnabled(),
                 'flashEvents' => $flashEvents,
+            ],
+            'googleAnalytics' => [
+                'measurementId' => GoogleAnalyticsService::measurementId(),
+                'enabled' => GoogleAnalyticsService::isEnabled(),
+                'flashEvents' => session()->pull('ga4_flash_events', []),
             ],
         ];
     }

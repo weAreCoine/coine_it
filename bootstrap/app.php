@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\HandleInertiaRequests;
+use App\Http\Middleware\TrackGAPageView;
 use App\Http\Middleware\TrackMetaPageView;
 use Combindma\FacebookPixel\MetaPixelMiddleware;
 use Illuminate\Foundation\Application;
@@ -20,6 +21,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: [
             'cookie_consent',
+            '_ga',
         ]);
 
         $middleware->web(append: [
@@ -27,6 +29,7 @@ return Application::configure(basePath: dirname(__DIR__))
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             TrackMetaPageView::class,
+            TrackGAPageView::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

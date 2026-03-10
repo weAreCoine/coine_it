@@ -8,6 +8,7 @@ use App\Exceptions\ExceptionHandler;
 use App\Helpers\CookieConsent;
 use App\Http\Requests\ContactFormRequest;
 use App\Models\Lead;
+use App\Services\GoogleAnalytics\GoogleAnalyticsService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Support\Str;
@@ -26,6 +27,7 @@ class ContactFormController extends Controller
         ]);
 
         $this->trackLeadEvent();
+        $this->trackGALeadEvent($request);
     }
 
     private function trackLeadEvent(): void
@@ -43,5 +45,11 @@ class ContactFormController extends Controller
         }
 
         MetaPixel::flashEvent('Lead', [], $leadEventId);
+    }
+
+    private function trackGALeadEvent(ContactFormRequest $request): void
+    {
+        GoogleAnalyticsService::trackGenerateLead($request);
+        GoogleAnalyticsService::flashEvent('generate_lead');
     }
 }

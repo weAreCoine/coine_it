@@ -37,6 +37,15 @@
         });
         @endif
     </script>
+    @if(\App\Helpers\CookieConsent::hasMarketingConsent() && \App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled())
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}"></script>
+        <script>
+            gtag('js', new Date());
+            gtag('config', '{{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}', {
+                send_page_view: false
+            });
+        </script>
+    @endif
     @if(\App\Helpers\CookieConsent::hasMarketingConsent())
         <x-metapixel-head />
     @endif
