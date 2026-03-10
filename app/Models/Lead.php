@@ -20,6 +20,7 @@ class Lead extends Model
     {
         return [
             'terms' => 'boolean',
+            'services' => 'array',
             'updated_at' => 'datetime',
             'created_at' => 'datetime',
             'stage' => LeadStage::class,
