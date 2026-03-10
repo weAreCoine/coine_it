@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Head, Link } from '@inertiajs/react';
 import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import ArticleCard from '@/components/articleCard';
@@ -25,6 +26,40 @@ type BlogIndexProps = {
 };
 
 export default function Index({ featuredArticles, articles, categories, currentCategory, seoTitle, seoDescription, canonicalUrl }: BlogIndexProps) {
+    const filtersNavRef = useRef<HTMLElement>(null);
+    const [canScrollLeft, setCanScrollLeft] = useState(false);
+    const [canScrollRight, setCanScrollRight] = useState(false);
+
+    const updateScrollState = useCallback(() => {
+        const nav = filtersNavRef.current;
+        if (!nav) return;
+        setCanScrollLeft(nav.scrollLeft > 1);
+        setCanScrollRight(nav.scrollLeft + nav.clientWidth < nav.scrollWidth - 1);
+    }, []);
+
+    useEffect(() => {
+        const nav = filtersNavRef.current;
+        if (!nav) return;
+        updateScrollState();
+        nav.addEventListener('scroll', updateScrollState);
+        return () => nav.removeEventListener('scroll', updateScrollState);
+    }, [updateScrollState]);
+
+    const scrollByOneTag = (direction: 'left' | 'right') => {
+        const nav = filtersNavRef.current;
+        if (!nav) return;
+        const children = Array.from(nav.children) as HTMLElement[];
+        const navLeft = nav.getBoundingClientRect().left;
+
+        if (direction === 'right') {
+            const next = children.find((child) => child.getBoundingClientRect().left > navLeft + 1);
+            if (next) nav.scrollTo({ left: nav.scrollLeft + (next.getBoundingClientRect().left - navLeft), behavior: 'smooth' });
+        } else {
+            const prev = [...children].reverse().find((child) => child.getBoundingClientRect().left < navLeft - 1);
+            if (prev) nav.scrollTo({ left: nav.scrollLeft + (prev.getBoundingClientRect().left - navLeft), behavior: 'smooth' });
+        }
+    };
+
     return (
         <>
             <Head title={seoTitle}>
@@ -68,7 +103,7 @@ export default function Index({ featuredArticles, articles, categories, currentC
                         </div>
                         {/* Category Filters */}
                         <div className="blog-index__filters">
-                            <nav className="blog-index__filters-nav">
+                            <nav ref={filtersNavRef} className="blog-index__filters-nav">
                                 <Link
                                     href={index.url()}
                                     preserveState
@@ -87,6 +122,18 @@ export default function Index({ featuredArticles, articles, categories, currentC
                                     </Link>
                                 ))}
                             </nav>
+                            <div className="flex justify-end gap-4 mt-2">
+                                <button type="button" onClick={() => scrollByOneTag('left')} disabled={!canScrollLeft} aria-label="Scorri filtri a sinistra" className="disabled:opacity-25 transition-opacity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" fill="currentColor" className="size-3">
+                                        <polygon points="10,0 10,10 0,5" />
+                                    </svg>
+                                </button>
+                                <button type="button" onClick={() => scrollByOneTag('right')} disabled={!canScrollRight} aria-label="Scorri filtri a destra" className="disabled:opacity-25 transition-opacity">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10" fill="currentColor" className="size-3">
+                                        <polygon points="0,0 0,10 10,5" />
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                     </div>
 
