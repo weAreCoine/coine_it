@@ -40,16 +40,18 @@ export default function GameOfLife() {
     const paintValue = useRef(false);
 
     useEffect(() => {
-        const updateCellWidth = () => {
-            if (containerRef.current) {
-                setCellWidth(containerRef.current.clientWidth / CELLS);
+        if (!containerRef.current) return;
+
+        const observer = new ResizeObserver((entries) => {
+            const entry = entries[0];
+            if (entry) {
+                setCellWidth(entry.contentRect.width / CELLS);
             }
-        };
+        });
 
-        updateCellWidth();
-        window.addEventListener('resize', updateCellWidth);
+        observer.observe(containerRef.current);
 
-        return () => window.removeEventListener('resize', updateCellWidth);
+        return () => observer.disconnect();
     }, []);
 
     useEffect(() => {

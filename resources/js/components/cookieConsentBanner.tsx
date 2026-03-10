@@ -1,3 +1,4 @@
+import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { getConsentFromCookie } from '@/hooks/useConsent';
 
@@ -6,10 +7,10 @@ function setCookie(name: string, value: string, days: number): void {
     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
 }
 
-function saveAndReload(marketing: boolean): void {
+function saveConsent(marketing: boolean): void {
     const consent = JSON.stringify({ necessary: true, marketing });
     setCookie('cookie_consent', consent, 365);
-    window.location.reload();
+    router.reload();
 }
 
 export default function CookieConsentBanner() {
@@ -89,7 +90,7 @@ export default function CookieConsentBanner() {
                         {showSettings && (
                             <button
                                 type="button"
-                                onClick={() => saveAndReload(marketing)}
+                                onClick={() => saveConsent(marketing)}
                                 className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
                             >
                                 Salva preferenze
@@ -98,14 +99,14 @@ export default function CookieConsentBanner() {
                         <div className="flex space-x-2">
                             <button
                                 type="button"
-                                onClick={() => saveAndReload(false)}
+                                onClick={() => saveConsent(false)}
                                 className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
                             >
                                 Solo necessari
                             </button>
                             <button
                                 type="button"
-                                onClick={() => saveAndReload(true)}
+                                onClick={() => saveConsent(true)}
                                 className="rounded-lg bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
                             >
                                 Accetta tutti

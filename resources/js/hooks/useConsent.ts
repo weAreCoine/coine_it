@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react';
+import { router, usePage } from '@inertiajs/react';
 
 interface ConsentState {
     given: boolean;
@@ -15,10 +15,10 @@ function getCookie(name: string): string | null {
     return match ? decodeURIComponent(match[1]) : null;
 }
 
-function saveAndReload(marketing: boolean): void {
+function saveConsent(marketing: boolean): void {
     const consent = JSON.stringify({ necessary: true, marketing });
     setCookie('cookie_consent', consent, 365);
-    window.location.reload();
+    router.reload();
 }
 
 /**
@@ -30,9 +30,9 @@ export function useConsent() {
     return {
         hasGivenConsent: consent.given,
         hasMarketingConsent: consent.marketing,
-        acceptAll: () => saveAndReload(true),
-        rejectAll: () => saveAndReload(false),
-        savePreferences: ({ marketing }: { marketing: boolean }) => saveAndReload(marketing),
+        acceptAll: () => saveConsent(true),
+        rejectAll: () => saveConsent(false),
+        savePreferences: ({ marketing }: { marketing: boolean }) => saveConsent(marketing),
     };
 }
 

@@ -1,6 +1,6 @@
 import { usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AppLink from '@/components/appLink';
 import DevLabel from '@/components/devLabel';
 import NavigationItem = App.Entities.NavigationItem;
@@ -9,12 +9,6 @@ export default function Navigation() {
     const { navigationItems } = usePage<{ navigationItems: App.Entities.NavigationItem[] }>().props;
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [open, setOpen] = useState<boolean>(false);
-
-    useEffect(() => {
-        const handleResize = () => setHoveredIndex(null);
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
 
     return (
         <div className="primary__header relative">

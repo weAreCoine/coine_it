@@ -1,6 +1,12 @@
 @layer base {
-    html, body {
+    body {
         overscroll-behavior: none;
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+        html {
+            scroll-behavior: smooth;
+        }
     }
 
     @font-face {

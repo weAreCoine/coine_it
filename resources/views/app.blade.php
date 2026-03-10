@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark', 'overflow-x-clip'])>
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -47,7 +47,7 @@
     @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
     @inertiaHead
 </head>
-<body class="font-sans antialiased md:subpixel-antialiased scroll-smooth overflow-x-clip">
+<body class="font-sans antialiased md:subpixel-antialiased overflow-x-clip">
 @if(\App\Helpers\CookieConsent::hasMarketingConsent())
     <x-metapixel-body />
 @endif
