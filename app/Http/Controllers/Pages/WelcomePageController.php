@@ -145,7 +145,7 @@ class WelcomePageController extends Controller
         return [
             'kicker' => 'Approccio Data-Driven',
             'title' => 'Sviluppiamo strategie basate su dati concreti.',
-            'subtitle' => 'Ogni strategia nasce dall\'analisi dei dati realmente utili. T aiutiamo a misurare ciò che conta e a interpretare correttamente i risultati.',
+            'subtitle' => 'Ogni strategia nasce dall\'analisi dei dati realmente utili. Ti aiutiamo a misurare ciò che conta e a interpretare correttamente i risultati.',
             'link' => new NavigationItem('Raccontaci la tua idea', route('contact.show')),
         ];
     }
@@ -175,7 +175,7 @@ class WelcomePageController extends Controller
         return [
             'kicker' => __('Servizi'),
             'title' => __('Cosa facciamo'),
-            'subtitle' => __('Advertising, sviluppo e contenuti per e-commerce che vogliono vendere di più, non sembrare solamente più belli.'),
+            'subtitle' => __('Advertising, sviluppo e contenuti per e-commerce che puntano ai risultati, non solo all\'estetica.'),
             'services' => [
                 [
                     'tabIcon' => '<svg xmlns="http://www.w3.org/2000/svg" width="100%" viewBox="0 0 17 16" fill="none" class="squared-icon"><g clip-path="url(#clip0_15906_7025)"><path d="M16.1862 5.33333H10.1862V0L1.51953 10.6667H7.51953V16L16.1862 5.33333Z" fill="currentColor"></path></g></svg>',
