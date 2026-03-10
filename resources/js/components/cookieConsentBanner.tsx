@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getConsentFromCookie } from '@/hooks/useConsent';
 
 function setCookie(name: string, value: string, days: number): void {
@@ -42,8 +42,8 @@ export default function CookieConsentBanner() {
                 <div className="flex flex-col gap-4">
                     <div>
                         <p className="text-sm text-mercury-300">
-                            Utilizziamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie di marketing per analizzare il
-                            traffico e migliorare la tua esperienza.
+                            Utilizziamo cookie tecnici necessari al funzionamento del sito e, con il tuo consenso, cookie di marketing per analizzare
+                            il traffico e migliorare la tua esperienza.
                         </p>
                     </div>
 
@@ -54,7 +54,7 @@ export default function CookieConsentBanner() {
                                     <p className="text-sm font-semibold text-mercury-200">Necessari</p>
                                     <p className="text-xs text-mercury-400">Sempre attivi, indispensabili per il funzionamento del sito.</p>
                                 </div>
-                                <div className="rounded-full bg-mercury-600 px-3 py-1 text-xs text-mercury-200">Sempre attivi</div>
+                                <div className="rounded-full bg-mercury-600 px-3 py-1 text-xs whitespace-nowrap text-mercury-200">Sempre attivi</div>
                             </div>
                             <div className="flex items-center justify-between">
                                 <div>
@@ -95,20 +95,22 @@ export default function CookieConsentBanner() {
                                 Salva preferenze
                             </button>
                         )}
-                        <button
-                            type="button"
-                            onClick={() => saveAndReload(false)}
-                            className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
-                        >
-                            Solo necessari
-                        </button>
-                        <button
-                            type="button"
-                            onClick={() => saveAndReload(true)}
-                            className="rounded-lg bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
-                        >
-                            Accetta tutti
-                        </button>
+                        <div className="flex space-x-2">
+                            <button
+                                type="button"
+                                onClick={() => saveAndReload(false)}
+                                className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
+                            >
+                                Solo necessari
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => saveAndReload(true)}
+                                className="rounded-lg bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
+                            >
+                                Accetta tutti
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
