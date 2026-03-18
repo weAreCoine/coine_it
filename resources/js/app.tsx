@@ -9,7 +9,6 @@ import '../css/app.css';
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 router.on('navigate', (event) => {
-    document.getElementById('app')?.scrollTo(0, 0);
     handleMetaPixelNavigation(event.detail.page.props);
     handleGANavigation(event.detail.page.props);
 });
