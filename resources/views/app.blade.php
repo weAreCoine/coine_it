@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark'])>
+    lang="{{ str_replace('_', '-', app()->getLocale()) }}" @class(['dark' => ($appearance ?? 'system') == 'dark', 'overflow-x-hidden'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,7 +20,11 @@
     />
     <script>
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
@@ -38,7 +42,8 @@
         @endif
     </script>
     @if(\App\Helpers\CookieConsent::hasMarketingConsent() && \App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled())
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}"></script>
+        <script async
+                src="https://www.googletagmanager.com/gtag/js?id={{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}"></script>
         <script>
             gtag('js', new Date());
             gtag('config', '{{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}', {

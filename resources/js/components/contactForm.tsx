@@ -107,7 +107,7 @@ export default function ContactForm() {
                                 className="mt-0.5 size-4 shrink-0 accent-black"
                             />
                             <span className="text-sm text-mercury-500">
-                                Accetto il trattamento dei dati personali ai sensi del GDPR. <span className="text-mercury-400">*</span>
+                                Accetto il trattamento dei dati personali ai sensi del GDPR<span className="text-mercury-400">*</span>.
                             </span>
                         </label>
                         {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
