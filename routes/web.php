@@ -28,7 +28,7 @@ Route::prefix('blog')->group(function () {
         ->name('blog.category');
 });
 
-Route::get('/chi-shiamo', [AboutPageController::class, 'show'])
+Route::get('/chi-siamo', [AboutPageController::class, 'show'])
     ->name('about');
 
 Route::prefix('servizi')->group(function () {
