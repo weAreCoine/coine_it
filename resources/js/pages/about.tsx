@@ -67,7 +67,7 @@ export default function About({ numbers, principles }: AboutProps) {
                 <div className="relative mt-8 grid gap-px bg-mercury-200 p-px lg:grid-cols-2">
                     <BordersDecorations />
                     <div className="group flex flex-col items-center justify-start gap-8 bg-white p-4 sm:flex-row">
-                        <div className="aspect-square max-w-40 shrink-0 overflow-clip lg:aspect-9/12 xl:aspect-square">
+                        <div className="aspect-square max-w-40 shrink-0 overflow-hidden lg:aspect-9/12 xl:aspect-square">
                             <img
                                 src={'/images/luca.webp'}
                                 alt="Luca Barbi"
@@ -86,7 +86,7 @@ export default function About({ numbers, principles }: AboutProps) {
                         </div>
                     </div>
                     <div className="group flex flex-col items-center justify-start gap-8 bg-white p-4 sm:flex-row">
-                        <div className="aspect-square max-w-40 shrink-0 overflow-clip lg:aspect-9/12 xl:aspect-square">
+                        <div className="aspect-square max-w-40 shrink-0 overflow-hidden lg:aspect-9/12 xl:aspect-square">
                             <img
                                 src={'/images/silvia.webp'}
                                 alt="Silvia Pallai"
