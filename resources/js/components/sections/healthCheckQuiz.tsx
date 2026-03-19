@@ -207,8 +207,8 @@ export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
                         E-commerce <em>Health Check</em>
                     </h2>
                     <p className="mx-auto max-w-xl text-balance text-white/60">
-                        Sei domande sul tuo e-commerce. Al termine ricevi una diagnosi preliminare che identifica le aree di attenzione e le
-                        priorità di intervento — senza impegno.
+                        Sei domande sul tuo e-commerce. Al termine ricevi una diagnosi preliminare che identifica le aree di attenzione e le priorità
+                        di intervento — senza impegno.
                     </p>
                 </div>
 
@@ -223,9 +223,7 @@ export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
                         <QuestionStep
                             question={questions[state.step]}
                             selectedValue={state.answers[questions[state.step].key]?.value}
-                            onSelect={(value, points) =>
-                                dispatch({ type: 'SELECT_OPTION', key: questions[state.step].key, value, points })
-                            }
+                            onSelect={(value, points) => dispatch({ type: 'SELECT_OPTION', key: questions[state.step].key, value, points })}
                             onNext={() => dispatch({ type: 'NEXT' })}
                             onPrev={() => dispatch({ type: 'PREV' })}
                             isFirst={state.step === 0}
@@ -338,7 +336,7 @@ function ContactStep({
             <p className="mb-8 text-sm text-white/40">
                 La diagnosi è pronta. Inserisci i tuoi dati per riceverla e per prenotare una call di approfondimento gratuita.
             </p>
-            <div className="grid grid-cols-1 gap-px border border-white/12 bg-white/12 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-px bg-mercury-900 p-px md:grid-cols-2">
                 <div className="coine__input coine__input--dark">
                     <input
                         id="hc-firstName"
@@ -379,13 +377,7 @@ function ContactStep({
                     </label>
                 </div>
                 <div className="coine__input coine__input--dark md:col-span-2">
-                    <input
-                        id="hc-url"
-                        type="url"
-                        value={contact.url}
-                        onChange={(e) => onChange('url', e.target.value)}
-                        placeholder=" "
-                    />
+                    <input id="hc-url" type="url" value={contact.url} onChange={(e) => onChange('url', e.target.value)} placeholder=" " />
                     <label htmlFor="hc-url">URL del tuo e-commerce</label>
                 </div>
             </div>
@@ -393,7 +385,10 @@ function ContactStep({
                 <button type="button" onClick={onPrev} className="cursor-pointer text-sm text-white/30 transition-colors hover:text-white/60">
                     &larr; Indietro
                 </button>
-                <button type="submit" className="cursor-pointer bg-white px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90">
+                <button
+                    type="submit"
+                    className="cursor-pointer bg-white px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
+                >
                     Visualizza l'analisi
                 </button>
             </div>
@@ -416,7 +411,7 @@ function ResultsStep({ answers }: { answers: QuizState['answers'] }) {
             </div>
 
             <div className="mb-8">
-                <h4 className="mb-4 text-sm font-medium uppercase tracking-wider text-white/40">Aree di attenzione</h4>
+                <h4 className="mb-4 text-sm font-medium tracking-wider text-white/40 uppercase">Aree di attenzione</h4>
                 <div className="space-y-4">
                     {findings.map((finding, index) => (
                         <div key={index} className="flex gap-3 border border-white/10 p-4">
@@ -431,8 +426,8 @@ function ResultsStep({ answers }: { answers: QuizState['answers'] }) {
             </div>
 
             <p className="mb-8 text-center text-xs text-white/30">
-                Questa è un'analisi preliminare basata sulle tue risposte. L'audit completo include un'analisi del tracking, una revisione del
-                funnel, un benchmark competitivo e un piano d'azione prioritizzato — con i dati reali del tuo sito.
+                Questa è un'analisi preliminare basata sulle tue risposte. L'audit completo include un'analisi del tracking, una revisione del funnel,
+                un benchmark competitivo e un piano d'azione prioritizzato — con i dati reali del tuo sito.
             </p>
 
             <div className="text-center">

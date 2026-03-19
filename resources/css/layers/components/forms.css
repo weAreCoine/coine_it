@@ -32,10 +32,10 @@
     }
 
     .coine__input--dark {
-        @apply bg-white/5;
+        @apply bg-mercury-800;
 
         input, textarea {
-            @apply bg-white/5 text-white placeholder:text-white/20;
+            @apply bg-mercury-800 text-white placeholder:text-white/20;
 
             &:focus, &:not(:placeholder-shown) {
                 @apply bg-white/10;
