@@ -11,6 +11,10 @@ class CookieConsent
      */
     public static function hasMarketingConsent(): bool
     {
+        if (app()->environment('local') && request()->query('force_consent') === '1') {
+            return true;
+        }
+
         $consent = self::getConsent();
 
         return $consent['marketing'] ?? false;
