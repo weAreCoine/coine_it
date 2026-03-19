@@ -48,22 +48,22 @@ class HealthCheckPageController extends Controller
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Cosa ricevo esattamente alla fine?'),
-                    'answer' => __('Un report personalizzato con un punteggio su 100, il confronto con la media degli e-commerce che fanno questa analisi, e 3 findings specifici sulle aree dove stai perdendo risultati (o dove sei già avanti). Non è un documento generico: cambia in base alle tue risposte.'),
+                    'question' => __('Cosa ricevo se decido di fare la chiamata gratuita?'),
+                    'answer' => __('30 minuti con Luca e Silvia in cui analizziamo insieme i dati del tuo e-commerce. Non quelli del quiz, quelli reali: posizionamento, performance del sito, ecc... Alla fine ricevi un documento con le 3 azioni a più alto impatto per la tua situazione specifica. Nessun pitch commerciale: se ha senso lavorare insieme te lo diciamo, altrimenti ti porti a casa il documento e lo usi come vuoi.'),
                     'opened' => false,
                 ],
                 [
                     'question' => __('Per quali e-commerce è pensato?'),
-                    'answer' => __('Per e-commerce attivi con un fatturato indicativo tra €50K e €1M. Se hai un negozio online su WooCommerce, Shopify, PrestaShop o una piattaforma custom e stai investendo (o vuoi investire) in advertising, l\'analisi è calibrata sulla tua situazione.'),
+                    'answer' => __('Per e-commerce attivi con un fatturato indicativo tra €50K e €1M annuo. Se hai un negozio online su WooCommerce, Shopify, PrestaShop o una piattaforma custom e stai investendo (o vuoi investire) in advertising, l\'analisi è calibrata sulla tua situazione.'),
                     'opened' => false,
                 ],
                 [
                     'question' => __('Devo per forza prenotare una call dopo?'),
-                    'answer' => __('No. Puoi leggere il report e fermarti lì. Se preferisci aspettare, riceverai via email contenuti mirati sulle aree emerse dall\'analisi. La call è un\'opzione, non un obbligo.'),
+                    'answer' => __('No. Puoi leggere il primo report breve e fermarti lì. Se preferisci aspettare, riceverai via email contenuti mirati sulle aree emerse dall\'analisi. La call è un\'opzione, non un obbligo.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Chi analizza i miei risultati?'),
+                    'question' => __('Chi analizza i miei risultati per preparare il report che consegnate in chiamata?'),
                     'answer' => __('Luca e Silvia, direttamente. Non un algoritmo, non un commerciale. Le stesse persone che gestiscono campagne e sviluppano e-commerce ogni giorno sono quelle che leggono le tue risposte e preparano eventuali approfondimenti.'),
                     'opened' => false,
                 ],
