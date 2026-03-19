@@ -24,7 +24,7 @@ export default function HealthCheckCta() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                         </svg>
                     </a>
-                    <AppLink href="mailto:info@coine.it" className="text-sm font-medium text-mercury-500 transition-colors hover:text-white">
+                    <AppLink href="mailto:info@coine.it" className="text-sm font-medium text-mercury-500 transition-colors hover:opacity-75">
                         Scrivici direttamente
                     </AppLink>
                 </div>

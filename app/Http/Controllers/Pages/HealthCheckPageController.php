@@ -43,23 +43,33 @@ class HealthCheckPageController extends Controller
             ],
             'faqs' => [
                 [
-                    'question' => __('Come siete diversi da un\'agenzia tradizionale?'),
-                    'answer' => __('Lavori direttamente con noi, non con un account che fa da filtro.'),
+                    'question' => __('L\'Health Check è davvero gratuito?'),
+                    'answer' => __('Sì, senza costi e senza impegno. Ricevi un report con punteggio, aree critiche e priorità di intervento. Se vuoi approfondire, puoi prenotare una call di 30 minuti — anche quella gratuita. Nessun obbligo.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Come siete diversi da tre freelance separati?'),
-                    'answer' => __('Advertising, sviluppo e contenuti condividono gli stessi dati e obiettivi.'),
+                    'question' => __('Cosa ricevo esattamente alla fine?'),
+                    'answer' => __('Un report personalizzato con un punteggio su 100, il confronto con la media degli e-commerce che fanno questa analisi, e 3 findings specifici sulle aree dove stai perdendo risultati (o dove sei già avanti). Non è un documento generico: cambia in base alle tue risposte.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Quanto tempo prima di vedere risultati?'),
-                    'answer' => __('Il primo mese è analisi. Dal secondo si interviene. Dal terzo si misurano i risultati.'),
+                    'question' => __('I miei dati vengono condivisi con terzi?'),
+                    'answer' => __('No. Email, nome e URL restano a noi e servono esclusivamente per inviarti il report e, se lo desideri, contenuti utili per il tuo e-commerce. Nessuna cessione a terzi, nessuno spam.'),
                     'opened' => false,
                 ],
                 [
-                    'question' => __('Qual è il vostro modello di pricing?'),
-                    'answer' => __('Retainer mensile fisso, con KPI concordati prima di iniziare.'),
+                    'question' => __('Per quali e-commerce è pensato?'),
+                    'answer' => __('Per e-commerce attivi con un fatturato indicativo tra €50K e €1M. Se hai un negozio online su WooCommerce, Shopify, PrestaShop o una piattaforma custom e stai investendo (o vuoi investire) in advertising, l\'analisi è calibrata sulla tua situazione.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Devo per forza prenotare una call dopo?'),
+                    'answer' => __('No. Puoi leggere il report e fermarti lì. Se preferisci aspettare, riceverai via email contenuti mirati sulle aree emerse dall\'analisi. La call è un\'opzione, non un obbligo.'),
+                    'opened' => false,
+                ],
+                [
+                    'question' => __('Chi analizza i miei risultati?'),
+                    'answer' => __('Luca e Silvia, direttamente. Non un algoritmo, non un commerciale. Le stesse persone che gestiscono campagne e sviluppano e-commerce ogni giorno sono quelle che leggono le tue risposte e preparano eventuali approfondimenti.'),
                     'opened' => false,
                 ],
             ],
