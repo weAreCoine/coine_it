@@ -1,4 +1,4 @@
-export type HeroPoint = { title: string; description: string };
+export type HeroPoint = { text: string };
 export type WorkStep = { number: string; title: string; description: string };
 
 export type QuizOption = { label: string; value: string; points: number };

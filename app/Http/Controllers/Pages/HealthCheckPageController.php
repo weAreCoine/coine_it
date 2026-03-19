@@ -14,22 +14,10 @@ class HealthCheckPageController extends Controller
     {
         return Inertia::render('health-check', [
             'heroPoints' => [
-                [
-                    'title' => __('Quando una landing page non converte'),
-                    'description' => __('non aspetti un altro fornitore. La modifica avviene nello stesso flusso di chi ha progettato la campagna.'),
-                ],
-                [
-                    'title' => __('Chi scrive i contenuti'),
-                    'description' => __('sa già quali keyword performano nelle campagne a pagamento. Piano editoriale e piano media parlano la stessa lingua.'),
-                ],
-                [
-                    'title' => __('Retainer fisso'),
-                    'description' => __('non percentuale sulla spesa ads. I KPI sono concordati prima di partire. Ogni mese: cosa ha funzionato, cosa cambia.'),
-                ],
-                [
-                    'title' => __('Massimo 4–6 clienti'),
-                    'description' => __('in parallelo, per garantire attenzione piena a ogni progetto.'),
-                ],
+                ['text' => __('Tracking e dati: stai ottimizzando su segnali corretti?')],
+                ['text' => __('Checkout mobile: dov\'è il punto di abbandono invisibile?')],
+                ['text' => __('Campagne e sito: parlano la stessa lingua?')],
+                ['text' => __('Advertising: il budget va dove rende di più?')],
             ],
             'steps' => [
                 [
