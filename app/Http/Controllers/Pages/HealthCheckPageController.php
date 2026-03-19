@@ -127,19 +127,19 @@ class HealthCheckPageController extends Controller
                     'options' => [
                         [
                             'label' => __('Marketing e sviluppo sono gestiti da fornitori diversi che si coordinano poco'),
-                            'value' => 'separate', 'points' => 0
+                            'value' => 'separate', 'points' => 0,
                         ],
                         [
                             'label' => __('Contatto uno sviluppatore esterno e mi adatto ai suoi tempi'),
-                            'value' => 'external', 'points' => 7
+                            'value' => 'external', 'points' => 7,
                         ],
                         [
                             'label' => __('Lo gestisco io, intervengo direttamente sul sito'), 'value' => 'self',
-                            'points' => 15
+                            'points' => 15,
                         ],
                         [
                             'label' => __('Ho un team/persona interna che interviene in tempi rapidi'),
-                            'value' => 'internal', 'points' => 25
+                            'value' => 'internal', 'points' => 25,
                         ],
                     ],
                 ],
@@ -162,19 +162,19 @@ class HealthCheckPageController extends Controller
                     'options' => [
                         [
                             'label' => __('Non ho un setup strutturato, vado spesso a intuito'), 'value' => 'none',
-                            'points' => 0
+                            'points' => 0,
                         ],
                         [
                             'label' => __('Ho GA4 configurato, ma non mi fido completamente dei numeri'),
-                            'value' => 'basic', 'points' => 8
+                            'value' => 'basic', 'points' => 8,
                         ],
                         [
                             'label' => __('Ho un setup discreto, anche se so che ci sono lacune'), 'value' => 'decent',
-                            'points' => 17
+                            'points' => 17,
                         ],
                         [
                             'label' => __('Setup completo: GA4, GTM, eventi e-commerce, pixel (e li uso davvero)'),
-                            'value' => 'complete', 'points' => 25
+                            'value' => 'complete', 'points' => 25,
                         ],
                     ],
                 ],
@@ -197,19 +197,19 @@ class HealthCheckPageController extends Controller
                     'options' => [
                         [
                             'label' => __('Non l\'ho mai testato seriamente, non saprei dire'), 'value' => 'unknown',
-                            'points' => 0
+                            'points' => 0,
                         ],
                         [
                             'label' => __('Lento o poco ottimizzato (lo so, è un problema)'), 'value' => 'slow',
-                            'points' => 5
+                            'points' => 5,
                         ],
                         [
                             'label' => __('Funziona, ma non l\'abbiamo ottimizzato in modo specifico'), 'value' => 'ok',
-                            'points' => 13
+                            'points' => 13,
                         ],
                         [
                             'label' => __('Ottimizzato: pochi step, veloce, pensato per il mobile'),
-                            'value' => 'optimized', 'points' => 20
+                            'value' => 'optimized', 'points' => 20,
                         ],
                     ],
                 ],
@@ -232,19 +232,19 @@ class HealthCheckPageController extends Controller
                     'options' => [
                         [
                             'label' => __('Niente di automatizzato, ci penso manualmente quando posso'),
-                            'value' => 'none', 'points' => 0
+                            'value' => 'none', 'points' => 0,
                         ],
                         [
                             'label' => __('Ho qualche email automatica ma non so quanto funzioni'), 'value' => 'basic',
-                            'points' => 6
+                            'points' => 6,
                         ],
                         [
                             'label' => __('Ho flussi attivi (benvenuto, carrello abbandonato, post-acquisto) e li monitoro'),
-                            'value' => 'active', 'points' => 14
+                            'value' => 'active', 'points' => 14,
                         ],
                         [
                             'label' => __('Ho un sistema di retention strutturato con segmentazione e flussi multipli'),
-                            'value' => 'advanced', 'points' => 18
+                            'value' => 'advanced', 'points' => 18,
                         ],
                     ],
                 ],
@@ -314,7 +314,7 @@ class HealthCheckPageController extends Controller
                     'placeholder' => __('Racconta liberamente quello che senti come il freno principale alla crescita del tuo e-commerce.'),
                     'maxLength' => 500,
                 ],
-                'calendlyUrl' => config('services.calendly.url', 'https://calendly.com/coine'),
+                'calendlyUrl' => config('services.calendly.url', 'https://calendly.com/luca-coine/30min'),
             ],
             'teamMembers' => [
                 [

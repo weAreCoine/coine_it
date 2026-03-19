@@ -49,7 +49,7 @@ export default function HealthCheckHero({ points }: HealthCheckHeroProps) {
                 <div className="flex flex-col items-center">
                     <picture>
                         <source srcSet="/images/health-check-result.webp" type="image/webp" />
-                        <img src="/images/health-check-result.png" alt="Esempio di report E-commerce Health Check" className="rounded-lg shadow-lg" />
+                        <img src="/images/health-check-result.png" alt="Esempio di report E-commerce Health Check" className="shadow-2xl" />
                     </picture>
                 </div>
             </div>

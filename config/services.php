@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'calendly' => [
+        'url' => env('CALENDLY_URL', 'https://calendly.com/luca-coine/30min'),
+    ],
+
 ];
