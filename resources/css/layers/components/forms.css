@@ -30,4 +30,20 @@
             @apply text-xs text-red-600 absolute bottom-2 left-4;
         }
     }
+
+    .coine__input--dark {
+        @apply bg-white/5;
+
+        input, textarea {
+            @apply bg-white/5 text-white placeholder:text-white/20;
+
+            &:focus, &:not(:placeholder-shown) {
+                @apply bg-white/10;
+            }
+        }
+
+        label {
+            @apply text-white/40;
+        }
+    }
 }

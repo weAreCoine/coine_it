@@ -3,9 +3,12 @@ import DevLabel from '@/components/devLabel';
 import { cookiePolicy, home, privacyPolicy } from '@/routes';
 import { show as contact } from '@/routes/contact';
 
-export default function Colophon() {
+interface ColophonProps {
+    marginTop?: boolean;
+}
+export default function Colophon({ marginTop = true }: ColophonProps) {
     return (
-        <div className="colophon relative">
+        <div className={`colophon relative ${marginTop ? 'mt-32' : ''}`}>
             <DevLabel name="Colophon" />
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">

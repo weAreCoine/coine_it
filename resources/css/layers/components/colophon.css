@@ -1,5 +1,5 @@
 @layer components {
     .colophon {
-        @apply bg-black mt-32 text-white
+        @apply bg-black text-white
     }
 }

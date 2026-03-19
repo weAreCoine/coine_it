@@ -75,3 +75,5 @@ export type TabSectionData = {
     subtitle: string;
     services: TabSectionItem[];
 };
+
+export type TeamMember = { name: string; role: string; bio: string; image: string; tags: string[] };
