@@ -1,12 +1,14 @@
 import { clsx } from 'clsx';
 import { useReducer } from 'react';
 import DevLabel from '@/components/devLabel';
-import type { QuizQuestion } from '@/types/dto/healthCheck';
+import type { QuizConfig, QuizQuestion, ResultRange } from '@/types/dto/healthCheck';
 
 type QuizState = {
     step: number;
     answers: Record<string, { value: string; points: number }>;
     contact: { firstName: string; lastName: string; email: string; url: string };
+    openText: string;
+    marketingConsent: boolean;
 };
 
 type QuizAction =
@@ -14,13 +16,16 @@ type QuizAction =
     | { type: 'NEXT' }
     | { type: 'PREV' }
     | { type: 'SET_CONTACT'; field: keyof QuizState['contact']; value: string }
-    | { type: 'SUBMIT' };
+    | { type: 'SUBMIT' }
+    | { type: 'HIDE_TRANSITION' }
+    | { type: 'SET_OPEN_TEXT'; value: string }
+    | { type: 'SET_MARKETING_CONSENT'; value: boolean };
 
 function quizReducer(state: QuizState, action: QuizAction): QuizState {
     switch (action.type) {
         case 'SELECT_OPTION':
             return { ...state, answers: { ...state.answers, [action.key]: { value: action.value, points: action.points } } };
-        case 'NEXT':
+        case 'HIDE_TRANSITION':
             return { ...state, step: state.step + 1 };
         case 'PREV':
             return { ...state, step: Math.max(0, state.step - 1) };
@@ -28,147 +33,95 @@ function quizReducer(state: QuizState, action: QuizAction): QuizState {
             return { ...state, contact: { ...state.contact, [action.field]: action.value } };
         case 'SUBMIT':
             return { ...state, step: 7 };
+        case 'SET_OPEN_TEXT':
+            return { ...state, openText: action.value };
+        case 'SET_MARKETING_CONSENT':
+            return { ...state, marketingConsent: action.value };
         default:
             return state;
     }
 }
 
-function calculateScore(answers: QuizState['answers']): number {
-    let s = 62;
-
-    const tracking = answers.tracking?.value;
-    if (tracking === 'full') s += 15;
-    else if (tracking === 'partial') s += 5;
-    else if (tracking === 'basic') s -= 5;
-    else if (tracking === 'none') s -= 15;
-
-    const checkout = answers.checkout?.value;
-    if (checkout === 'good') s += 10;
-    else if (checkout === 'bad') s -= 12;
-    else if (checkout === 'unknown') s -= 8;
-
-    const ads = answers.ads?.value;
-    if (ads === 'agency' || ads === 'freelance') s += 5;
-    else if (ads === 'none') s -= 5;
-
-    const pain = answers.pain?.value;
-    if (pain === 'data' || pain === 'silos') s -= 8;
-
-    const age = answers.age?.value;
-    if (age === 'restructure') s -= 8;
-    else if (age === 'mature') s += 5;
-
-    return Math.max(20, Math.min(86, s));
+function computeScore(questions: QuizQuestion[], answers: QuizState['answers']): number {
+    return questions.filter((q) => q.scored).reduce((sum, q) => sum + (answers[q.key]?.points ?? 0), 0);
 }
 
-type Finding = { color: 'r' | 'a' | 'g'; title: string; description: string };
+function findRange(score: number, ranges: ResultRange[]): ResultRange {
+    return ranges.find((r) => score >= r.min && score <= r.max) ?? ranges[ranges.length - 1];
+}
 
-function generateFindings(answers: QuizState['answers']): Finding[] {
+type Finding = { color: 'r' | 'g' | 'a'; title: string; description: string };
+
+const AREA_LABELS: Record<string, string> = {
+    advertising: 'la gestione advertising',
+    coordination: 'il coordinamento tra marketing e sito',
+    tracking: 'il setup di tracciamento dati',
+    mobile: "l'esperienza mobile",
+    retention: 'la fidelizzazione clienti',
+};
+
+function buildFindings(questions: QuizQuestion[], answers: QuizState['answers'], config: QuizConfig): Finding[] {
+    const scoredQuestions = questions.filter((q) => q.scored && q.finding);
+
+    const negatives: { question: QuizQuestion; weight: number }[] = [];
+    const positives: { question: QuizQuestion; weight: number }[] = [];
+
+    for (const q of scoredQuestions) {
+        const score = answers[q.key]?.points ?? 0;
+        const f = q.finding!;
+
+        if (score <= f.threshold_max) {
+            negatives.push({ question: q, weight: q.weight });
+        }
+        if (score >= f.threshold_min) {
+            positives.push({ question: q, weight: q.weight });
+        }
+    }
+
+    negatives.sort((a, b) => b.weight - a.weight);
+    positives.sort((a, b) => b.weight - a.weight);
+
     const findings: Finding[] = [];
 
-    const tracking = answers.tracking?.value;
-    if (tracking === 'none' || tracking === 'basic') {
-        findings.push({
-            color: 'r',
-            title: 'Tracking: dati non affidabili',
-            description:
-                "Ottimizzare le campagne su dati parziali o errati significa prendere decisioni nella direzione sbagliata. Il fix del tracking è la prima cosa da fare — aumenta l'efficacia di ogni altra azione successiva.",
-        });
-    }
+    if (negatives.length === 0) {
+        // Score molto alto: 2 positivi + finding generico
+        for (const p of positives.slice(0, 2)) {
+            findings.push({ color: 'g', title: p.question.finding!.positive_title, description: p.question.finding!.positive_text });
+        }
+        findings.push({ color: 'a', title: config.fallbackFinding.title, description: config.fallbackFinding.text });
+    } else {
+        // Max 2 negativi
+        for (const n of negatives.slice(0, 2)) {
+            findings.push({ color: 'r', title: n.question.finding!.negative_title, description: n.question.finding!.negative_text });
+        }
 
-    const checkout = answers.checkout?.value;
-    if (checkout === 'bad' || checkout === 'unknown') {
-        findings.push({
-            color: 'r',
-            title: 'Checkout mobile: punto di frizione non monitorato',
-            description:
-                'Oltre il 60% degli acquisti avviene da smartphone. Un checkout non ottimizzato per mobile può generare abbandoni che non emergono nei report standard.',
-        });
-    }
-
-    const pain = answers.pain?.value;
-    if (pain === 'silos') {
-        findings.push({
-            color: 'a',
-            title: 'Coordinamento tra marketing e sviluppo',
-            description:
-                'La frammentazione tra chi gestisce le campagne e chi interviene sul sito genera ritardi e ottimizzazioni parziali. È il problema strutturale che affrontiamo più spesso.',
-        });
-    } else if (pain === 'roas') {
-        findings.push({
-            color: 'a',
-            title: "Ritorno sull'investimento basso o instabile",
-            description:
-                "Un ROAS basso ha quasi sempre un'origine identificabile — tracking errato, creatività esaurite, landing page non allineata, o problemi nel funnel. L'audit completo serve a isolare la causa prima di intervenire.",
-        });
-    } else if (pain === 'traffic') {
-        findings.push({
-            color: 'a',
-            title: 'Traffico che non si trasforma in conversioni',
-            description:
-                "Quando il traffico c'è ma le vendite no, il problema è quasi sempre nel sito — UX, velocità, chiarezza del valore, call to action. Le campagne amplificano ciò che funziona; non compensano ciò che non funziona.",
-        });
-    } else if (pain === 'data') {
-        findings.push({
-            color: 'a',
-            title: 'Mancanza di segnali chiari su dove intervenire',
-            description:
-                'Non sapere dove concentrarsi è spesso il sintomo di un setup analytics incompleto o di metriche non prioritizzate. Il primo obiettivo è costruire un quadro leggibile.',
-        });
-    }
-
-    const age = answers.age?.value;
-    if (age === 'restructure') {
-        findings.push({
-            color: 'a',
-            title: 'E-commerce maturo con segnali di stagnazione',
-            description:
-                "Un progetto con storia che non cresce più richiede spesso un'analisi strutturale — non più campagne o più contenuti, ma una revisione delle fondamenta: funnel, posizionamento, canali.",
-        });
-    }
-
-    const ads = answers.ads?.value;
-    if (ads === 'none') {
-        findings.push({
-            color: 'a',
-            title: 'Advertising non ancora attivo',
-            description:
-                "Prima di attivare le campagne è importante che il sito sia nella condizione di ricevere e convertire il traffico. L'Health Check completo valuta questo aspetto in modo sistematico.",
-        });
-    }
-
-    if (findings.length === 0) {
-        findings.push({
-            color: 'g',
-            title: 'Nessuna criticità emergente nelle aree analizzate',
-            description:
-                "L'audit completo esamina tracking, funnel e benchmark competitivo per identificare le opportunità di ottimizzazione che non emergono dall'analisi preliminare.",
-        });
+        // 1 positivo
+        if (positives.length > 0) {
+            const p = positives[0];
+            findings.push({ color: 'g', title: p.question.finding!.positive_title, description: p.question.finding!.positive_text });
+        } else {
+            // Fallback: area col ratio score/weight più alto
+            let bestRatio = -1;
+            let bestQ: QuizQuestion | null = null;
+            for (const q of scoredQuestions) {
+                const ratio = (answers[q.key]?.points ?? 0) / q.weight;
+                if (ratio > bestRatio) {
+                    bestRatio = ratio;
+                    bestQ = q;
+                }
+            }
+            if (bestQ) {
+                const areaLabel = AREA_LABELS[bestQ.key] ?? bestQ.key;
+                findings.push({
+                    color: 'g',
+                    title: 'Il tuo punto di forza',
+                    description: `L'area dove sei più avanti è ${areaLabel} — un buon punto di partenza su cui costruire.`,
+                });
+            }
+        }
     }
 
     return findings;
-}
-
-function getVerdict(score: number): { verdict: string; description: string } {
-    if (score >= 68) {
-        return {
-            verdict: 'Base solida, margini di crescita identificabili',
-            description:
-                'Il tuo e-commerce ha fondamenta discrete. Le aree di miglioramento che abbiamo individuato sono principalmente di ottimizzazione, non di ricostruzione.',
-        };
-    }
-    if (score >= 44) {
-        return {
-            verdict: 'Potenziale inespresso — alcune priorità chiare',
-            description:
-                'Ci sono nodi che limitano le performance e che sono risolvibili con interventi mirati. Alcune di queste perdite probabilmente non sono ancora visibili nei report standard.',
-        };
-    }
-    return {
-        verdict: 'Gap strutturali che richiedono attenzione',
-        description:
-            'Ci sono aree critiche che stanno probabilmente già influenzando il fatturato. Il punto di partenza è capire dove si concentrano le perdite reali.',
-    };
 }
 
 function FindingDot({ color }: { color: 'r' | 'a' | 'g' }) {
@@ -185,17 +138,24 @@ function FindingDot({ color }: { color: 'r' | 'a' | 'g' }) {
 
 type HealthCheckQuizProps = {
     questions: QuizQuestion[];
+    config: QuizConfig;
 };
 
-export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
+export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizProps) {
     const [state, dispatch] = useReducer(quizReducer, {
         step: 0,
         answers: {},
         contact: { firstName: '', lastName: '', email: '', url: '' },
+        openText: '',
+        marketingConsent: false,
     });
 
     const totalQuestions = questions.length;
-    const progressWidth = state.step <= totalQuestions ? `${(state.step / totalQuestions) * 100}%` : '100%';
+    const progressPercent = state.step < totalQuestions ? Math.round((state.step / totalQuestions) * 100) : 100;
+
+    function handleContinue() {
+        dispatch({ type: 'HIDE_TRANSITION' });
+    }
 
     return (
         <section id="health-check-quiz" aria-labelledby="healthCheckQuizLabel" className="relative bg-black py-24 text-white">
@@ -212,10 +172,18 @@ export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
                     </p>
                 </div>
 
-                {/* Progress bar */}
-                <div className="mx-auto mb-12 h-px max-w-2xl bg-white/10">
-                    <div className="h-full bg-white transition-all duration-500 ease-out" style={{ width: progressWidth }} />
-                </div>
+                {/* Progress bar — solo durante le domande */}
+                {state.step < totalQuestions && (
+                    <div className="mx-auto mb-12 max-w-2xl">
+                        <p className="mb-2 text-right text-xs text-white/40">{progressPercent}%</p>
+                        <div className="h-px bg-white/10">
+                            <div
+                                className="h-full bg-white transition-all duration-500 ease-out"
+                                style={{ width: `${progressPercent}%` }}
+                            />
+                        </div>
+                    </div>
+                )}
 
                 <div className="mx-auto max-w-2xl">
                     {/* Question steps (0–5) */}
@@ -224,7 +192,7 @@ export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
                             question={questions[state.step]}
                             selectedValue={state.answers[questions[state.step].key]?.value}
                             onSelect={(value, points) => dispatch({ type: 'SELECT_OPTION', key: questions[state.step].key, value, points })}
-                            onNext={() => dispatch({ type: 'NEXT' })}
+                            onNext={handleContinue}
                             onPrev={() => dispatch({ type: 'PREV' })}
                             isFirst={state.step === 0}
                         />
@@ -234,14 +202,24 @@ export default function HealthCheckQuiz({ questions }: HealthCheckQuizProps) {
                     {state.step === totalQuestions && (
                         <ContactStep
                             contact={state.contact}
+                            marketingConsent={state.marketingConsent}
                             onChange={(field, value) => dispatch({ type: 'SET_CONTACT', field, value })}
+                            onMarketingConsentChange={(v) => dispatch({ type: 'SET_MARKETING_CONSENT', value: v })}
                             onSubmit={() => dispatch({ type: 'SUBMIT' })}
                             onPrev={() => dispatch({ type: 'PREV' })}
                         />
                     )}
 
                     {/* Results step (7) */}
-                    {state.step === 7 && <ResultsStep answers={state.answers} />}
+                    {state.step === 7 && (
+                        <ResultsStep
+                            questions={questions}
+                            answers={state.answers}
+                            config={config}
+                            openText={state.openText}
+                            onOpenTextChange={(v) => dispatch({ type: 'SET_OPEN_TEXT', value: v })}
+                        />
+                    )}
                 </div>
             </div>
         </section>
@@ -316,12 +294,16 @@ function QuestionStep({
 
 function ContactStep({
     contact,
+    marketingConsent,
     onChange,
+    onMarketingConsentChange,
     onSubmit,
     onPrev,
 }: {
     contact: QuizState['contact'];
+    marketingConsent: boolean;
     onChange: (field: keyof QuizState['contact'], value: string) => void;
+    onMarketingConsentChange: (value: boolean) => void;
     onSubmit: () => void;
     onPrev: () => void;
 }) {
@@ -332,9 +314,9 @@ function ContactStep({
 
     return (
         <form onSubmit={handleSubmit}>
-            <h3 className="mb-2 font-display text-2xl">Dove inviamo la tua analisi?</h3>
+            <h3 className="mb-2 font-display text-2xl">Il tuo punteggio è pronto.</h3>
             <p className="mb-8 text-sm text-white/40">
-                La diagnosi è pronta. Inserisci i tuoi dati per riceverla e per prenotare una call di approfondimento gratuita.
+                Inserisci i tuoi dati per riceverlo insieme a un'analisi personalizzata via email.
             </p>
             <div className="grid grid-cols-1 gap-px bg-mercury-900 p-px md:grid-cols-2">
                 <div className="coine__input coine__input--dark">
@@ -377,17 +359,48 @@ function ContactStep({
                     </label>
                 </div>
                 <div className="coine__input coine__input--dark md:col-span-2">
-                    <input id="hc-url" type="url" value={contact.url} onChange={(e) => onChange('url', e.target.value)} placeholder=" " />
-                    <label htmlFor="hc-url">URL del tuo e-commerce</label>
+                    <input
+                        id="hc-url"
+                        type="url"
+                        value={contact.url}
+                        onChange={(e) => onChange('url', e.target.value)}
+                        placeholder=" "
+                        required
+                    />
+                    <label htmlFor="hc-url">
+                        URL del tuo e-commerce <span className="text-white/20">*</span>
+                    </label>
                 </div>
             </div>
+            <div className="mt-8">
+                <label className="flex items-start gap-3">
+                    <input
+                        type="checkbox"
+                        checked={marketingConsent}
+                        onChange={(e) => onMarketingConsentChange(e.target.checked)}
+                        className="mt-0.5 size-4 shrink-0 accent-white"
+                    />
+                    <span className="text-sm text-white/50">
+                        Acconsento al trattamento dei miei dati per ricevere l'analisi e comunicazioni di marketing via email.{' '}
+                        <a href="/privacy-policy" target="_blank" className="underline transition-colors hover:text-white/80">
+                            Privacy Policy
+                        </a>
+                        <span className="text-white/30"> *</span>
+                    </span>
+                </label>
+            </div>
+
             <div className="mt-8 flex items-center justify-between">
                 <button type="button" onClick={onPrev} className="cursor-pointer text-sm text-white/30 transition-colors hover:text-white/60">
                     &larr; Indietro
                 </button>
                 <button
                     type="submit"
-                    className="cursor-pointer bg-white px-6 py-3 text-sm font-medium text-black transition-opacity hover:opacity-90"
+                    disabled={!marketingConsent}
+                    className={clsx(
+                        'px-6 py-3 text-sm font-medium transition-opacity',
+                        marketingConsent ? 'cursor-pointer bg-white text-black hover:opacity-90' : 'cursor-not-allowed bg-white/20 text-white/40',
+                    )}
                 >
                     Visualizza l'analisi
                 </button>
@@ -396,20 +409,49 @@ function ContactStep({
     );
 }
 
-function ResultsStep({ answers }: { answers: QuizState['answers'] }) {
-    const score = calculateScore(answers);
-    const { verdict, description } = getVerdict(score);
-    const findings = generateFindings(answers);
+function ResultsStep({
+    questions,
+    answers,
+    config,
+    openText,
+    onOpenTextChange,
+}: {
+    questions: QuizQuestion[];
+    answers: QuizState['answers'];
+    config: QuizConfig;
+    openText: string;
+    onOpenTextChange: (value: string) => void;
+}) {
+    const score = computeScore(questions, answers);
+    const range = findRange(score, config.resultRanges);
+    const findings = buildFindings(questions, answers, config);
 
     return (
         <div>
             <div className="mb-12 text-center">
-                <p className="font-display text-7xl font-bold">{score}</p>
-                <p className="text-lg text-white/40">punteggio / 100</p>
-                <p className="mt-4 font-display text-xl">{verdict}</p>
-                <p className="mx-auto mt-2 max-w-lg text-sm text-white/60">{description}</p>
+                {/* Score numerico con colore della fascia */}
+                <p className="font-display text-7xl font-bold" style={{ color: range.color }}>
+                    {score}
+                </p>
+                <p className="text-lg text-white/40">/100</p>
+
+                {/* Barra visuale colorata */}
+                <div className="mx-auto mt-6 h-2 max-w-md overflow-hidden rounded-full bg-white/10">
+                    <div
+                        className="h-full rounded-full transition-all duration-700 ease-out"
+                        style={{ width: `${score}%`, backgroundColor: range.color }}
+                    />
+                </div>
+
+                {/* Benchmark */}
+                <p className="mx-auto mt-3 max-w-md text-xs text-white/30">{config.benchmarkText}</p>
+
+                {/* Verdict */}
+                <p className="mt-6 font-display text-xl">{range.label}</p>
+                <p className="mx-auto mt-2 max-w-lg text-sm text-white/60">{range.message}</p>
             </div>
 
+            {/* Findings */}
             <div className="mb-8">
                 <h4 className="mb-4 text-sm font-medium tracking-wider text-white/40 uppercase">Aree di attenzione</h4>
                 <div className="space-y-4">
@@ -425,12 +467,33 @@ function ResultsStep({ answers }: { answers: QuizState['answers'] }) {
                 </div>
             </div>
 
-            <p className="mb-8 text-center text-xs text-white/30">
-                Questa è un'analisi preliminare basata sulle tue risposte. L'audit completo include un'analisi del tracking, una revisione del funnel,
-                un benchmark competitivo e un piano d'azione prioritizzato — con i dati reali del tuo sito.
-            </p>
+            {/* Blocco motivazionale */}
+            <div className="mb-8">
+                <h4 className="mb-2 font-display text-lg">{range.motivational_title}</h4>
+                <p className="text-sm text-white/60">{range.motivational_text}</p>
+            </div>
 
+            {/* Campo aperto */}
+            <div className="mb-8">
+                <div className="coine__input coine__input--dark">
+                    <textarea
+                        id="hc-openField"
+                        value={openText}
+                        onChange={(e) => onOpenTextChange(e.target.value)}
+                        placeholder=" "
+                        maxLength={config.openField.maxLength}
+                        rows={4}
+                    />
+                    <label htmlFor="hc-openField">{range.open_field_placeholder}</label>
+                </div>
+                <p className="mt-1 text-right text-xs text-white/30">
+                    {openText.length}/{config.openField.maxLength}
+                </p>
+            </div>
+
+            {/* CTA */}
             <div className="text-center">
+                <p className="mx-auto mb-6 max-w-lg text-sm text-white/60">{range.cta_text}</p>
                 <button
                     type="button"
                     onClick={() => alert('TODO: Calendly')}
