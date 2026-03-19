@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import { useReducer, useRef } from 'react';
 import { router, usePage } from '@inertiajs/react';
-import { store, complete } from '@/actions/App/Http/Controllers/HealthCheckQuizController';
+import { complete, store } from '@/actions/App/Http/Controllers/HealthCheckQuizController';
 import DevLabel from '@/components/devLabel';
 import type { QuizConfig, QuizQuestion, ResultRange } from '@/types/dto/healthCheck';
 
@@ -202,45 +202,54 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
         dispatch({ type: 'SUBMIT_START' });
         const score = computeScore(questions, state.answers);
 
-        router.post(store().url, {
-            firstName: state.contact.firstName,
-            lastName: state.contact.lastName,
-            email: state.contact.email,
-            phone: state.contact.phone,
-            url: normalizeUrl(state.contact.url),
-            marketingConsent: state.marketingConsent,
-            answers: state.answers,
-            score,
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: () => dispatch({ type: 'SUBMIT_SUCCESS' }),
-            onError: (errors) => dispatch({
-                type: 'SUBMIT_ERROR',
-                error: Object.values(errors)[0] ?? 'Errore durante l\'invio.',
-                errors,
-            }),
-        });
+        router.post(
+            store().url,
+            {
+                firstName: state.contact.firstName,
+                lastName: state.contact.lastName,
+                email: state.contact.email,
+                phone: state.contact.phone,
+                url: normalizeUrl(state.contact.url),
+                marketingConsent: state.marketingConsent,
+                answers: state.answers,
+                score,
+            },
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => dispatch({ type: 'SUBMIT_SUCCESS' }),
+                onError: (errors) =>
+                    dispatch({
+                        type: 'SUBMIT_ERROR',
+                        error: Object.values(errors)[0] ?? "Errore durante l'invio.",
+                        errors,
+                    }),
+            },
+        );
     }
 
     function handleComplete() {
         dispatch({ type: 'COMPLETE_START' });
 
-        router.patch(complete().url, {
-            email: state.contact.email,
-            openText: state.openText,
-        }, {
-            preserveState: true,
-            preserveScroll: true,
-            onSuccess: () => {
-                dispatch({ type: 'COMPLETE_DONE' });
-                window.open(config.calendlyUrl, '_blank');
+        router.patch(
+            complete().url,
+            {
+                email: state.contact.email,
+                openText: state.openText,
             },
-            onError: () => {
-                dispatch({ type: 'COMPLETE_DONE' });
-                window.open(config.calendlyUrl, '_blank');
+            {
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    dispatch({ type: 'COMPLETE_DONE' });
+                    window.open(config.calendlyUrl, '_blank');
+                },
+                onError: () => {
+                    dispatch({ type: 'COMPLETE_DONE' });
+                    window.open(config.calendlyUrl, '_blank');
+                },
             },
-        });
+        );
     }
 
     return (
@@ -248,7 +257,7 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
             <DevLabel name="HealthCheckQuiz" />
             <div className="container">
                 <div className="mb-12 text-center">
-                    <p className="kicker mb-2 text-white/40">Strumento gratuito</p>
+                    <p className="kicker mb-2 text-white/40">Audit gratuito</p>
                     <h2 id="healthCheckQuizLabel" className="section__title text-white">
                         E-commerce <em>Health Check</em>
                     </h2>
@@ -530,7 +539,12 @@ function ContactStep({
             </div>
 
             <div className="mt-8 flex items-center justify-between">
-                <button type="button" onClick={onPrev} disabled={submitting} className="cursor-pointer text-sm text-white/30 transition-colors hover:text-white/60">
+                <button
+                    type="button"
+                    onClick={onPrev}
+                    disabled={submitting}
+                    className="cursor-pointer text-sm text-white/30 transition-colors hover:text-white/60"
+                >
                     &larr; Indietro
                 </button>
                 <button
@@ -541,7 +555,7 @@ function ContactStep({
                         isDisabled ? 'cursor-not-allowed bg-white/20 text-white/40' : 'cursor-pointer bg-white text-black hover:opacity-90',
                     )}
                 >
-                    {submitting ? 'Invio in corso...' : 'Visualizza l\'analisi'}
+                    {submitting ? 'Invio in corso...' : "Visualizza l'analisi"}
                 </button>
             </div>
         </form>

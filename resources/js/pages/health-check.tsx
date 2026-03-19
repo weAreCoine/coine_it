@@ -26,7 +26,7 @@ export default function HealthCheck({ heroPoints, steps, faqs, questions, quizCo
             <Head title="E-commerce Health Check" />
             <Navigation />
             <HealthCheckHero points={heroPoints} />
-            <HowWeWork steps={steps} faqs={faqs} />
+            <HowWeWork steps={steps} />
             <HealthCheckQuiz questions={questions} config={quizConfig} />
             <HealthCheckTeam members={teamMembers} />
             <div className="container my-24">

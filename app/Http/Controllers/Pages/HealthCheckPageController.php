@@ -22,23 +22,23 @@ class HealthCheckPageController extends Controller
             'steps' => [
                 [
                     'number' => '01',
-                    'title' => __('Prima misuriamo'),
-                    'description' => __('Il primo periodo è dedicato all\'analisi: tracking, funnel, dati storici. Nessuna campagna parte prima di avere una lettura chiara di dove si perdono le conversioni e perché.'),
+                    'title' => __('Rispondi alle domande'),
+                    'description' => __('Sei domande sulla tua piattaforma, advertising, tracking, checkout mobile e maturità del progetto.'),
                 ],
                 [
                     'number' => '02',
-                    'title' => __('Sito e campagne in parallelo'),
-                    'description' => __('Lo stesso professionista che imposta la campagna può modificare il template, correggere il data layer e ottimizzare il checkout — nello stesso flusso di lavoro, senza ticket aperti a terzi.'),
+                    'title' => __('Compila il form'),
+                    'description' => __('Nome, email e URL del tuo e-commerce. Nessun dato viene condiviso con terzi.'),
                 ],
                 [
                     'number' => '03',
-                    'title' => __('Contenuti che supportano le performance'),
-                    'description' => __('I contenuti nascono sapendo già quali keyword performano in campagna e quali touchpoint del funnel hanno più frizione. Niente di decorativo.'),
+                    'title' => __('Ricevi la diagnosi'),
+                    'description' => __('Un documento personalizzato con punteggio, aree critiche e priorità di intervento — immediato.'),
                 ],
                 [
                     'number' => '04',
-                    'title' => __('Ottimizzazione continua'),
-                    'description' => __('Il lavoro non finisce al lancio. Ogni mese: analisi dei dati, aggiustamenti, report trasparenti. L\'obiettivo è costruire un sistema che migliora nel tempo.'),
+                    'title' => __('Decidi il passo successivo'),
+                    'description' => __('Puoi prenotare una call gratuita di 30 minuti. Se preferisci aspettare, ricevi contenuti specifici per la tua situazione.'),
                 ],
             ],
             'faqs' => [
