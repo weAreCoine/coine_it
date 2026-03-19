@@ -4,10 +4,13 @@ namespace App\Models;
 
 use App\Enums\LeadStage;
 use App\Events\LeadCreated;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Lead extends Model
 {
+    use HasFactory;
+
     public $timestamps = true;
 
     protected $guarded = [];

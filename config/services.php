@@ -39,4 +39,11 @@ return [
         'url' => env('CALENDLY_URL', 'https://calendly.com/luca-coine/30min'),
     ],
 
+    'klaviyo' => [
+        'enabled' => (bool) env('KLAVIYO_ENABLED', false),
+        'api_key' => env('KLAVIYO_API_KEY', ''),
+        'company_id' => env('KLAVIYO_COMPANY_ID', ''),
+        'revision' => env('KLAVIYO_API_REVISION', '2024-10-15'),
+    ],
+
 ];

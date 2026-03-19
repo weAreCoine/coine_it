@@ -54,6 +54,9 @@
     @if(\App\Helpers\CookieConsent::hasMarketingConsent())
         <x-metapixel-head />
     @endif
+    @if(\App\Helpers\CookieConsent::hasMarketingConsent() && config('services.klaviyo.enabled') && config('services.klaviyo.company_id') !== '')
+        <x-klaviyo-tracking />
+    @endif
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=inter-tight:400,400i,500,500i,600,600i|press-start-2p:400"
           rel="stylesheet" />
