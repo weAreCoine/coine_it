@@ -273,6 +273,7 @@ class HealthCheckPageController extends Controller
                     'placeholder' => __('Racconta liberamente quello che senti come il freno principale alla crescita del tuo e-commerce.'),
                     'maxLength' => 500,
                 ],
+                'calendlyUrl' => config('services.calendly.url', 'https://calendly.com/coine'),
             ],
             'teamMembers' => [
                 [

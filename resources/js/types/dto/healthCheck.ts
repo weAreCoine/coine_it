@@ -43,4 +43,5 @@ export type QuizConfig = {
     transitionMessages: string[];
     fallbackFinding: { title: string; text: string };
     openField: { text: string; placeholder: string; maxLength: number };
+    calendlyUrl: string;
 };

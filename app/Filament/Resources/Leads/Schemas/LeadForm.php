@@ -44,6 +44,13 @@ class LeadForm
                 Textarea::make('notes')
                     ->columnSpanFull(),
                 Toggle::make('terms'),
+                TextInput::make('quiz_score')
+                    ->numeric()
+                    ->disabled(),
+                Textarea::make('quiz_answers')
+                    ->disabled()
+                    ->columnSpanFull()
+                    ->formatStateUsing(fn ($state) => $state ? json_encode($state, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : null),
             ]);
     }
 }

@@ -4,52 +4,21 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\ExceptionHandler;
-use App\Helpers\CookieConsent;
 use App\Http\Requests\ContactFormRequest;
-use App\Models\Lead;
-use App\Services\GoogleAnalytics\GoogleAnalyticsService;
-use Combindma\FacebookPixel\Facades\MetaPixel;
-use FacebookAds\Object\ServerSide\CustomData;
-use Illuminate\Support\Str;
+use App\Services\LeadService;
 
 class ContactFormController extends Controller
 {
-    public function store(ContactFormRequest $request)
+    public function store(ContactFormRequest $request, LeadService $leadService): void
     {
         $validated = $request->validated();
-        Lead::create([
+
+        $leadService->createAndTrack([
             'name' => sprintf('%s %s', $validated['firstName'], $validated['lastName']),
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'project' => $validated['message'],
             'terms' => $validated['termsAccepted'],
-        ]);
-
-        $this->trackLeadEvent();
-        $this->trackGALeadEvent($request);
-    }
-
-    private function trackLeadEvent(): void
-    {
-        if (! MetaPixel::isEnabled() || ! CookieConsent::hasMarketingConsent()) {
-            return;
-        }
-
-        $leadEventId = Str::uuid()->toString();
-
-        try {
-            MetaPixel::send('Lead', $leadEventId, new CustomData);
-        } catch (\Exception $e) {
-            ExceptionHandler::handle($e);
-        }
-
-        MetaPixel::flashEvent('Lead', [], $leadEventId);
-    }
-
-    private function trackGALeadEvent(ContactFormRequest $request): void
-    {
-        GoogleAnalyticsService::trackGenerateLead($request);
-        GoogleAnalyticsService::flashEvent('generate_lead');
+        ], $request);
     }
 }

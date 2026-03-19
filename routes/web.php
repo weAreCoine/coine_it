@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\HealthCheckQuizController;
 use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
@@ -34,6 +35,10 @@ Route::get('/chi-siamo', [AboutPageController::class, 'show'])
 
 Route::get('/health-check', [HealthCheckPageController::class, 'show'])
     ->name('health-check');
+Route::post('/health-check', [HealthCheckQuizController::class, 'store'])
+    ->name('health-check.store');
+Route::patch('/health-check', [HealthCheckQuizController::class, 'complete'])
+    ->name('health-check.complete');
 
 Route::prefix('servizi')->group(function () {
     Route::get('sviluppo-app-siti-web', [DevelopingPageController::class, 'show'])

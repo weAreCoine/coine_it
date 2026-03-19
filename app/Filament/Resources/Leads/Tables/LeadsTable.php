@@ -29,17 +29,28 @@ class LeadsTable
                     ->sortable(),
                 TextColumn::make('phone')
                     ->searchable(),
-                TextColumn::make('budget')
-                    ->sortable(),
                 SelectColumn::make('stage')
                     ->options(LeadStage::class)
                     ->sortable(),
+                TextColumn::make('quiz_score')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->badge()
+                    ->color(fn (?int $state): string => match (true) {
+                        $state === null => 'gray',
+                        $state >= 75 => 'success',
+                        $state >= 50 => 'warning',
+                        $state >= 25 => 'info',
+                        default => 'danger',
+                    })
+                    ->toggleable(),
                 IconColumn::make('terms')
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(),
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
