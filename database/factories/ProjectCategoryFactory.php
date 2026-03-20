@@ -19,6 +19,7 @@ class ProjectCategoryFactory extends Factory
     {
         return [
             'name' => fake()->unique()->words(rand(1, 3), true),
+            'slug' => fn (array $attributes) => \Illuminate\Support\Str::slug($attributes['name']),
             'description' => fake()->sentence(),
         ];
     }

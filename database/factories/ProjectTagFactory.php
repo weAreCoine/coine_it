@@ -19,6 +19,7 @@ class ProjectTagFactory extends Factory
     {
         return [
             'name' => fake()->unique()->word(),
+            'slug' => fn (array $attributes) => \Illuminate\Support\Str::slug($attributes['name']),
             'description' => fake()->sentence(),
         ];
     }
