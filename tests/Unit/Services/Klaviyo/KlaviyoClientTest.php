@@ -37,6 +37,25 @@ it('sends a POST request to create a profile with correct headers and body', fun
     });
 });
 
+it('sends a POST request to subscribe a profile to a list', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
+    ]);
+
+    $client = new KlaviyoClient;
+    $client->subscribeToList('test@example.com', 'list-abc');
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create/'
+            && $request->method() === 'POST'
+            && $request->header('Authorization')[0] === 'Klaviyo-API-Key test-api-key'
+            && $request['data']['type'] === 'profile-subscription-bulk-create-job'
+            && $request['data']['attributes']['profiles']['data'][0]['attributes']['email'] === 'test@example.com'
+            && $request['data']['attributes']['profiles']['data'][0]['attributes']['subscriptions']['email']['marketing']['consent'] === 'SUBSCRIBED'
+            && $request['data']['relationships']['list']['data']['id'] === 'list-abc';
+    });
+});
+
 it('sends a PATCH request to update a profile with correct headers and body', function () {
     Http::fake([
         'a.klaviyo.com/api/profiles/*' => Http::response(['data' => ['id' => 'profile-123']], 200),

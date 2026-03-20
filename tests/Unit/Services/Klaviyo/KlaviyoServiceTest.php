@@ -27,9 +27,12 @@ it('returns true when enabled and api key is set', function () {
     expect(KlaviyoService::isEnabled())->toBeTrue();
 });
 
-it('calls createProfile with correct structure', function () {
+it('calls createProfile with correct structure and subscribes to list', function () {
+    config(['services.klaviyo.list_id' => 'list-123']);
+
     Http::fake([
         'a.klaviyo.com/api/profiles/*' => Http::response(['data' => ['id' => 'p-1']], 201),
+        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
     ]);
 
     $lead = Lead::factory()->withHealthCheck()->create();
@@ -38,7 +41,7 @@ it('calls createProfile with correct structure', function () {
     $service->syncHealthCheckLead($lead);
 
     Http::assertSent(function ($request) use ($lead) {
-        $attrs = $request['data']['attributes'];
+        $attrs = $request['data']['attributes'] ?? [];
 
         return $request->url() === 'https://a.klaviyo.com/api/profiles/'
             && $request->method() === 'POST'
@@ -48,9 +51,18 @@ it('calls createProfile with correct structure', function () {
             && isset($attrs['properties']['quiz_platform'])
             && $attrs['properties']['lead_source'] === 'health_check';
     });
+
+    Http::assertSent(function ($request) use ($lead) {
+        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create/'
+            && $request->method() === 'POST'
+            && $request['data']['attributes']['profiles']['data'][0]['attributes']['email'] === $lead->email
+            && $request['data']['relationships']['list']['data']['id'] === 'list-123';
+    });
 });
 
-it('handles 409 conflict by updating the existing profile', function () {
+it('handles 409 conflict by updating the existing profile and subscribing to list', function () {
+    config(['services.klaviyo.list_id' => 'list-123']);
+
     Http::fake([
         'a.klaviyo.com/api/profiles/' => Http::response([
             'errors' => [[
@@ -58,6 +70,7 @@ it('handles 409 conflict by updating the existing profile', function () {
             ]],
         ], 409),
         'a.klaviyo.com/api/profiles/existing-123' => Http::response(['data' => ['id' => 'existing-123']], 200),
+        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
     ]);
 
     $lead = Lead::factory()->withHealthCheck()->create();
@@ -65,15 +78,17 @@ it('handles 409 conflict by updating the existing profile', function () {
     $service = app(KlaviyoService::class);
     $service->syncHealthCheckLead($lead);
 
-    Http::assertSent(fn ($request) => $request->method() === 'POST');
+    Http::assertSent(fn ($request) => $request->method() === 'POST'
+        && str_contains($request->url(), '/api/profiles/'));
     Http::assertSent(fn ($request) => $request->method() === 'PATCH'
         && str_contains($request->url(), 'existing-123'));
+    Http::assertSent(fn ($request) => str_contains($request->url(), 'profile-subscription-bulk-create'));
 });
 
 it('handles exceptions without propagating them', function () {
     Http::fake(fn () => throw new RuntimeException('Connection failed'));
 
-    Log::shouldReceive('error')->once();
+    Log::shouldReceive('error')->atLeast()->once();
 
     $lead = Lead::factory()->withHealthCheck()->create();
 

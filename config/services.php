@@ -44,6 +44,7 @@ return [
         'api_key' => env('KLAVIYO_API_KEY', ''),
         'company_id' => env('KLAVIYO_COMPANY_ID', ''),
         'revision' => env('KLAVIYO_API_REVISION', '2024-10-15'),
+        'list_id' => env('KLAVIYO_LIST_ID', ''),
     ],
 
 ];

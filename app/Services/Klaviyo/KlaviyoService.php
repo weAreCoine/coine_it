@@ -42,6 +42,7 @@ class KlaviyoService
                 if ($profileId !== null) {
                     $this->client->updateProfile($profileId, $attributes);
                     Log::info('Klaviyo profile updated for lead', ['lead_id' => $lead->id]);
+                    $this->subscribeLeadToList($lead);
 
                     return;
                 }
@@ -56,6 +57,7 @@ class KlaviyoService
 
             if ($response->successful()) {
                 Log::info('Klaviyo profile created for lead', ['lead_id' => $lead->id]);
+                $this->subscribeLeadToList($lead);
             } else {
                 Log::warning('Klaviyo profile creation failed', [
                     'lead_id' => $lead->id,
@@ -95,6 +97,32 @@ class KlaviyoService
             'last_name' => $nameParts['last_name'],
             'properties' => $properties,
         ];
+    }
+
+    /**
+     * Subscribe a lead to the Klaviyo email marketing list.
+     */
+    private function subscribeLeadToList(Lead $lead): void
+    {
+        $listId = config('services.klaviyo.list_id');
+
+        if ($listId === '' || $listId === null) {
+            Log::warning('Klaviyo list_id not configured, skipping subscription', ['lead_id' => $lead->id]);
+
+            return;
+        }
+
+        $response = $this->client->subscribeToList($lead->email, $listId);
+
+        if ($response->successful()) {
+            Log::info('Klaviyo email subscription created for lead', ['lead_id' => $lead->id]);
+        } else {
+            Log::warning('Klaviyo email subscription failed', [
+                'lead_id' => $lead->id,
+                'status' => $response->status(),
+                'response' => $response->json(),
+            ]);
+        }
     }
 
     /**

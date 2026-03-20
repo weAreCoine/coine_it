@@ -17,6 +17,7 @@ class KlaviyoClient
      * Create a new profile in Klaviyo.
      *
      * @param  array<string, mixed>  $attributes  Profile attributes (email, first_name, properties, etc.)
+     *
      * @throws ConnectionException
      * @throws ConnectionException
      */
@@ -49,7 +50,7 @@ class KlaviyoClient
      *
      * @param  string  $profileId  The Klaviyo profile ID
      * @param  array<string, mixed>  $attributes  Profile attributes to update
-     * @throws ConnectionException
+     *
      * @throws ConnectionException
      */
     public function updateProfile(string $profileId, array $attributes): Response
@@ -60,6 +61,51 @@ class KlaviyoClient
                     'type' => 'profile',
                     'id' => $profileId,
                     'attributes' => $attributes,
+                ],
+            ]);
+    }
+
+    /**
+     * Subscribe a profile to a Klaviyo list for email marketing.
+     *
+     * @param  string  $email  The email address to subscribe
+     * @param  string  $listId  The Klaviyo list ID
+     *
+     * @throws ConnectionException
+     */
+    public function subscribeToList(string $email, string $listId): Response
+    {
+        return Http::withHeaders($this->headers())
+            ->post('https://a.klaviyo.com/api/profile-subscription-bulk-create/', [
+                'data' => [
+                    'type' => 'profile-subscription-bulk-create-job',
+                    'attributes' => [
+                        'profiles' => [
+                            'data' => [
+                                [
+                                    'type' => 'profile',
+                                    'attributes' => [
+                                        'email' => $email,
+                                        'subscriptions' => [
+                                            'email' => [
+                                                'marketing' => [
+                                                    'consent' => 'SUBSCRIBED',
+                                                ],
+                                            ],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    'relationships' => [
+                        'list' => [
+                            'data' => [
+                                'type' => 'list',
+                                'id' => $listId,
+                            ],
+                        ],
+                    ],
                 ],
             ]);
     }
