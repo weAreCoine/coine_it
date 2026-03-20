@@ -22,7 +22,7 @@ export default function HealthCheckResult({ result, leadName }: HealthCheckResul
                         <h1 className="section__title text-white">{leadName ? `${leadName}, ecco la tua diagnosi` : 'Ecco la tua diagnosi'}</h1>
                     </div>
                     <div className="mx-auto max-w-2xl">
-                        <HealthCheckResults {...result} />
+                        <HealthCheckResults {...result} showMotivational={false} />
                     </div>
                 </div>
             </section>

@@ -10,6 +10,7 @@ export type HealthCheckResultsProps = {
     motivationalTitle: string;
     motivationalText: string;
     findings: { color: 'r' | 'g' | 'a'; title: string; description: string }[];
+    showMotivational?: boolean;
 };
 
 function FindingDot({ color }: { color: 'r' | 'a' | 'g' }) {
@@ -33,6 +34,7 @@ export default function HealthCheckResults({
     motivationalTitle,
     motivationalText,
     findings,
+    showMotivational = true,
 }: HealthCheckResultsProps) {
     return (
         <div>
@@ -70,10 +72,12 @@ export default function HealthCheckResults({
                 </div>
             </div>
 
-            <div className="mb-8">
-                <h4 className="mb-2 font-display text-lg">{motivationalTitle}</h4>
-                <p className="text-sm text-white/60">{motivationalText}</p>
-            </div>
+            {showMotivational && (
+                <div className="mb-8">
+                    <h4 className="mb-2 font-display text-lg">{motivationalTitle}</h4>
+                    <p className="text-sm text-white/60">{motivationalText}</p>
+                </div>
+            )}
         </div>
     );
 }
