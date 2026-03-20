@@ -6,6 +6,7 @@ use App\Enums\LeadStage;
 use App\Events\LeadCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Lead extends Model
 {
@@ -14,6 +15,11 @@ class Lead extends Model
     public $timestamps = true;
 
     protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::creating(fn (Lead $lead) => $lead->uuid ??= (string) Str::uuid());
+    }
 
     protected $dispatchesEvents = [
         'created' => LeadCreated::class,

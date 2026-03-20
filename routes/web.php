@@ -10,6 +10,7 @@ use App\Http\Controllers\Pages\ContentPageController;
 use App\Http\Controllers\Pages\CookiePolicyPageController;
 use App\Http\Controllers\Pages\DevelopingPageController;
 use App\Http\Controllers\Pages\HealthCheckPageController;
+use App\Http\Controllers\Pages\HealthCheckResultPageController;
 use App\Http\Controllers\Pages\MarketingPageController;
 use App\Http\Controllers\Pages\PrivacyPolicyPageController;
 use App\Http\Controllers\Pages\ProjectPageController;
@@ -39,6 +40,8 @@ Route::post('/health-check', [HealthCheckQuizController::class, 'store'])
     ->name('health-check.store');
 Route::patch('/health-check', [HealthCheckQuizController::class, 'complete'])
     ->name('health-check.complete');
+Route::get('/health-check/{lead:uuid}', [HealthCheckResultPageController::class, 'show'])
+    ->name('health-check.result');
 
 Route::prefix('servizi')->group(function () {
     Route::get('sviluppo-app-siti-web', [DevelopingPageController::class, 'show'])

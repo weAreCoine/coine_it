@@ -33,17 +33,23 @@ class LeadFactory extends Factory
      */
     public function withHealthCheck(): static
     {
-        return $this->state(fn (array $attributes) => [
-            'website' => fake()->domainName(),
-            'quiz_score' => fake()->numberBetween(20, 100),
-            'quiz_answers' => [
-                'platform' => fake()->randomElement(['WordPress', 'Shopify', 'Custom', 'Wix', 'Squarespace']),
-                'advertising' => fake()->randomElement(['Google Ads', 'Meta Ads', 'None', 'Both']),
-                'seo' => fake()->randomElement(['Yes', 'No', 'Partially']),
-                'analytics' => fake()->randomElement(['Google Analytics', 'None', 'Other']),
-                'social_media' => fake()->randomElement(['Instagram', 'Facebook', 'LinkedIn', 'None']),
-                'goals' => fake()->randomElement(['More traffic', 'More leads', 'Brand awareness', 'E-commerce sales']),
-            ],
-        ]);
+        return $this->state(function (array $attributes) {
+            $answers = [
+                'platform' => ['value' => fake()->randomElement(['woocommerce', 'shopify', 'prestashop_magento', 'custom']), 'points' => 0],
+                'advertising' => ['value' => fake()->randomElement(['none', 'internal', 'freelance', 'agency']), 'points' => fake()->randomElement([3, 6, 9, 12])],
+                'coordination' => ['value' => fake()->randomElement(['separate', 'external', 'self', 'internal']), 'points' => fake()->randomElement([0, 7, 15, 25])],
+                'tracking' => ['value' => fake()->randomElement(['none', 'basic', 'decent', 'complete']), 'points' => fake()->randomElement([0, 8, 17, 25])],
+                'mobile' => ['value' => fake()->randomElement(['unknown', 'slow', 'ok', 'optimized']), 'points' => fake()->randomElement([0, 5, 13, 20])],
+                'retention' => ['value' => fake()->randomElement(['none', 'basic', 'active', 'advanced']), 'points' => fake()->randomElement([0, 6, 14, 18])],
+            ];
+
+            $score = collect($answers)->except('platform')->sum('points');
+
+            return [
+                'website' => fake()->domainName(),
+                'quiz_score' => $score,
+                'quiz_answers' => $answers,
+            ];
+        });
     }
 }

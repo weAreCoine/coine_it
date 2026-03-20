@@ -7,11 +7,13 @@ import HealthCheckHero from '@/components/sections/healthCheckHero';
 import HealthCheckQuiz from '@/components/sections/healthCheckQuiz';
 import HealthCheckTeam from '@/components/sections/healthCheckTeam';
 import HowWeWork from '@/components/sections/howWeWork';
+import Marquee from '@/components/sections/marquee';
 import type { HeroPoint, QuizConfig, QuizQuestion, WorkStep } from '@/types/dto/healthCheck';
-import type { TeamMember } from '@/types/dto/sections';
+import type { MarqueeData, TeamMember } from '@/types/dto/sections';
 import Faq = App.Entities.Faq;
 
 interface HealthCheckProps {
+    marquee: MarqueeData;
     heroPoints: HeroPoint[];
     steps: WorkStep[];
     faqs: Faq[];
@@ -20,12 +22,13 @@ interface HealthCheckProps {
     teamMembers: TeamMember[];
 }
 
-export default function HealthCheck({ heroPoints, steps, faqs, questions, quizConfig, teamMembers }: HealthCheckProps) {
+export default function HealthCheck({ marquee, heroPoints, steps, faqs, questions, quizConfig, teamMembers }: HealthCheckProps) {
     return (
         <>
             <Head title="E-commerce Health Check" />
             <Navigation />
             <HealthCheckHero points={heroPoints} />
+            <Marquee {...marquee} />
             <HowWeWork steps={steps} />
             <HealthCheckQuiz questions={questions} config={quizConfig} />
             <HealthCheckTeam members={teamMembers} />

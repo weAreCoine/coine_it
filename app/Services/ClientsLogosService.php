@@ -16,7 +16,7 @@ class ClientsLogosService
      */
     public static function all(): array
     {
-        return cache()->remember('clientsLogos', 3600, function () {
+        $cached = cache()->remember('clientsLogos', 3600, function () {
             $projectsByLogo = Project::query()
                 ->where('is_published', true)
                 ->whereNotNull('client_logo')
@@ -30,15 +30,22 @@ class ClientsLogosService
                     $project = $projectsByLogo->get($filename);
 
                     return [
-                        'logoUrl' => asset('images/clients/'.$filename),
+                        'filename' => $filename,
                         'title' => Str::headline($file->getFilenameWithoutExtension()),
-                        'link' => $project
-                            ? new NavigationItem($project->title, route('projects.show', $project))
-                            : null,
+                        'projectSlug' => $project?->slug,
+                        'projectTitle' => $project?->title,
                     ];
                 })
                 ->values()
                 ->all();
         });
+
+        return array_map(fn (array $item) => [
+            'logoUrl' => asset('images/clients/'.$item['filename']),
+            'title' => $item['title'],
+            'link' => $item['projectSlug']
+                ? new NavigationItem($item['projectTitle'], route('projects.show', $item['projectSlug']))
+                : null,
+        ], $cached);
     }
 }

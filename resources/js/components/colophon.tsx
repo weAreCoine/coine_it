@@ -5,10 +5,11 @@ import { show as contact } from '@/routes/contact';
 
 interface ColophonProps {
     marginTop?: boolean;
+    borderTop?: boolean;
 }
-export default function Colophon({ marginTop = true }: ColophonProps) {
+export default function Colophon({ marginTop = true, borderTop = false }: ColophonProps) {
     return (
-        <div className={`colophon relative ${marginTop ? 'mt-32' : ''}`}>
+        <div className={`colophon relative ${marginTop ? 'mt-32' : ''} ${borderTop ? 'border-t border-mercury-700/60' : ''}`}>
             <DevLabel name="Colophon" />
             <div className="container">
                 <div className="flex flex-col justify-between md:flex-row">
