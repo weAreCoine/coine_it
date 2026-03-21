@@ -39,14 +39,14 @@ it('sends a POST request to create a profile with correct headers and body', fun
 
 it('sends a POST request to subscribe a profile to a list', function () {
     Http::fake([
-        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
+        'a.klaviyo.com/api/profile-subscription-bulk-create-jobs*' => Http::response(null, 202),
     ]);
 
     $client = new KlaviyoClient;
     $client->subscribeToList('test@example.com', 'list-abc');
 
     Http::assertSent(function ($request) {
-        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create/'
+        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs'
             && $request->method() === 'POST'
             && $request->header('Authorization')[0] === 'Klaviyo-API-Key test-api-key'
             && $request['data']['type'] === 'profile-subscription-bulk-create-job'

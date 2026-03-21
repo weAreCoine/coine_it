@@ -76,7 +76,7 @@ class KlaviyoClient
     public function subscribeToList(string $email, string $listId): Response
     {
         return Http::withHeaders($this->headers())
-            ->post('https://a.klaviyo.com/api/profile-subscription-bulk-create/', [
+            ->post('https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs', [
                 'data' => [
                     'type' => 'profile-subscription-bulk-create-job',
                     'attributes' => [

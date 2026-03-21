@@ -32,7 +32,7 @@ it('calls createProfile with correct structure and subscribes to list', function
 
     Http::fake([
         'a.klaviyo.com/api/profiles/*' => Http::response(['data' => ['id' => 'p-1']], 201),
-        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
+        'a.klaviyo.com/api/profile-subscription-bulk-create-jobs*' => Http::response(null, 202),
     ]);
 
     $lead = Lead::factory()->withHealthCheck()->create();
@@ -53,7 +53,7 @@ it('calls createProfile with correct structure and subscribes to list', function
     });
 
     Http::assertSent(function ($request) use ($lead) {
-        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create/'
+        return $request->url() === 'https://a.klaviyo.com/api/profile-subscription-bulk-create-jobs'
             && $request->method() === 'POST'
             && $request['data']['attributes']['profiles']['data'][0]['attributes']['email'] === $lead->email
             && $request['data']['relationships']['list']['data']['id'] === 'list-123';
@@ -70,7 +70,7 @@ it('handles 409 conflict by updating the existing profile and subscribing to lis
             ]],
         ], 409),
         'a.klaviyo.com/api/profiles/existing-123' => Http::response(['data' => ['id' => 'existing-123']], 200),
-        'a.klaviyo.com/api/profile-subscription-bulk-create/*' => Http::response(null, 202),
+        'a.klaviyo.com/api/profile-subscription-bulk-create-jobs*' => Http::response(null, 202),
     ]);
 
     $lead = Lead::factory()->withHealthCheck()->create();
@@ -82,7 +82,7 @@ it('handles 409 conflict by updating the existing profile and subscribing to lis
         && str_contains($request->url(), '/api/profiles/'));
     Http::assertSent(fn ($request) => $request->method() === 'PATCH'
         && str_contains($request->url(), 'existing-123'));
-    Http::assertSent(fn ($request) => str_contains($request->url(), 'profile-subscription-bulk-create'));
+    Http::assertSent(fn ($request) => str_contains($request->url(), 'profile-subscription-bulk-create-jobs'));
 });
 
 it('handles exceptions without propagating them', function () {
