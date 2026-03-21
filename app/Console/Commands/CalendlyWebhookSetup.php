@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace App\Console\Commands;
 
+use App\Exceptions\ExceptionHandler;
 use App\Services\Calendly\CalendlyClient;
 use Illuminate\Console\Command;
+use Illuminate\Http\Client\ConnectionException;
 
 /**
  * Manages Calendly webhook subscription for receiving invitee events.
@@ -27,6 +29,7 @@ class CalendlyWebhookSetup extends Command
 
     /**
      * Execute the console command.
+     * @throws ConnectionException
      */
     public function handle(CalendlyClient $client): int
     {
@@ -58,18 +61,25 @@ class CalendlyWebhookSetup extends Command
 
             return self::FAILURE;
         }
+        try {
 
-        return $this->createSubscription($client, $organizationUri, $signingKey);
+            return $this->createSubscription($client, $organizationUri, $signingKey);
+        } catch (ConnectionException $e) {
+            $this->error('Failed to create webhook subscription: '.$e->getMessage());
+            ExceptionHandler::handle($e);
+            return self::FAILURE;
+        }
     }
 
     /**
      * Resolve the organization URI from the Calendly API.
+     * @throws ConnectionException
      */
     private function resolveOrganizationUri(CalendlyClient $client): ?string
     {
         $response = $client->getCurrentUser();
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             $this->error('Failed to fetch Calendly user info. Check CALENDLY_PAT.');
 
             return null;
@@ -80,12 +90,13 @@ class CalendlyWebhookSetup extends Command
 
     /**
      * List existing webhook subscriptions.
+     * @throws ConnectionException
      */
     private function listSubscriptions(CalendlyClient $client, string $organizationUri): int
     {
         $response = $client->listWebhookSubscriptions($organizationUri);
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             $this->error('Failed to fetch webhook subscriptions.');
 
             return self::FAILURE;
@@ -101,7 +112,7 @@ class CalendlyWebhookSetup extends Command
 
         $this->table(
             ['URI', 'URL', 'Events', 'State'],
-            collect($subscriptions)->map(fn (array $sub) => [
+            collect($subscriptions)->map(fn(array $sub) => [
                 $sub['uri'],
                 $sub['callback_url'],
                 implode(', ', $sub['events']),
@@ -113,7 +124,78 @@ class CalendlyWebhookSetup extends Command
     }
 
     /**
+     * Delete existing webhook subscription for the configured URL.
+     * @throws ConnectionException
+     */
+    private function deleteSubscription(CalendlyClient $client, string $organizationUri): int
+    {
+        $webhookUrl = $this->resolveWebhookUrl();
+        $existing = $this->findExistingSubscription($client, $organizationUri, $webhookUrl);
+
+        if ($existing === null) {
+            $this->info("No webhook subscription found for {$webhookUrl}.");
+
+            return self::SUCCESS;
+        }
+
+        $response = $client->deleteWebhookSubscription($existing['uri']);
+
+        if (!$response->successful()) {
+            $this->error('Failed to delete webhook subscription.');
+
+            return self::FAILURE;
+        }
+
+        $this->info("Webhook subscription deleted for {$webhookUrl}.");
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Resolve the webhook URL from the --url option or the default route.
+     */
+    private function resolveWebhookUrl(): string
+    {
+        $url = $this->option('url');
+
+        if ($url !== null && $url !== '') {
+            return $url;
+        }
+
+        return rtrim((string) config('app.url'), '/').'/api/webhooks/calendly';
+    }
+
+    /**
+     * Find an existing webhook subscription matching the given URL.
+     *
+     * @return array<string, mixed>|null
+     * @throws ConnectionException
+     */
+    private function findExistingSubscription(
+        CalendlyClient $client,
+        string $organizationUri,
+        string $webhookUrl
+    ): ?array {
+        $response = $client->listWebhookSubscriptions($organizationUri);
+
+        if (!$response->successful()) {
+            return null;
+        }
+
+        $subscriptions = $response->json('collection', []);
+
+        foreach ($subscriptions as $subscription) {
+            if ($subscription['callback_url'] === $webhookUrl) {
+                return $subscription;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Create a webhook subscription (idempotent: skips if already exists for the URL).
+     * @throws ConnectionException
      */
     private function createSubscription(CalendlyClient $client, string $organizationUri, string $signingKey): int
     {
@@ -130,7 +212,7 @@ class CalendlyWebhookSetup extends Command
 
         $response = $client->createWebhookSubscription($webhookUrl, $events, $organizationUri, $signingKey);
 
-        if (! $response->successful()) {
+        if (!$response->successful()) {
             $this->error('Failed to create webhook subscription.');
             $this->error((string) json_encode($response->json(), JSON_PRETTY_PRINT));
 
@@ -140,70 +222,5 @@ class CalendlyWebhookSetup extends Command
         $this->info("Webhook subscription created for {$webhookUrl}.");
 
         return self::SUCCESS;
-    }
-
-    /**
-     * Delete existing webhook subscription for the configured URL.
-     */
-    private function deleteSubscription(CalendlyClient $client, string $organizationUri): int
-    {
-        $webhookUrl = $this->resolveWebhookUrl();
-        $existing = $this->findExistingSubscription($client, $organizationUri, $webhookUrl);
-
-        if ($existing === null) {
-            $this->info("No webhook subscription found for {$webhookUrl}.");
-
-            return self::SUCCESS;
-        }
-
-        $response = $client->deleteWebhookSubscription($existing['uri']);
-
-        if (! $response->successful()) {
-            $this->error('Failed to delete webhook subscription.');
-
-            return self::FAILURE;
-        }
-
-        $this->info("Webhook subscription deleted for {$webhookUrl}.");
-
-        return self::SUCCESS;
-    }
-
-    /**
-     * Find an existing webhook subscription matching the given URL.
-     *
-     * @return array<string, mixed>|null
-     */
-    private function findExistingSubscription(CalendlyClient $client, string $organizationUri, string $webhookUrl): ?array
-    {
-        $response = $client->listWebhookSubscriptions($organizationUri);
-
-        if (! $response->successful()) {
-            return null;
-        }
-
-        $subscriptions = $response->json('collection', []);
-
-        foreach ($subscriptions as $subscription) {
-            if ($subscription['callback_url'] === $webhookUrl) {
-                return $subscription;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Resolve the webhook URL from the --url option or the default route.
-     */
-    private function resolveWebhookUrl(): string
-    {
-        $url = $this->option('url');
-
-        if ($url !== null && $url !== '') {
-            return $url;
-        }
-
-        return rtrim((string) config('app.url'), '/').'/api/webhooks/calendly';
     }
 }
