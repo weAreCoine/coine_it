@@ -90,6 +90,7 @@ class KlaviyoService
             $properties['website'] = $lead->website ?? '';
             $properties['quiz_score'] = $lead->quiz_score ?? 0;
             $properties['health_check_call_booked'] = 'false';
+            $properties['health_check_result_url'] = route('health-check.result', $lead);
 
             foreach ($lead->quiz_answers as $key => $value) {
                 $properties['quiz_'.$key] = is_array($value) ? implode(', ', $value) : $value;

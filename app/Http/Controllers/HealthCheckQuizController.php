@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\HealthCheckQuizRequest;
 use App\Models\Lead;
+use App\Services\Klaviyo\KlaviyoService;
 use App\Services\LeadService;
 use Illuminate\Http\Request;
 
@@ -33,7 +34,7 @@ class HealthCheckQuizController extends Controller
     /**
      * Complete the quiz (Event 3: QuizCompleted).
      */
-    public function complete(Request $request, LeadService $leadService): void
+    public function complete(Request $request, LeadService $leadService, KlaviyoService $klaviyoService): void
     {
         $validated = $request->validate([
             'email' => 'required|email|max:255',
@@ -44,6 +45,16 @@ class HealthCheckQuizController extends Controller
 
         if ($lead && ! empty($validated['openText'])) {
             $lead->update(['notes' => $validated['openText']]);
+
+            if (KlaviyoService::isEnabled()) {
+                $profileId = $klaviyoService->findProfileIdByEmail($lead->email);
+
+                if ($profileId !== null) {
+                    $klaviyoService->updateProfileProperties($profileId, [
+                        'health_check_notes' => $validated['openText'],
+                    ]);
+                }
+            }
         }
 
         $leadService->trackMetaPixelEvent('CompleteRegistration');

@@ -2,6 +2,7 @@
 
 use App\Mail\LeadReceived;
 use App\Models\Lead;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 function validQuizPayload(array $overrides = []): array
@@ -132,6 +133,39 @@ test('complete updates notes with openText', function () {
 
     $lead = Lead::where('email', 'mario@example.com')->first();
     expect($lead->notes)->toBe('Il nostro problema principale è il checkout mobile.');
+});
+
+test('complete sends notes to klaviyo when enabled', function () {
+    Mail::fake();
+    Http::fake([
+        'a.klaviyo.com/api/profiles?*' => Http::response([
+            'data' => [['id' => 'profile-abc', 'type' => 'profile']],
+        ], 200),
+        'a.klaviyo.com/api/profiles/profile-abc' => Http::response(['data' => ['id' => 'profile-abc']], 200),
+    ]);
+
+    config([
+        'services.klaviyo.enabled' => true,
+        'services.klaviyo.api_key' => 'test-key',
+    ]);
+
+    $this->post(route('health-check.store'), validQuizPayload())
+        ->assertOk();
+
+    $this->patch(route('health-check.complete'), [
+        'email' => 'mario@example.com',
+        'openText' => 'Il nostro problema principale è il checkout mobile.',
+    ])->assertOk();
+
+    Http::assertSent(function ($request) {
+        if ($request->method() !== 'PATCH' || ! str_contains($request->url(), 'profile-abc')) {
+            return false;
+        }
+
+        $properties = $request['data']['attributes']['properties'] ?? [];
+
+        return $properties['health_check_notes'] === 'Il nostro problema principale è il checkout mobile.';
+    });
 });
 
 test('complete without openText does not clear notes', function () {

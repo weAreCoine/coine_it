@@ -241,5 +241,8 @@ it('maps quiz answers as flattened properties', function () {
         ->toHaveKey('quiz_score', 75)
         ->toHaveKey('website', 'example.com')
         ->toHaveKey('lead_source', 'health_check')
-        ->toHaveKey('health_check_call_booked', 'false');
+        ->toHaveKey('health_check_call_booked', 'false')
+        ->toHaveKey('health_check_result_url')
+        ->and($attributes['properties']['health_check_result_url'])
+        ->toContain($lead->uuid);
 });
