@@ -6,6 +6,7 @@ namespace App\Services\Klaviyo;
 
 use App\Exceptions\ExceptionHandler;
 use App\Models\Lead;
+use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Log;
 
 /**
@@ -13,7 +14,9 @@ use Illuminate\Support\Facades\Log;
  */
 class KlaviyoService
 {
-    public function __construct(private KlaviyoClient $client) {}
+    public function __construct(private KlaviyoClient $client)
+    {
+    }
 
     /**
      * Check if Klaviyo integration is enabled and configured.
@@ -103,7 +106,33 @@ class KlaviyoService
     }
 
     /**
+     * Split a full name into first and last name.
+     *
+     * @return array{first_name: string, last_name: string}
+     */
+    private function splitName(string $fullName): array
+    {
+        $parts = explode(' ', trim($fullName), 2);
+
+        return [
+            'first_name' => $parts[0] ?? '',
+            'last_name' => $parts[1] ?? '',
+        ];
+    }
+
+    /**
+     * Extract the profile ID from a 409 conflict response.
+     *
+     * @param  array<string, mixed>|null  $responseBody
+     */
+    private function extractProfileIdFromConflict(?array $responseBody): ?string
+    {
+        return $responseBody['errors'][0]['meta']['duplicate_profile_id'] ?? null;
+    }
+
+    /**
      * Subscribe a lead to the Klaviyo email marketing list.
+     * @throws ConnectionException
      */
     private function subscribeLeadToList(Lead $lead): void
     {
@@ -129,27 +158,53 @@ class KlaviyoService
     }
 
     /**
-     * Extract the profile ID from a 409 conflict response.
+     * Find a Klaviyo profile ID by email address.
      *
-     * @param  array<string, mixed>|null  $responseBody
+     * @param  string  $email  The email address to search for
+     * @return string|null The profile ID, or null if not found
+     * @throws ConnectionException
      */
-    private function extractProfileIdFromConflict(?array $responseBody): ?string
+    public function findProfileIdByEmail(string $email): ?string
     {
-        return $responseBody['errors'][0]['meta']['duplicate_profile_id'] ?? null;
+        $response = $this->client->getProfileByEmail($email);
+
+        if (!$response->successful()) {
+            Log::warning('Klaviyo profile lookup failed', [
+                'email' => $email,
+                'status' => $response->status(),
+            ]);
+
+            return null;
+        }
+
+        $profiles = $response->json('data', []);
+
+        if (count($profiles) === 0) {
+            Log::info('No Klaviyo profile found for email, skipping call properties update', [
+                'email' => $email,
+            ]);
+
+            return null;
+        }
+
+        return $profiles[0]['id'];
     }
 
     /**
-     * Split a full name into first and last name.
+     * Update custom properties on a Klaviyo profile.
      *
-     * @return array{first_name: string, last_name: string}
+     * @param  string  $profileId  The Klaviyo profile ID
+     * @param  array<string, mixed>  $properties  Properties to set on the profile
+     * @throws ConnectionException
      */
-    private function splitName(string $fullName): array
+    public function updateProfileProperties(string $profileId, array $properties): void
     {
-        $parts = explode(' ', trim($fullName), 2);
+        $this->client->updateProfile($profileId, [
+            'properties' => $properties,
+        ]);
 
-        return [
-            'first_name' => $parts[0] ?? '',
-            'last_name' => $parts[1] ?? '',
-        ];
+        Log::info('Klaviyo profile updated with call properties', [
+            'profile_id' => $profileId,
+        ]);
     }
 }

@@ -37,6 +37,8 @@ return [
 
     'calendly' => [
         'url' => env('CALENDLY_URL', 'https://calendly.com/luca-coine/30min'),
+        'pat' => env('CALENDLY_PAT', ''),
+        'webhook_signing_key' => env('CALENDLY_WEBHOOK_SIGNING_KEY', ''),
     ],
 
     'klaviyo' => [

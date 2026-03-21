@@ -66,6 +66,21 @@ class KlaviyoClient
     }
 
     /**
+     * Get a profile by email address.
+     *
+     * @param  string  $email  The email address to search for
+     *
+     * @throws ConnectionException
+     */
+    public function getProfileByEmail(string $email): Response
+    {
+        return Http::withHeaders($this->headers())
+            ->get('https://a.klaviyo.com/api/profiles', [
+                'filter' => 'equals(email,"'.$email.'")',
+            ]);
+    }
+
+    /**
      * Subscribe a profile to a Klaviyo list for email marketing.
      *
      * @param  string  $email  The email address to subscribe

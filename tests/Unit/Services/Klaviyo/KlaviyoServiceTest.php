@@ -115,6 +115,49 @@ it('maps contact form lead with lead_source contact_form', function () {
         ->not->toHaveKey('website');
 });
 
+it('finds profile id by email when profile exists', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles?*' => Http::response([
+            'data' => [['id' => 'profile-xyz', 'type' => 'profile']],
+        ], 200),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $profileId = $service->findProfileIdByEmail('test@example.com');
+
+    expect($profileId)->toBe('profile-xyz');
+});
+
+it('returns null when no profile found by email', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles?*' => Http::response(['data' => []], 200),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $profileId = $service->findProfileIdByEmail('unknown@example.com');
+
+    expect($profileId)->toBeNull();
+});
+
+it('updates profile properties with correct payload', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles/profile-xyz' => Http::response(['data' => ['id' => 'profile-xyz']], 200),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $service->updateProfileProperties('profile-xyz', [
+        'health_check_call_date' => '2026-04-01T10:00:00.000000Z',
+        'health_check_call_url' => 'https://meet.google.com/abc',
+    ]);
+
+    Http::assertSent(function ($request) {
+        return $request->method() === 'PATCH'
+            && str_contains($request->url(), 'profile-xyz')
+            && $request['data']['attributes']['properties']['health_check_call_date'] === '2026-04-01T10:00:00.000000Z'
+            && $request['data']['attributes']['properties']['health_check_call_url'] === 'https://meet.google.com/abc';
+    });
+});
+
 it('maps quiz answers as flattened properties', function () {
     $lead = Lead::factory()->withHealthCheck()->create([
         'name' => 'Mario Rossi',

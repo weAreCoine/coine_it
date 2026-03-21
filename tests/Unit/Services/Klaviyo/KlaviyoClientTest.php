@@ -56,6 +56,24 @@ it('sends a POST request to subscribe a profile to a list', function () {
     });
 });
 
+it('sends a GET request to search profile by email', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles?*' => Http::response([
+            'data' => [['id' => 'profile-456', 'type' => 'profile']],
+        ], 200),
+    ]);
+
+    $client = new KlaviyoClient;
+    $client->getProfileByEmail('test@example.com');
+
+    Http::assertSent(function ($request) {
+        return $request->method() === 'GET'
+            && str_contains($request->url(), 'a.klaviyo.com/api/profiles')
+            && str_contains($request->url(), 'filter=equals%28email%2C%22test%40example.com%22%29')
+            && $request->header('Authorization')[0] === 'Klaviyo-API-Key test-api-key';
+    });
+});
+
 it('sends a PATCH request to update a profile with correct headers and body', function () {
     Http::fake([
         'a.klaviyo.com/api/profiles/*' => Http::response(['data' => ['id' => 'profile-123']], 200),
