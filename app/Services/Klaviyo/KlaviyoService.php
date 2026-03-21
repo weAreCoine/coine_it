@@ -89,6 +89,7 @@ class KlaviyoService
         if ($isHealthCheck) {
             $properties['website'] = $lead->website ?? '';
             $properties['quiz_score'] = $lead->quiz_score ?? 0;
+            $properties['health_check_call_booked'] = 'false';
 
             foreach ($lead->quiz_answers as $key => $value) {
                 $properties['quiz_'.$key] = is_array($value) ? implode(', ', $value) : $value;

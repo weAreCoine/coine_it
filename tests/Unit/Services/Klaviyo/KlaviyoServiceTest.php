@@ -112,7 +112,8 @@ it('maps contact form lead with lead_source contact_form', function () {
         ->and($attributes['properties'])
         ->toHaveKey('lead_source', 'contact_form')
         ->not->toHaveKey('quiz_score')
-        ->not->toHaveKey('website');
+        ->not->toHaveKey('website')
+        ->not->toHaveKey('health_check_call_booked');
 });
 
 it('finds profile id by email when profile exists', function () {
@@ -239,5 +240,6 @@ it('maps quiz answers as flattened properties', function () {
         ->toHaveKey('quiz_advertising', 'Google Ads')
         ->toHaveKey('quiz_score', 75)
         ->toHaveKey('website', 'example.com')
-        ->toHaveKey('lead_source', 'health_check');
+        ->toHaveKey('lead_source', 'health_check')
+        ->toHaveKey('health_check_call_booked', 'false');
 });

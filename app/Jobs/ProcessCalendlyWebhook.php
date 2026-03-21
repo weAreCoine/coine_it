@@ -70,6 +70,7 @@ class ProcessCalendlyWebhook implements ShouldQueue
     private function buildCallProperties(CalendlyClient $calendlyClient): array
     {
         $properties = [
+            'health_check_call_booked' => 'true',
             'health_check_call_date' => $this->payload['scheduled_event']['start_time'] ?? null,
             'health_check_reschedule_url' => $this->payload['reschedule_url'] ?? null,
             'health_check_abort_url' => $this->payload['cancel_url'] ?? null,

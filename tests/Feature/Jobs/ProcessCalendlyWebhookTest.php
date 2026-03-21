@@ -56,7 +56,8 @@ it('updates klaviyo profile with call properties when profile exists', function 
 
         $properties = $request['data']['attributes']['properties'] ?? [];
 
-        return $properties['health_check_call_date'] === '2026-04-01T10:00:00.000000Z'
+        return $properties['health_check_call_booked'] === 'true'
+            && $properties['health_check_call_date'] === '2026-04-01T10:00:00.000000Z'
             && $properties['health_check_call_url'] === 'https://meet.google.com/abc-defg-hij'
             && $properties['health_check_reschedule_url'] === 'https://calendly.com/reschedulings/abc'
             && $properties['health_check_abort_url'] === 'https://calendly.com/cancellations/abc';
@@ -182,7 +183,8 @@ it('updates profile without join url when calendly event fetch fails', function 
 
         $properties = $request['data']['attributes']['properties'] ?? [];
 
-        return isset($properties['health_check_call_date'])
+        return $properties['health_check_call_booked'] === 'true'
+            && isset($properties['health_check_call_date'])
             && isset($properties['health_check_reschedule_url'])
             && isset($properties['health_check_abort_url'])
             && ! isset($properties['health_check_call_url']);
