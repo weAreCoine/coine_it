@@ -11,6 +11,7 @@ export default function ContactForm() {
         phone: '',
         message: '',
         termsAccepted: false,
+        newsletterOptIn: false,
     });
 
     function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
@@ -111,6 +112,16 @@ export default function ContactForm() {
                             </span>
                         </label>
                         {errors.termsAccepted && <p className="error__message">{errors.termsAccepted}</p>}
+
+                        <label className="mt-3 flex items-start gap-3">
+                            <input
+                                type="checkbox"
+                                checked={data.newsletterOptIn}
+                                onChange={(e) => setData('newsletterOptIn', e.target.checked)}
+                                className="mt-0.5 size-4 shrink-0 accent-black"
+                            />
+                            <span className="text-sm text-mercury-500">Desidero iscrivermi alla newsletter</span>
+                        </label>
                     </div>
 
                     <div className="mt-8 sm:mt-0">

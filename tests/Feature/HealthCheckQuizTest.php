@@ -74,6 +74,16 @@ test('dispatches LeadCreated event and sends LeadReceived mailable', function ()
     Mail::assertSent(LeadReceived::class);
 });
 
+test('stores newsletter_opt_in as true', function () {
+    Mail::fake();
+
+    $this->post(route('health-check.store'), validQuizPayload())
+        ->assertOk();
+
+    $lead = Lead::where('email', 'mario@example.com')->first();
+    expect($lead->newsletter_opt_in)->toBeTrue();
+});
+
 test('validation requires firstName', function () {
     $this->post(route('health-check.store'), validQuizPayload(['firstName' => '']))
         ->assertSessionHasErrors('firstName');

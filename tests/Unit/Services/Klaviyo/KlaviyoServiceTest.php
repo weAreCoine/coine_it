@@ -38,7 +38,7 @@ it('calls createProfile with correct structure and subscribes to list', function
     $lead = Lead::factory()->withHealthCheck()->create();
 
     $service = app(KlaviyoService::class);
-    $service->syncHealthCheckLead($lead);
+    $service->syncLead($lead);
 
     Http::assertSent(function ($request) use ($lead) {
         $attrs = $request['data']['attributes'] ?? [];
@@ -76,7 +76,7 @@ it('handles 409 conflict by updating the existing profile and subscribing to lis
     $lead = Lead::factory()->withHealthCheck()->create();
 
     $service = app(KlaviyoService::class);
-    $service->syncHealthCheckLead($lead);
+    $service->syncLead($lead);
 
     Http::assertSent(fn ($request) => $request->method() === 'POST'
         && str_contains($request->url(), '/api/profiles/'));
@@ -93,7 +93,26 @@ it('handles exceptions without propagating them', function () {
     $lead = Lead::factory()->withHealthCheck()->create();
 
     $service = app(KlaviyoService::class);
-    $service->syncHealthCheckLead($lead);
+    $service->syncLead($lead);
+});
+
+it('maps contact form lead with lead_source contact_form', function () {
+    $lead = Lead::factory()->create([
+        'name' => 'Jane Doe',
+        'quiz_answers' => null,
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $attributes = $service->mapLeadToProfileAttributes($lead);
+
+    expect($attributes)
+        ->toHaveKey('first_name', 'Jane')
+        ->toHaveKey('last_name', 'Doe')
+        ->toHaveKey('email', $lead->email)
+        ->and($attributes['properties'])
+        ->toHaveKey('lead_source', 'contact_form')
+        ->not->toHaveKey('quiz_score')
+        ->not->toHaveKey('website');
 });
 
 it('maps quiz answers as flattened properties', function () {

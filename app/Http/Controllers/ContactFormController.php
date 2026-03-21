@@ -19,6 +19,7 @@ class ContactFormController extends Controller
             'phone' => $validated['phone'],
             'project' => $validated['message'],
             'terms' => $validated['termsAccepted'],
+            'newsletter_opt_in' => $validated['newsletterOptIn'] ?? false,
         ], $request);
     }
 }

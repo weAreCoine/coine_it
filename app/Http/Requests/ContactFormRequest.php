@@ -28,7 +28,7 @@ class ContactFormRequest extends FormRequest
             'phone' => 'sometimes|nullable',
             'message' => 'required',
             'termsAccepted' => 'accepted',
-
+            'newsletterOptIn' => 'sometimes|boolean',
         ];
     }
 }

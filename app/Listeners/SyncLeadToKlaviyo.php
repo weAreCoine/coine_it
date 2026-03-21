@@ -10,23 +10,21 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 readonly class SyncLeadToKlaviyo implements ShouldQueue
 {
-    public function __construct(private KlaviyoService $klaviyoService)
-    {
-    }
+    public function __construct(private KlaviyoService $klaviyoService) {}
 
     /**
      * Handle the LeadCreated event.
      */
     public function handle(LeadCreated $event): void
     {
-        if (!KlaviyoService::isEnabled()) {
+        if (! KlaviyoService::isEnabled()) {
             return;
         }
 
-        if ($event->lead->quiz_answers === null) {
+        if (! $event->lead->newsletter_opt_in) {
             return;
         }
 
-        $this->klaviyoService->syncHealthCheckLead($event->lead);
+        $this->klaviyoService->syncLead($event->lead);
     }
 }

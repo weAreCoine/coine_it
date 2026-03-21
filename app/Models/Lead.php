@@ -29,6 +29,7 @@ class Lead extends Model
     {
         return [
             'terms' => 'boolean',
+            'newsletter_opt_in' => 'boolean',
             'quiz_answers' => 'array',
             'services' => 'array',
             'updated_at' => 'datetime',

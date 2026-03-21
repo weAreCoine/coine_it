@@ -25,11 +25,11 @@ class KlaviyoService
     }
 
     /**
-     * Sync a health check lead to Klaviyo as a profile.
+     * Sync a lead to Klaviyo as a profile.
      *
      * Creates a new profile or updates an existing one if the email already exists (409 conflict).
      */
-    public function syncHealthCheckLead(Lead $lead): void
+    public function syncLead(Lead $lead): void
     {
         $attributes = $this->mapLeadToProfileAttributes($lead);
 
@@ -79,13 +79,16 @@ class KlaviyoService
     {
         $nameParts = $this->splitName($lead->name ?? '');
 
+        $isHealthCheck = is_array($lead->quiz_answers);
+
         $properties = [
-            'website' => $lead->website ?? '',
-            'quiz_score' => $lead->quiz_score ?? 0,
-            'lead_source' => 'health_check',
+            'lead_source' => $isHealthCheck ? 'health_check' : 'contact_form',
         ];
 
-        if (is_array($lead->quiz_answers)) {
+        if ($isHealthCheck) {
+            $properties['website'] = $lead->website ?? '';
+            $properties['quiz_score'] = $lead->quiz_score ?? 0;
+
             foreach ($lead->quiz_answers as $key => $value) {
                 $properties['quiz_'.$key] = is_array($value) ? implode(', ', $value) : $value;
             }

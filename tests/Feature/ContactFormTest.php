@@ -131,6 +131,43 @@ test('validation requires message', function () {
     ])->assertSessionHasErrors('message');
 });
 
+test('stores newsletter_opt_in as true when newsletterOptIn is true', function () {
+    Mail::fake();
+
+    $this->post(route('contact.store'), [
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'email' => 'newsletter@example.com',
+        'phone' => null,
+        'message' => 'I want newsletter',
+        'termsAccepted' => true,
+        'newsletterOptIn' => true,
+    ])->assertOk();
+
+    $this->assertDatabaseHas('leads', [
+        'email' => 'newsletter@example.com',
+        'newsletter_opt_in' => true,
+    ]);
+});
+
+test('stores newsletter_opt_in as false when newsletterOptIn is omitted', function () {
+    Mail::fake();
+
+    $this->post(route('contact.store'), [
+        'firstName' => 'John',
+        'lastName' => 'Doe',
+        'email' => 'nonews@example.com',
+        'phone' => null,
+        'message' => 'No newsletter',
+        'termsAccepted' => true,
+    ])->assertOk();
+
+    $this->assertDatabaseHas('leads', [
+        'email' => 'nonews@example.com',
+        'newsletter_opt_in' => false,
+    ]);
+});
+
 test('validation requires termsAccepted', function () {
     $this->post(route('contact.store'), [
         'firstName' => 'John',

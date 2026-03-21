@@ -25,6 +25,7 @@ class LeadFactory extends Factory
             'terms' => true,
             'services' => null,
             'budget' => null,
+            'newsletter_opt_in' => false,
         ];
     }
 
@@ -49,6 +50,7 @@ class LeadFactory extends Factory
                 'website' => fake()->domainName(),
                 'quiz_score' => $score,
                 'quiz_answers' => $answers,
+                'newsletter_opt_in' => true,
             ];
         });
     }

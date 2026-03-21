@@ -26,6 +26,7 @@ class HealthCheckQuizController extends Controller
             'terms' => true,
             'quiz_answers' => $validated['answers'],
             'quiz_score' => $validated['score'],
+            'newsletter_opt_in' => true,
         ], $request);
     }
 
