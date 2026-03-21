@@ -63,10 +63,65 @@ it('updates klaviyo profile with call properties when profile exists', function 
     });
 });
 
-it('skips update when no klaviyo profile is found', function () {
+it('creates profile and updates properties when no klaviyo profile is found', function () {
     Http::fake([
         'a.klaviyo.com/api/profiles?*' => Http::response(['data' => []], 200),
+        'a.klaviyo.com/api/profiles/' => Http::response(['data' => ['id' => 'new-profile-123', 'type' => 'profile']], 201),
+        'a.klaviyo.com/api/profiles/new-profile-123' => Http::response(['data' => ['id' => 'new-profile-123']], 200),
+        'api.calendly.com/scheduled_events/event-123' => Http::response([
+            'resource' => [
+                'location' => [
+                    'type' => 'google_conference',
+                    'join_url' => 'https://meet.google.com/abc-defg-hij',
+                ],
+            ],
+        ], 200),
     ]);
+
+    $payload = [
+        'email' => 'new@example.com',
+        'cancel_url' => 'https://calendly.com/cancellations/abc',
+        'reschedule_url' => 'https://calendly.com/reschedulings/abc',
+        'scheduled_event' => [
+            'uri' => 'https://api.calendly.com/scheduled_events/event-123',
+            'start_time' => '2026-04-01T10:00:00.000000Z',
+        ],
+    ];
+
+    ProcessCalendlyWebhook::dispatchSync($payload);
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://a.klaviyo.com/api/profiles/'
+            && $request->method() === 'POST'
+            && $request['data']['attributes']['email'] === 'new@example.com';
+    });
+
+    Http::assertSent(function ($request) {
+        if ($request->method() !== 'PATCH' || ! str_contains($request->url(), 'new-profile-123')) {
+            return false;
+        }
+
+        $properties = $request['data']['attributes']['properties'] ?? [];
+
+        return $properties['health_check_call_date'] === '2026-04-01T10:00:00.000000Z'
+            && $properties['health_check_call_url'] === 'https://meet.google.com/abc-defg-hij';
+    });
+});
+
+it('skips update when profile creation also fails', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles?*' => Http::response(['data' => []], 200),
+        'a.klaviyo.com/api/profiles/' => Http::response(['errors' => [['detail' => 'Server error']]], 500),
+    ]);
+
+    Log::shouldReceive('info')
+        ->withArgs(fn ($message) => str_contains($message, 'No Klaviyo profile found'));
+
+    Log::shouldReceive('warning')
+        ->withArgs(fn ($message) => str_contains($message, 'Failed to create minimal'));
+
+    Log::shouldReceive('warning')
+        ->withArgs(fn ($message) => str_contains($message, 'Failed to find or create'));
 
     $payload = [
         'email' => 'unknown@example.com',
@@ -78,7 +133,6 @@ it('skips update when no klaviyo profile is found', function () {
 
     ProcessCalendlyWebhook::dispatchSync($payload);
 
-    Http::assertSent(fn ($request) => str_contains($request->url(), 'a.klaviyo.com/api/profiles'));
     Http::assertNotSent(fn ($request) => $request->method() === 'PATCH');
     Http::assertNotSent(fn ($request) => str_contains($request->url(), 'api.calendly.com'));
 });

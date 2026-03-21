@@ -14,9 +14,7 @@ use Illuminate\Support\Facades\Log;
  */
 class KlaviyoService
 {
-    public function __construct(private KlaviyoClient $client)
-    {
-    }
+    public function __construct(private KlaviyoClient $client) {}
 
     /**
      * Check if Klaviyo integration is enabled and configured.
@@ -132,6 +130,7 @@ class KlaviyoService
 
     /**
      * Subscribe a lead to the Klaviyo email marketing list.
+     *
      * @throws ConnectionException
      */
     private function subscribeLeadToList(Lead $lead): void
@@ -162,13 +161,14 @@ class KlaviyoService
      *
      * @param  string  $email  The email address to search for
      * @return string|null The profile ID, or null if not found
+     *
      * @throws ConnectionException
      */
     public function findProfileIdByEmail(string $email): ?string
     {
         $response = $this->client->getProfileByEmail($email);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             Log::warning('Klaviyo profile lookup failed', [
                 'email' => $email,
                 'status' => $response->status(),
@@ -191,20 +191,58 @@ class KlaviyoService
     }
 
     /**
+     * Create a minimal Klaviyo profile with just an email address.
+     *
+     * @return string|null The profile ID, or null on failure
+     *
+     * @throws ConnectionException
+     */
+    public function createMinimalProfile(string $email): ?string
+    {
+        $response = $this->client->createProfile(['email' => $email]);
+
+        if ($response->status() === 409) {
+            return $this->extractProfileIdFromConflict($response->json());
+        }
+
+        if ($response->successful()) {
+            Log::info('Klaviyo minimal profile created', ['email' => $email]);
+
+            return $response->json('data.id');
+        }
+
+        Log::warning('Failed to create minimal Klaviyo profile', [
+            'email' => $email,
+            'status' => $response->status(),
+        ]);
+
+        return null;
+    }
+
+    /**
      * Update custom properties on a Klaviyo profile.
      *
      * @param  string  $profileId  The Klaviyo profile ID
      * @param  array<string, mixed>  $properties  Properties to set on the profile
+     *
      * @throws ConnectionException
      */
     public function updateProfileProperties(string $profileId, array $properties): void
     {
-        $this->client->updateProfile($profileId, [
+        $response = $this->client->updateProfile($profileId, [
             'properties' => $properties,
         ]);
 
-        Log::info('Klaviyo profile updated with call properties', [
-            'profile_id' => $profileId,
-        ]);
+        if ($response->successful()) {
+            Log::info('Klaviyo profile updated with call properties', [
+                'profile_id' => $profileId,
+            ]);
+        } else {
+            Log::warning('Failed to update Klaviyo profile with call properties', [
+                'profile_id' => $profileId,
+                'status' => $response->status(),
+                'response' => $response->json(),
+            ]);
+        }
     }
 }

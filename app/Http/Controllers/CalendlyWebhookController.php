@@ -28,6 +28,9 @@ class CalendlyWebhookController extends Controller
         $event = $request->input('event');
 
         if ($event === 'invitee.created') {
+            Log::info('Calendly invitee.created webhook received, dispatching job', [
+                'email' => $request->input('payload.email'),
+            ]);
             ProcessCalendlyWebhook::dispatch($request->input('payload'));
         }
 

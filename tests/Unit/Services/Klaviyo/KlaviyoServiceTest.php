@@ -158,6 +158,64 @@ it('updates profile properties with correct payload', function () {
     });
 });
 
+it('creates minimal profile and returns id', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles/' => Http::response(['data' => ['id' => 'new-profile-1', 'type' => 'profile']], 201),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $profileId = $service->createMinimalProfile('new@example.com');
+
+    expect($profileId)->toBe('new-profile-1');
+
+    Http::assertSent(function ($request) {
+        return $request->url() === 'https://a.klaviyo.com/api/profiles/'
+            && $request->method() === 'POST'
+            && $request['data']['attributes']['email'] === 'new@example.com';
+    });
+});
+
+it('returns existing profile id on 409 conflict during minimal profile creation', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles/' => Http::response([
+            'errors' => [[
+                'meta' => ['duplicate_profile_id' => 'existing-456'],
+            ]],
+        ], 409),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $profileId = $service->createMinimalProfile('existing@example.com');
+
+    expect($profileId)->toBe('existing-456');
+});
+
+it('returns null when minimal profile creation fails', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles/' => Http::response(['errors' => [['detail' => 'Server error']]], 500),
+    ]);
+
+    $service = app(KlaviyoService::class);
+    $profileId = $service->createMinimalProfile('fail@example.com');
+
+    expect($profileId)->toBeNull();
+});
+
+it('logs warning when update profile properties fails', function () {
+    Http::fake([
+        'a.klaviyo.com/api/profiles/profile-xyz' => Http::response(['errors' => [['detail' => 'Not found']]], 404),
+    ]);
+
+    Log::shouldReceive('warning')
+        ->once()
+        ->withArgs(fn ($message) => str_contains($message, 'Failed to update Klaviyo profile'));
+
+    $service = app(KlaviyoService::class);
+    $service->updateProfileProperties('profile-xyz', [
+        'health_check_call_date' => '2026-04-01T10:00:00.000000Z',
+    ]);
+});
+
 it('maps quiz answers as flattened properties', function () {
     $lead = Lead::factory()->withHealthCheck()->create([
         'name' => 'Mario Rossi',

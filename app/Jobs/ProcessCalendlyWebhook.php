@@ -25,9 +25,7 @@ class ProcessCalendlyWebhook implements ShouldQueue
     /**
      * @param  array<string, mixed>  $payload  The webhook payload from Calendly
      */
-    public function __construct(public readonly array $payload)
-    {
-    }
+    public function __construct(public readonly array $payload) {}
 
     /**
      * Execute the job.
@@ -46,7 +44,13 @@ class ProcessCalendlyWebhook implements ShouldQueue
             $profileId = $klaviyoService->findProfileIdByEmail($email);
 
             if ($profileId === null) {
-                return;
+                $profileId = $klaviyoService->createMinimalProfile($email);
+
+                if ($profileId === null) {
+                    Log::warning('Failed to find or create Klaviyo profile for Calendly invitee', ['email' => $email]);
+
+                    return;
+                }
             }
 
             $callProperties = $this->buildCallProperties($calendlyClient);
@@ -60,6 +64,7 @@ class ProcessCalendlyWebhook implements ShouldQueue
      * Build the call properties array from the webhook payload and Calendly API.
      *
      * @return array<string, string|null>
+     *
      * @throws ConnectionException
      */
     private function buildCallProperties(CalendlyClient $calendlyClient): array
@@ -80,18 +85,19 @@ class ProcessCalendlyWebhook implements ShouldQueue
             }
         }
 
-        return array_filter($properties, fn($value) => $value !== null);
+        return array_filter($properties, fn ($value) => $value !== null);
     }
 
     /**
      * Fetch the join URL (Google Meet link) from the Calendly event details.
+     *
      * @throws ConnectionException
      */
     private function fetchJoinUrl(CalendlyClient $calendlyClient, string $eventUri): ?string
     {
         $response = $calendlyClient->getEvent($eventUri);
 
-        if (!$response->successful()) {
+        if (! $response->successful()) {
             Log::warning('Failed to fetch Calendly event details', [
                 'event_uri' => $eventUri,
                 'status' => $response->status(),
