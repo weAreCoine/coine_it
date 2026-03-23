@@ -32,7 +32,7 @@ export default function HowWeWork({ steps }: HowWeWorkProps) {
                 <h3 className="mt-8 mb-2 font-medium">Cosa succede dopo?</h3>
                 <p className="max-w-3xl text-mercury-500">
                     Se scegli di prenotare un incontro, lo scheduling avviene direttamente online. Se non sei ancora pronto, riceverai contenuti
-                    calibrati sulle tue risposte attraverso una sequenza email dedicata.
+                    calibrati sulle tue risposte attraverso una sequenza email dedicata. Niente chiamate indesiderate, niente spam.
                 </p>
             </div>
         </section>
