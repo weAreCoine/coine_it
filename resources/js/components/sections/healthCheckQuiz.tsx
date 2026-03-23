@@ -361,17 +361,20 @@ function QuestionStep({
                 ) : (
                     <span />
                 )}
-                <button
-                    type="button"
-                    onClick={onNext}
-                    disabled={!selectedValue}
-                    className={clsx(
-                        'cursor-pointer px-6 py-3 text-sm font-medium transition-opacity',
-                        selectedValue ? 'bg-white text-black' : 'cursor-not-allowed bg-white/20 text-white/40',
-                    )}
-                >
-                    Continua
-                </button>
+                <div className="text-right">
+                    <button
+                        type="button"
+                        onClick={onNext}
+                        disabled={!selectedValue}
+                        className={clsx(
+                            'cursor-pointer px-6 py-3 text-sm font-medium transition-opacity',
+                            selectedValue ? 'bg-white text-black' : 'cursor-not-allowed bg-white/20 text-white/40',
+                        )}
+                    >
+                        Continua
+                    </button>
+                    <p className={clsx('mt-1 text-xs', selectedValue ? 'text-transparent' : 'text-white/30')}>Rispondi per continuare</p>
+                </div>
             </div>
         </div>
     );

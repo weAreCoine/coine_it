@@ -11,81 +11,83 @@ export default function Navigation() {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
-        <div className="primary__header relative">
+        <div className={clsx({'primary__header relative':true, 'justify-center': navigationItems.length === 0})}>
             <DevLabel name="Navigation" />
             <div className="px-6">
                 <AppLink href="/" title="Home">
                     <span className="font-display text-5xl font-black text-black">Coiné</span>
                 </AppLink>
             </div>
-            <nav className={clsx({ open: open, header__navigation: true })}>
-                <div
-                    onClick={() => {
-                        setOpen(!open);
-                    }}
-                    className="hamburger"
-                >
-                    <span></span>
-                    <span></span>
-                </div>
+            {navigationItems.length > 0 && (
+                <nav className={clsx({ open: open, header__navigation: true })}>
+                    <div
+                        onClick={() => {
+                            setOpen(!open);
+                        }}
+                        className="hamburger"
+                    >
+                        <span></span>
+                        <span></span>
+                    </div>
 
-                <ul className="primary__navigation">
-                    {navigationItems.map((menuItem: App.Entities.NavigationItem, index: number) => {
-                        const hasSubItems = menuItem.subItems.length > 0;
-                        return (
-                            <li
-                                key={index}
-                                onMouseEnter={() => window.innerWidth >= 1024 && setHoveredIndex(index)}
-                                onMouseLeave={() => window.innerWidth >= 1024 && setHoveredIndex(null)}
-                                onClick={() => window.innerWidth < 1024 && setHoveredIndex(index !== hoveredIndex ? index : null)}
-                                className={clsx({
-                                    has__subitems: hasSubItems,
-                                    call__to__action: menuItem.isCallToAction,
-                                    focus__item: hoveredIndex === index,
-                                    mouse__in__nav: hoveredIndex !== null,
-                                })}
-                            >
-                                <div>
-                                    <AppLink
-                                        href={menuItem.href}
-                                        title={menuItem.title}
-                                        prevent={menuItem.isPlaceholder}
-                                        external={menuItem.isExternal || menuItem.targetBlank}
-                                        className={clsx({
-                                            current: menuItem.isCurrent,
-                                            has__subitems: hasSubItems,
-                                        })}
-                                        {...(menuItem.targetBlank && { target: '_blank', rel: 'noopener noreferrer' })}
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                                        </svg>
-                                        <span>{menuItem.title}</span>
-                                    </AppLink>
-                                </div>
-                                {hasSubItems && (
-                                    <div
-                                        className={clsx({
-                                            navigation__submenu: true,
-                                            is__visible: index === hoveredIndex,
-                                        })}
-                                    >
-                                        <ul>
-                                            {menuItem.subItems.map((subItem: NavigationItem, subIndex) => (
-                                                <li key={subIndex} className={clsx({})}>
-                                                    <AppLink href={subItem.href} title={subItem.title} external={subItem.isExternal}>
-                                                        <span>{subItem.title}</span>
-                                                    </AppLink>
-                                                </li>
-                                            ))}
-                                        </ul>
+                    <ul className="primary__navigation">
+                        {navigationItems.map((menuItem: App.Entities.NavigationItem, index: number) => {
+                            const hasSubItems = menuItem.subItems.length > 0;
+                            return (
+                                <li
+                                    key={index}
+                                    onMouseEnter={() => window.innerWidth >= 1024 && setHoveredIndex(index)}
+                                    onMouseLeave={() => window.innerWidth >= 1024 && setHoveredIndex(null)}
+                                    onClick={() => window.innerWidth < 1024 && setHoveredIndex(index !== hoveredIndex ? index : null)}
+                                    className={clsx({
+                                        has__subitems: hasSubItems,
+                                        call__to__action: menuItem.isCallToAction,
+                                        focus__item: hoveredIndex === index,
+                                        mouse__in__nav: hoveredIndex !== null,
+                                    })}
+                                >
+                                    <div>
+                                        <AppLink
+                                            href={menuItem.href}
+                                            title={menuItem.title}
+                                            prevent={menuItem.isPlaceholder}
+                                            external={menuItem.isExternal || menuItem.targetBlank}
+                                            className={clsx({
+                                                current: menuItem.isCurrent,
+                                                has__subitems: hasSubItems,
+                                            })}
+                                            {...(menuItem.targetBlank && { target: '_blank', rel: 'noopener noreferrer' })}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                                            </svg>
+                                            <span>{menuItem.title}</span>
+                                        </AppLink>
                                     </div>
-                                )}
-                            </li>
-                        );
-                    })}
-                </ul>
-            </nav>
+                                    {hasSubItems && (
+                                        <div
+                                            className={clsx({
+                                                navigation__submenu: true,
+                                                is__visible: index === hoveredIndex,
+                                            })}
+                                        >
+                                            <ul>
+                                                {menuItem.subItems.map((subItem: NavigationItem, subIndex) => (
+                                                    <li key={subIndex} className={clsx({})}>
+                                                        <AppLink href={subItem.href} title={subItem.title} external={subItem.isExternal}>
+                                                            <span>{subItem.title}</span>
+                                                        </AppLink>
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    )}
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
+            )}
         </div>
     );
 }

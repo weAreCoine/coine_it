@@ -61,7 +61,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
-            'navigationItems' => [
+            'navigationItems' => $isHealthCheck ? [] : [
                 new NavigationItem('Home', route('home')),
 
                 new NavigationItem('Chi siamo', route('about')),
@@ -73,10 +73,7 @@ class HandleInertiaRequests extends Middleware
                 new NavigationItem('Progetti', route('projects.index')),
                 new NavigationItem('Blog', route('blog.index')),
 
-                $isHealthCheck ? new NavigationItem('Contatti',
-                    route('contact.show')
-                )
-                    : new NavigationItem('Testa il tuo sito', route('health-check'),
+                new NavigationItem('Testa il tuo sito', route('health-check'),
                     isCallToAction: true),
             ],
             'consent' => [
