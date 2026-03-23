@@ -13,8 +13,22 @@ type FaqAccordionProps = {
 export default function FaqAccordion({ faqs, bg = 'bg-mercury-50', bordersDecorations = true }: FaqAccordionProps) {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
+    const faqSchema = {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faqs.map((faq) => ({
+            '@type': 'Question',
+            name: faq.question,
+            acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+            },
+        })),
+    };
+
     return (
         <div className="relative grid grid-cols-1 gap-px bg-mercury-200 p-px">
+            <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
             <DevLabel name="FaqAccordion" />
             {bordersDecorations && <BordersDecorations bg={bg} />}
             {faqs.map((faq, index) => (
