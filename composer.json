@@ -18,6 +18,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
         "laravel/wayfinder": "^0.1.11",
+        "propaganistas/laravel-disposable-email": "^2.4",
         "spatie/laravel-typescript-transformer": "^2.6"
     },
     "require-dev": {

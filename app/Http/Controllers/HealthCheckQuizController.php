@@ -37,8 +37,10 @@ class HealthCheckQuizController extends Controller
     public function complete(Request $request, LeadService $leadService, KlaviyoService $klaviyoService): void
     {
         $validated = $request->validate([
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|indisposable|max:255',
             'openText' => 'nullable|string|max:2000',
+        ], [
+            'email.indisposable' => 'Non sono ammessi indirizzi email temporanei.',
         ]);
 
         $lead = Lead::where('email', $validated['email'])->first();

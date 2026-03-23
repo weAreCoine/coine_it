@@ -17,6 +17,18 @@ class HealthCheckQuizRequest extends FormRequest
     }
 
     /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.indisposable' => 'Non sono ammessi indirizzi email temporanei.',
+        ];
+    }
+
+    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
@@ -26,7 +38,7 @@ class HealthCheckQuizRequest extends FormRequest
         return [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
+            'email' => 'required|email|indisposable|max:255',
             'phone' => 'required|string|max:50',
             'url' => 'required|url|max:255',
             'marketingConsent' => 'accepted',

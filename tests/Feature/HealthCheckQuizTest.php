@@ -120,6 +120,25 @@ test('validation requires score', function () {
         ->assertSessionHasErrors('score');
 });
 
+test('validation rejects disposable email', function () {
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'test@mailinator.com']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation accepts gmail email', function () {
+    Mail::fake();
+
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'test@gmail.com']))
+        ->assertOk();
+});
+
+test('complete rejects disposable email', function () {
+    $this->patch(route('health-check.complete'), [
+        'email' => 'test@guerrillamail.com',
+        'openText' => 'Some text',
+    ])->assertSessionHasErrors('email');
+});
+
 test('complete updates notes with openText', function () {
     Mail::fake();
 
