@@ -25,7 +25,18 @@ interface HealthCheckProps {
 export default function HealthCheck({ marquee, heroPoints, steps, faqs, questions, quizConfig, teamMembers }: HealthCheckProps) {
     return (
         <>
-            <Head title="E-commerce Health Check" />
+            <Head title="Il tuo e-commerce funziona davvero? | Health Check gratuito — Coiné">
+                <meta name="description" content="Rispondi a 6 domande sul tuo e-commerce e ricevi un report con punteggio, aree critiche e priorità di intervento. Gratuito, senza impegno, in 2 minuti." />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content="Il tuo e-commerce funziona davvero? Scopri il punteggio." />
+                <meta property="og:description" content="6 domande. Un report personalizzato con punteggio e priorità di intervento per il tuo e-commerce. Gratuito." />
+                <meta property="og:url" content="https://coine.it/health-check" />
+                <meta property="og:image" content="https://coine.it/images/health_check_banner.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content="Il tuo e-commerce funziona davvero? Scopri il punteggio." />
+                <meta name="twitter:description" content="6 domande. Un report personalizzato con punteggio e priorità di intervento per il tuo e-commerce. Gratuito." />
+                <meta name="twitter:image" content="https://coine.it/images/health_check_banner.png" />
+            </Head>
             <Navigation />
             <HealthCheckHero points={heroPoints} />
             <Marquee {...marquee} />
