@@ -43,8 +43,10 @@ class HandleInertiaRequests extends Middleware
         $eventId = Str::uuid()->toString();
         $request->attributes->set('meta_pixel_event_id', $eventId);
 
+        $isHealthCheck = $request->routeIs('health-check');
+
         $flashEvents = collect(session()->get(MetaPixel::sessionKey(), []))
-            ->map(fn (array $event, string $eventName) => [
+            ->map(fn(array $event, string $eventName) => [
                 'eventName' => $eventName,
                 'data' => $event['data'] ?? [],
                 'eventId' => $event['event_id'] ?? null,
@@ -71,7 +73,11 @@ class HandleInertiaRequests extends Middleware
                 new NavigationItem('Progetti', route('projects.index')),
                 new NavigationItem('Blog', route('blog.index')),
 
-                new NavigationItem('Scrivici', route('contact.show'), isCallToAction: true),
+                $isHealthCheck ? new NavigationItem('Contatti',
+                    route('contact.show')
+                )
+                    : new NavigationItem('Testa il tuo sito', route('health-check'),
+                    isCallToAction: true),
             ],
             'consent' => [
                 'given' => CookieConsent::hasConsent(),
