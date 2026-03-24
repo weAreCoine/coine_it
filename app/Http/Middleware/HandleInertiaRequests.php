@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Entities\NavigationItem;
 use App\Helpers\CookieConsent;
 use App\Services\GoogleAnalytics\GoogleAnalyticsService;
+use App\Services\LinkedIn\LinkedInService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -46,7 +47,7 @@ class HandleInertiaRequests extends Middleware
         $isHealthCheck = $request->routeIs('health-check');
 
         $flashEvents = collect(session()->get(MetaPixel::sessionKey(), []))
-            ->map(fn(array $event, string $eventName) => [
+            ->map(fn (array $event, string $eventName) => [
                 'eventName' => $eventName,
                 'data' => $event['data'] ?? [],
                 'eventId' => $event['event_id'] ?? null,
@@ -90,6 +91,11 @@ class HandleInertiaRequests extends Middleware
                 'measurementId' => GoogleAnalyticsService::measurementId(),
                 'enabled' => GoogleAnalyticsService::isEnabled(),
                 'flashEvents' => session()->pull('ga4_flash_events', []),
+            ],
+            'linkedIn' => [
+                'partnerId' => LinkedInService::partnerId(),
+                'enabled' => LinkedInService::isEnabled(),
+                'flashEvents' => session()->pull('linkedin_flash_events', []),
             ],
         ];
     }

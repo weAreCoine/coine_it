@@ -8,6 +8,7 @@ use App\Exceptions\ExceptionHandler;
 use App\Helpers\CookieConsent;
 use App\Models\Lead;
 use App\Services\GoogleAnalytics\GoogleAnalyticsService;
+use App\Services\LinkedIn\LinkedInService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ class LeadService
 
         $this->trackMetaPixelEvent('Lead');
         $this->trackGAEvent($request, $gaEventName);
+        $this->trackLinkedInEvent($request, 'lead', $attributes['email'] ?? null);
 
         return $lead;
     }
@@ -57,5 +59,14 @@ class LeadService
     {
         GoogleAnalyticsService::trackGenerateLead($request);
         GoogleAnalyticsService::flashEvent($eventName);
+    }
+
+    /**
+     * Send a server-side LinkedIn conversion event and flash it for the browser.
+     */
+    public function trackLinkedInEvent(Request $request, string $conversionType, ?string $email = null): void
+    {
+        LinkedInService::trackConversion($request, $conversionType, $email);
+        LinkedInService::flashEvent($conversionType);
     }
 }

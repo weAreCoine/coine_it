@@ -61,5 +61,6 @@ class HealthCheckQuizController extends Controller
 
         $leadService->trackMetaPixelEvent('CompleteRegistration');
         $leadService->trackGAEvent($request, 'quiz_completed');
+        $leadService->trackLinkedInEvent($request, 'complete_registration', $validated['email']);
     }
 }

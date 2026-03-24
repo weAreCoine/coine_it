@@ -3,6 +3,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import CookieConsentBanner from '@/components/cookieConsentBanner';
 import { handleGANavigation } from '@/hooks/useGoogleAnalytics';
+import { handleLinkedInNavigation } from '@/hooks/useLinkedIn';
 import { handleMetaPixelNavigation } from '@/hooks/useMetaPixel';
 import '../css/app.css';
 
@@ -11,6 +12,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 router.on('navigate', (event) => {
     handleMetaPixelNavigation(event.detail.page.props);
     handleGANavigation(event.detail.page.props);
+    handleLinkedInNavigation(event.detail.page.props);
 });
 
 createInertiaApp({
