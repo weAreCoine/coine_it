@@ -41,8 +41,9 @@
     }
 
     .rich__text {
+
         h2 {
-            @apply text-4xl font-medium mt-10 mb-4;
+            @apply text-2xl font-medium mt-10 mb-4;
         }
 
         h3 {
@@ -71,7 +72,11 @@
         }
 
         li {
-            @apply leading-relaxed pl-2;
+            @apply leading-relaxed pl-1;
+
+            p {
+                @apply mb-0;
+            }
         }
 
         blockquote {
