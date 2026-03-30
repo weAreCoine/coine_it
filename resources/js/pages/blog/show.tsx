@@ -75,13 +75,26 @@ export default function Show({
 
                 {/* Hero / Header */}
                 <header className="container mt-16 mb-8 max-w-180 text-balance">
-                    <div className="mb-4 text-center text-sm uppercase">
-                        <time dateTime={createdAtIso}>{createdAt}</time>
+                    <div className="mb-4 flex items-center justify-center gap-4 text-center text-sm uppercase">
+                        <div className="flex items-center justify-start gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                                <path
+                                    fillRule="evenodd"
+                                    d="M6.75 2.25A.75.75 0 0 1 7.5 3v1.5h9V3A.75.75 0 0 1 18 3v1.5h.75a3 3 0 0 1 3 3v11.25a3 3 0 0 1-3 3H5.25a3 3 0 0 1-3-3V7.5a3 3 0 0 1 3-3H6V3a.75.75 0 0 1 .75-.75Zm13.5 9a1.5 1.5 0 0 0-1.5-1.5H5.25a1.5 1.5 0 0 0-1.5 1.5v7.5a1.5 1.5 0 0 0 1.5 1.5h13.5a1.5 1.5 0 0 0 1.5-1.5v-7.5Z"
+                                    clipRule="evenodd"
+                                />
+                            </svg>
+
+                            <time dateTime={createdAtIso}>{createdAt}</time>
+                        </div>
                         {categories.length > 0 && (
-                            <>
-                                <span className="mx-2 font-semibold text-mercury-200">/</span>
+                            <div className="flex items-center justify-start gap-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-4">
+                                    <path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z" />
+                                </svg>
+
                                 {categories.join(', ')}
-                            </>
+                            </div>
                         )}
                     </div>
                     <h1 className="text-center text-4xl font-semibold">{title}</h1>
@@ -133,10 +146,19 @@ export default function Show({
                 {/* Tags */}
                 {tags.length > 0 && (
                     <footer className="container mx-auto mt-12 max-w-3xl border-t border-mercury-200 pt-6">
-                        <ul className="flex flex-wrap gap-2">
+                        <ul className="flex flex-wrap items-center gap-2">
+                            <li>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M5.25 2.25a3 3 0 0 0-3 3v4.318a3 3 0 0 0 .879 2.121l9.58 9.581c.92.92 2.39 1.186 3.548.428a18.849 18.849 0 0 0 5.441-5.44c.758-1.16.492-2.629-.428-3.548l-9.58-9.581a3 3 0 0 0-2.122-.879H5.25ZM6.375 7.5a1.125 1.125 0 1 0 0-2.25 1.125 1.125 0 0 0 0 2.25Z"
+                                        clipRule="evenodd"
+                                    />
+                                </svg>
+                            </li>
                             {tags.map((tag) => (
                                 <li key={tag} className="rounded bg-mercury-100 px-3 py-1 text-sm">
-                                    {tag}
+                                    {tag.toLowerCase()}
                                 </li>
                             ))}
                         </ul>
