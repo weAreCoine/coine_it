@@ -114,8 +114,14 @@ class ArticlePageController extends Controller
             'content' => $article->content,
             'excerpt' => $article->excerpt,
             'cover' => $article->cover ? Storage::disk(Article::$disk)->url($article->cover) : null,
-            'categories' => $article->categories->pluck('name')->all(),
-            'tags' => $article->tags->pluck('name')->all(),
+            'categories' => $article->categories->map(fn (Category $cat) => [
+                'name' => $cat->name,
+                'slug' => $cat->slug,
+            ])->all(),
+            'tags' => $article->tags->map(fn (\App\Models\Tag $tag) => [
+                'name' => $tag->name,
+                'slug' => $tag->slug,
+            ])->all(),
             'authorName' => $article->user->name ?? '',
             'createdAt' => $article->created_at->format('d M Y'),
             'createdAtIso' => $article->created_at->toIso8601String(),

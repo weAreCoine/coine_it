@@ -1,8 +1,9 @@
 import { Head, Link } from '@inertiajs/react';
-import Navigation from '@/components/navigation';
-import Colophon from '@/components/colophon';
-import ArticleCard from '@/components/articleCard';
 import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
+import { show as showCategory } from '@/actions/App/Http/Controllers/Pages/CategoryPageController';
+import ArticleCard from '@/components/articleCard';
+import Colophon from '@/components/colophon';
+import Navigation from '@/components/navigation';
 import BlogArticleCard = App.Entities.BlogArticleCard;
 
 type ArticlePageProps = {
@@ -11,8 +12,8 @@ type ArticlePageProps = {
     content: string;
     excerpt: string;
     cover: string | null;
-    categories: string[];
-    tags: string[];
+    categories: { name: string; slug: string }[];
+    tags: { name: string; slug: string }[];
     authorName: string;
     createdAt: string;
     createdAtIso: string;
@@ -93,7 +94,14 @@ export default function Show({
                                     <path d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z" />
                                 </svg>
 
-                                {categories.join(', ')}
+                                {categories.map((cat, i) => (
+                                    <span key={cat.slug}>
+                                        <Link href={showCategory.url(cat.slug)} className="hover:underline">
+                                            {cat.name}
+                                        </Link>
+                                        {i < categories.length - 1 && ', '}
+                                    </span>
+                                ))}
                             </div>
                         )}
                     </div>
@@ -157,8 +165,8 @@ export default function Show({
                                 </svg>
                             </li>
                             {tags.map((tag) => (
-                                <li key={tag} className="rounded bg-mercury-100 px-3 py-1 text-sm">
-                                    {tag.toLowerCase()}
+                                <li key={tag.slug} className="rounded bg-mercury-100 px-3 py-1 text-sm">
+                                    {tag.name.toLowerCase()}
                                 </li>
                             ))}
                         </ul>
