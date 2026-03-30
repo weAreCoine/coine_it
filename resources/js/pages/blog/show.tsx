@@ -84,7 +84,7 @@ export default function Show({
                             </>
                         )}
                     </div>
-                    <h1 className="text-center text-[2.5rem] font-medium">{title}</h1>
+                    <h1 className="text-center text-4xl font-semibold">{title}</h1>
                     <p className="mt-4 text-center text-mercury-500">{authorName}</p>
                 </header>
 
