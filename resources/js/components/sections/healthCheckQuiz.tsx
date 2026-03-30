@@ -252,7 +252,7 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
                     </h2>
                     <p className="mx-auto max-w-xl text-balance text-white/60">
                         Sei domande sul tuo e-commerce. Al termine ricevi una diagnosi preliminare che identifica le aree di attenzione e le priorità
-                        di intervento — senza impegno.
+                        di intervento, senza impegno.
                     </p>
                 </div>
 
