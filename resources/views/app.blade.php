@@ -41,14 +41,19 @@
         });
         @endif
     </script>
-    @if(\App\Helpers\CookieConsent::hasMarketingConsent() && \App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled())
+    @if(\App\Helpers\CookieConsent::hasMarketingConsent() && (\App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled() || \App\Services\GoogleAds\GoogleAdsService::isEnabled()))
         <script async
-                src="https://www.googletagmanager.com/gtag/js?id={{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}"></script>
+                src="https://www.googletagmanager.com/gtag/js?id={{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled() ? \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() : \App\Services\GoogleAds\GoogleAdsService::conversionId() }}"></script>
         <script>
             gtag('js', new Date());
+            @if(\App\Services\GoogleAnalytics\GoogleAnalyticsService::isEnabled())
             gtag('config', '{{ \App\Services\GoogleAnalytics\GoogleAnalyticsService::measurementId() }}', {
                 send_page_view: false
             });
+            @endif
+            @if(\App\Services\GoogleAds\GoogleAdsService::isEnabled())
+            gtag('config', '{{ \App\Services\GoogleAds\GoogleAdsService::conversionId() }}');
+            @endif
         </script>
     @endif
     @if(\App\Helpers\CookieConsent::hasMarketingConsent())
