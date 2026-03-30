@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\HealthCheckQuizController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
@@ -66,3 +67,6 @@ Route::prefix('progetti')->group(function () {
     Route::get('/', [ProjectPageController::class, 'index'])->name('projects.index');
     Route::get('/{project:slug}', [ProjectPageController::class, 'show'])->name('projects.show');
 });
+
+Route::get('/sitemap.xml', SitemapController::class)
+    ->name('sitemap');
