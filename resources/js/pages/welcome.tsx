@@ -8,7 +8,15 @@ import CtaBanner from '@/components/sections/ctaBanner';
 import Hero from '@/components/sections/hero';
 import Marquee from '@/components/sections/marquee';
 import TabSection from '@/components/sections/tabSection';
-import type { ArticleGridData, CardGridData, ContentStatsData, CtaBannerData, HeroData, MarqueeData, TabSectionData } from '@/types/dto/sections';
+import type {
+    ArticleGridData,
+    CardGridData,
+    ContentStatsData,
+    CtaBannerData,
+    HeroData,
+    MarqueeData,
+    TabSectionData
+} from '@/types/dto/sections';
 
 export default function Welcome({
     hero,
@@ -29,7 +37,7 @@ export default function Welcome({
 }) {
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Agenzia Marketing e Sviluppo Web" />
             <Navigation />
             <Hero {...hero} />
             <Marquee {...marquee} />
