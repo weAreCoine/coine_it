@@ -61,19 +61,7 @@ export default function Show({
 
     return (
         <>
-            <Head title={seoTitle}>
-                <meta name="description" content={seoDescription} />
-                <link rel="canonical" href={canonicalUrl} />
-                <meta property="og:type" content="article" />
-                <meta property="og:title" content={seoTitle} />
-                <meta property="og:description" content={seoDescription} />
-                <meta property="og:url" content={canonicalUrl} />
-                {seoImage && <meta property="og:image" content={seoImage} />}
-                <meta name="twitter:card" content="summary_large_image" />
-                <meta name="twitter:title" content={seoTitle} />
-                <meta name="twitter:description" content={seoDescription} />
-                {seoImage && <meta name="twitter:image" content={seoImage} />}
-            </Head>
+            <Head title={seoTitle} />
 
             <Navigation />
 

@@ -12,8 +12,9 @@
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
     @stack('seo')
     <x-seo-metadata
-        :title="View::yieldContent('page.title', config('app.name'))"
+        :title="$seoTitle ?? config('app.name')"
         :description="$seoDescription ?? null"
+        :canonical-url="$canonicalUrl ?? null"
         :og-image="$seoImage ?? null"
         :article="$seoArticle ?? null"
         :breadcrumbs="$seoBreadcrumbs ?? []"

@@ -14,6 +14,11 @@ class HealthCheckPageController extends Controller
 {
     public function show(): Response
     {
+        $seoTitle = __('Il tuo e-commerce funziona davvero? | Health Check gratuito — Coiné');
+        $seoDescription = __('Rispondi a 6 domande sul tuo e-commerce e ricevi un report con punteggio, aree critiche e priorità di intervento. Gratuito, senza impegno, in 2 minuti.');
+        $canonicalUrl = route('health-check');
+        $seoImage = asset('images/health_check_banner.png');
+
         return Inertia::render('health-check', [
             'marquee' => [
                 'kicker' => __('I nostri clienti'),
@@ -95,6 +100,11 @@ class HealthCheckPageController extends Controller
                     'tags' => ['Content strategy', 'SEO', 'Piano editoriale', 'Email marketing', 'Brand positioning'],
                 ],
             ],
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'seoImage' => $seoImage,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

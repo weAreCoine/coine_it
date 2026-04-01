@@ -27,13 +27,7 @@ type ProjectsIndexProps = {
 export default function Index({ featuredProjects, projects, categories, currentCategory, seoTitle, seoDescription, canonicalUrl }: ProjectsIndexProps) {
     return (
         <>
-            <Head title={seoTitle}>
-                <meta name="description" content={seoDescription} />
-                <link rel="canonical" href={canonicalUrl} />
-                <meta property="og:title" content={seoTitle} />
-                <meta property="og:description" content={seoDescription} />
-                <meta property="og:url" content={canonicalUrl} />
-            </Head>
+            <Head title={seoTitle} />
 
             <Navigation />
 

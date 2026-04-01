@@ -123,6 +123,23 @@ test('returns related articles from same categories, max 3', function () {
         );
 });
 
+test('renders correct OG meta tags in server-side HTML', function () {
+    $article = Article::factory()
+        ->for($this->user)
+        ->create([
+            'is_published' => true,
+            'seo_title' => 'Custom OG Title',
+            'seo_description' => 'Custom OG Description',
+        ]);
+
+    $response = $this->get(route('blog.show', $article));
+
+    $response->assertOk()
+        ->assertSee('<meta property="og:title" content="Custom OG Title">', false)
+        ->assertSee('<meta property="og:description" content="Custom OG Description">', false)
+        ->assertSee('<meta property="og:type" content="article">', false);
+});
+
 test('related articles exclude unpublished and current article', function () {
     $category = Category::factory()->create();
 

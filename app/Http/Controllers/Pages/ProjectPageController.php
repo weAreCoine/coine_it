@@ -78,14 +78,22 @@ class ProjectPageController extends AbstractPageController
             ->map(fn (ProjectCategory $category) => ProjectCategoryItem::fromCategory($category))
             ->all();
 
+        $seoTitle = 'Progetti — Coine';
+        $seoDescription = 'I nostri progetti: case study, risultati e soluzioni digitali realizzate.';
+        $canonicalUrl = route('projects.index');
+
         return Inertia::render('projects/index', [
             'featuredProjects' => $featured->map(fn (Project $project) => ProjectCard::fromProject($project))->all(),
             'projects' => $projects->through(fn (Project $project) => ProjectCard::fromProject($project)),
             'categories' => $categories,
             'currentCategory' => $currentCategorySlug,
-            'seoTitle' => 'Progetti — Coine',
-            'seoDescription' => 'I nostri progetti: case study, risultati e soluzioni digitali realizzate.',
-            'canonicalUrl' => route('projects.index'),
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
@@ -111,6 +119,13 @@ class ProjectPageController extends AbstractPageController
             ->map(fn (Project $related) => ProjectCard::fromProject($related))
             ->all();
 
+        $seoTitle = $project->seo_title ?? $project->title;
+        $seoDescription = $project->seo_description ?? $project->excerpt;
+        $seoImage = $project->seo_image
+            ? Storage::disk(Project::$disk)->url($project->seo_image)
+            : ($project->cover ? Storage::disk(Project::$disk)->url($project->cover) : null);
+        $canonicalUrl = route('projects.show', $project);
+
         return Inertia::render('projects/show', [
             'title' => $project->title,
             'slug' => $project->slug,
@@ -125,13 +140,23 @@ class ProjectPageController extends AbstractPageController
             'authorName' => $project->user->name ?? '',
             'createdAt' => $project->created_at->format('d M Y'),
             'createdAtIso' => $project->created_at->toIso8601String(),
-            'seoTitle' => $project->seo_title ?? $project->title,
-            'seoDescription' => $project->seo_description ?? $project->excerpt,
-            'seoImage' => $project->seo_image
-                ? Storage::disk(Project::$disk)->url($project->seo_image)
-                : ($project->cover ? Storage::disk(Project::$disk)->url($project->cover) : null),
-            'canonicalUrl' => route('projects.show', $project),
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'seoImage' => $seoImage,
+            'canonicalUrl' => $canonicalUrl,
             'relatedProjects' => $relatedProjects,
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'seoImage' => $seoImage,
+            'canonicalUrl' => $canonicalUrl,
+            'seoArticle' => [
+                'published_time' => $project->created_at->toIso8601String(),
+                'modified_time' => $project->updated_at->toIso8601String(),
+                'author' => $project->user->name ?? 'Coiné',
+                'section' => $project->categories->first()?->name,
+                'tags' => $project->tags->pluck('name')->all(),
+            ],
         ]);
     }
 }

@@ -78,14 +78,22 @@ class ArticlePageController extends Controller
             ->map(fn (Category $category) => BlogCategoryItem::fromCategory($category))
             ->all();
 
+        $seoTitle = 'Blog — Coine';
+        $seoDescription = 'Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.';
+        $canonicalUrl = route('blog.index');
+
         return Inertia::render('blog/index', [
             'featuredArticles' => $featured->map(fn (Article $article) => BlogArticleCard::fromArticle($article))->all(),
             'articles' => $articles->through(fn (Article $article) => BlogArticleCard::fromArticle($article)),
             'categories' => $categories,
             'currentCategory' => $currentCategorySlug,
-            'seoTitle' => 'Blog — Coine',
-            'seoDescription' => 'Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.',
-            'canonicalUrl' => route('blog.index'),
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
@@ -108,6 +116,13 @@ class ArticlePageController extends Controller
             ->map(fn (Article $related) => BlogArticleCard::fromArticle($related))
             ->all();
 
+        $seoTitle = $article->seo_title ?? $article->title;
+        $seoDescription = $article->seo_description ?? $article->excerpt;
+        $seoImage = $article->seo_image
+            ? Storage::disk(Article::$disk)->url($article->seo_image)
+            : ($article->cover ? Storage::disk(Article::$disk)->url($article->cover) : null);
+        $canonicalUrl = route('blog.show', $article);
+
         return Inertia::render('blog/show', [
             'title' => $article->title,
             'slug' => $article->slug,
@@ -125,13 +140,23 @@ class ArticlePageController extends Controller
             'authorName' => $article->user->name ?? '',
             'createdAt' => $article->created_at->format('d M Y'),
             'createdAtIso' => $article->created_at->toIso8601String(),
-            'seoTitle' => $article->seo_title ?? $article->title,
-            'seoDescription' => $article->seo_description ?? $article->excerpt,
-            'seoImage' => $article->seo_image
-                ? Storage::disk(Article::$disk)->url($article->seo_image)
-                : ($article->cover ? Storage::disk(Article::$disk)->url($article->cover) : null),
-            'canonicalUrl' => route('blog.show', $article),
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'seoImage' => $seoImage,
+            'canonicalUrl' => $canonicalUrl,
             'relatedArticles' => $relatedArticles,
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'seoImage' => $seoImage,
+            'canonicalUrl' => $canonicalUrl,
+            'seoArticle' => [
+                'published_time' => $article->created_at->toIso8601String(),
+                'modified_time' => $article->updated_at->toIso8601String(),
+                'author' => $article->user->name ?? 'Coiné',
+                'section' => $article->categories->first()?->name,
+                'tags' => $article->tags->pluck('name')->all(),
+            ],
         ]);
     }
 }
