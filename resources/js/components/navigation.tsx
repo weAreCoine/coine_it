@@ -11,9 +11,9 @@ export default function Navigation() {
     const [open, setOpen] = useState<boolean>(false);
 
     return (
-        <div className={clsx({'primary__header relative':true, 'justify-center': navigationItems.length === 0})}>
+        <div className={clsx({ 'primary__header relative': true, 'justify-center': navigationItems.length === 0 })}>
             <DevLabel name="Navigation" />
-            <div className="px-6">
+            <div className="px-6 py-2">
                 <AppLink href="/" title="Home">
                     <span className="font-display text-5xl font-black text-black">Coiné</span>
                 </AppLink>
