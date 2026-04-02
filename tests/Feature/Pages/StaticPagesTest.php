@@ -21,6 +21,22 @@ test('contact page returns 200 and renders contact component with faqs', functio
         );
 });
 
+test('cookie policy page returns 200 and renders the legal cookie policy page', function () {
+    $this->get(route('cookie-policy'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('legal/cookie-policy')
+        );
+});
+
+test('privacy policy page returns 200 and renders the legal privacy policy page', function () {
+    $this->get(route('privacy-policy'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->component('legal/privacy-policy')
+        );
+});
+
 test('developing service page returns 200 and renders services/developing', function () {
     Cache::flush();
 

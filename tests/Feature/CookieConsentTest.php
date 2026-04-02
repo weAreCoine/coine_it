@@ -50,6 +50,11 @@ test('getConsent handles malformed JSON gracefully', function () {
 // --- Blade & Inertia integration tests ---
 
 test('meta pixel is not rendered without consent', function () {
+    config([
+        'meta-pixel.enabled' => true,
+        'meta-pixel.pixel_id' => '123456789',
+    ]);
+
     $response = $this->get(route('home'));
 
     $response->assertOk();
@@ -57,6 +62,11 @@ test('meta pixel is not rendered without consent', function () {
 });
 
 test('meta pixel is rendered with marketing consent', function () {
+    config([
+        'meta-pixel.enabled' => true,
+        'meta-pixel.pixel_id' => '123456789',
+    ]);
+
     $response = $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true]))
         ->get(route('home'));
 

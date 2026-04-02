@@ -39,7 +39,7 @@ it('creates webhook subscription when none exists', function () {
         'api.calendly.com/users/me' => Http::response([
             'resource' => ['current_organization' => 'https://api.calendly.com/organizations/org-1'],
         ], 200),
-        'api.calendly.com/webhook_subscriptions' => Http::sequence()
+        'api.calendly.com/webhook_subscriptions*' => Http::sequence()
             ->push(['collection' => []], 200)
             ->push(['resource' => ['uri' => 'https://api.calendly.com/webhook_subscriptions/wh-1']], 201),
     ]);
@@ -135,7 +135,7 @@ it('uses custom URL when provided', function () {
         'api.calendly.com/users/me' => Http::response([
             'resource' => ['current_organization' => 'https://api.calendly.com/organizations/org-1'],
         ], 200),
-        'api.calendly.com/webhook_subscriptions' => Http::sequence()
+        'api.calendly.com/webhook_subscriptions*' => Http::sequence()
             ->push(['collection' => []], 200)
             ->push(['resource' => ['uri' => 'https://api.calendly.com/webhook_subscriptions/wh-1']], 201),
     ]);

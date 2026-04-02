@@ -50,3 +50,11 @@ test('Testa il tuo sito is a call to action', function () {
             ->where('navigationItems.5.isCallToAction', true)
         );
 });
+
+test('health check page hides the main navigation', function () {
+    $this->get(route('health-check'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('navigationItems', 0)
+        );
+});

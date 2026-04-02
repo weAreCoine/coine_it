@@ -27,24 +27,27 @@ class SyncLeadOnKlaviyo extends Command
      */
     public function handle(KlaviyoService $klaviyoService): int
     {
-        if (!KlaviyoService::isEnabled()) {
+        if (! KlaviyoService::isEnabled()) {
             $this->error('Klaviyo integration is disabled');
+
             return self::FAILURE;
         }
 
         $lead = $this->argument('lead');
         if (empty($lead)) {
             $this->error('Lead ID is required');
+
             return self::FAILURE;
         }
 
         $lead = Lead::find($lead);
         if (empty($lead)) {
             $this->error('Lead ID is not found');
+
             return self::FAILURE;
         }
 
-        $klaviyoService->syncHealthCheckLead($lead);
+        $klaviyoService->syncLead($lead);
 
         return self::SUCCESS;
     }
