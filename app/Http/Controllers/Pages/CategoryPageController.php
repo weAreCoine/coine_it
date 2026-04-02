@@ -13,9 +13,17 @@ class CategoryPageController extends Controller
 {
     public function show(Category $category): Response
     {
+        $seoTitle = $category->name.' — Blog Coiné';
+        $seoDescription = __('Articoli e approfondimenti nella categoria :category.', ['category' => $category->name]);
+        $canonicalUrl = route('blog.category', $category);
+
         return Inertia::render('blog/category', [
             'name' => $category->name,
             'slug' => $category->slug,
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

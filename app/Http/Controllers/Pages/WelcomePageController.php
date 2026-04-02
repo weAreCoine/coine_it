@@ -17,9 +17,12 @@ use Throwable;
 
 class WelcomePageController extends Controller
 {
-
     public function show(): Response
     {
+        $seoTitle = __('Agenzia Marketing e Sviluppo Web — Coiné');
+        $seoDescription = __('Aiutiamo gli e‑commerce a trasformare il marketing in un sistema misurabile lavorando su conversioni, vendite e marginalità.');
+        $canonicalUrl = route('home');
+
         return Inertia::render('welcome', [
             'hero' => $this->heroData(),
             'marquee' => $this->marqueeData(),
@@ -28,6 +31,10 @@ class WelcomePageController extends Controller
             'ctaBanner' => $this->ctaBannerData(),
             'articleGrid' => $this->articleGridData(),
             'tabSection' => $this->tabSectionData(),
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 
@@ -53,7 +60,7 @@ class WelcomePageController extends Controller
             'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
             'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
             'link' => new NavigationItem('I nostri case studies', route('projects.index')),
-            'slides' => ClientsLogosService::all()
+            'slides' => ClientsLogosService::all(),
         ];
     }
 
@@ -165,7 +172,7 @@ class WelcomePageController extends Controller
                 ->with(['categories', 'user'])
                 ->limit(2)
                 ->get()
-                ->map(fn(Article $article) => BlogArticleCard::fromArticle($article)),
+                ->map(fn (Article $article) => BlogArticleCard::fromArticle($article)),
             'link' => new NavigationItem('Sfoglia', route('blog.index')),
         ];
     }

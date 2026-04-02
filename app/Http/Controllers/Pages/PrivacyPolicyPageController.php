@@ -11,6 +11,12 @@ class PrivacyPolicyPageController extends Controller
 {
     public function show()
     {
-        return Inertia::render('legal/privacy-policy');
+        return Inertia::render('legal/privacy-policy')
+            ->withViewData([
+                'seoTitle' => __('Privacy Policy — Coiné'),
+                'seoDescription' => __('Informativa sulla privacy e sul trattamento dei dati personali di Coiné.'),
+                'canonicalUrl' => route('privacy-policy'),
+                'seoRobots' => 'noindex, nofollow',
+            ]);
     }
 }

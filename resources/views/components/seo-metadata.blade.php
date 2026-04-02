@@ -50,6 +50,12 @@
     </script>
 @endif
 
+@if($creativeWorkSchema())
+    <script type="application/ld+json">
+        {!! json_encode($creativeWorkSchema(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+    </script>
+@endif
+
 @if($breadcrumbSchema())
     <script type="application/ld+json">
         {!! json_encode($breadcrumbSchema(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}

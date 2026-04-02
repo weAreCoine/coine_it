@@ -150,12 +150,10 @@ class ProjectPageController extends AbstractPageController
             'seoDescription' => $seoDescription,
             'seoImage' => $seoImage,
             'canonicalUrl' => $canonicalUrl,
-            'seoArticle' => [
+            'seoCreativeWork' => [
                 'published_time' => $project->created_at->toIso8601String(),
                 'modified_time' => $project->updated_at->toIso8601String(),
                 'author' => $project->user->name ?? 'Coiné',
-                'section' => $project->categories->first()?->name,
-                'tags' => $project->tags->pluck('name')->all(),
             ],
         ]);
     }

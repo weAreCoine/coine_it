@@ -25,6 +25,8 @@ class SeoMetadata extends Component
 
     public ?array $article;
 
+    public ?array $creativeWork;
+
     public array $breadcrumbs;
 
     public function __construct(
@@ -36,6 +38,7 @@ class SeoMetadata extends Component
         ?string $ogImage = null,
         string $twitterCard = 'summary_large_image',
         ?array $article = null,
+        ?array $creativeWork = null,
         array $breadcrumbs = [],
     ) {
         $this->title = $title ?? config('app.name');
@@ -47,6 +50,7 @@ class SeoMetadata extends Component
         $this->ogImage = $ogImage ?? asset('images/home/better_call_coine.webp');
         $this->twitterCard = $twitterCard;
         $this->article = $article;
+        $this->creativeWork = $creativeWork;
         $this->breadcrumbs = $breadcrumbs;
     }
 
@@ -95,6 +99,42 @@ class SeoMetadata extends Component
             ],
             'datePublished' => $this->article['published_time'] ?? null,
             'dateModified' => $this->article['modified_time'] ?? $this->article['published_time'] ?? null,
+            'mainEntityOfPage' => [
+                '@type' => 'WebPage',
+                '@id' => $this->canonicalUrl,
+            ],
+        ];
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function creativeWorkSchema(): ?array
+    {
+        if (! $this->creativeWork) {
+            return null;
+        }
+
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'CreativeWork',
+            'headline' => $this->title,
+            'description' => $this->description,
+            'image' => $this->ogImage,
+            'author' => [
+                '@type' => 'Person',
+                'name' => $this->creativeWork['author'] ?? 'Coiné',
+            ],
+            'publisher' => [
+                '@type' => 'Organization',
+                'name' => 'Coiné',
+                'logo' => [
+                    '@type' => 'ImageObject',
+                    'url' => asset('images/logo.png'),
+                ],
+            ],
+            'datePublished' => $this->creativeWork['published_time'] ?? null,
+            'dateModified' => $this->creativeWork['modified_time'] ?? $this->creativeWork['published_time'] ?? null,
             'mainEntityOfPage' => [
                 '@type' => 'WebPage',
                 '@id' => $this->canonicalUrl,

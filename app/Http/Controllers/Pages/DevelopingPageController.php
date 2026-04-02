@@ -13,6 +13,10 @@ class DevelopingPageController extends AbstractPageController
 {
     public function show(): Response
     {
+        $seoTitle = __('Sviluppo Siti Web e App Mobile — Coiné');
+        $seoDescription = __('Costruiamo strumenti digitali progettati per funzionare nel tempo, integrarsi con il marketing e supportare decisioni concrete.');
+        $canonicalUrl = route('service.developing');
+
         return Inertia::render('services/developing', [
             'faqs' => [
                 [
@@ -51,7 +55,7 @@ class DevelopingPageController extends AbstractPageController
                 'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
                 'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
                 'link' => null,
-                'slides' => ClientsLogosService::all()
+                'slides' => ClientsLogosService::all(),
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
@@ -75,6 +79,10 @@ class DevelopingPageController extends AbstractPageController
                     ],
                 ],
             ],
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

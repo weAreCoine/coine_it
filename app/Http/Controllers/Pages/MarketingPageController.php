@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
@@ -12,6 +13,10 @@ class MarketingPageController extends AbstractPageController
 {
     public function show(): Response
     {
+        $seoTitle = __('Marketing e Advertising — Coiné');
+        $seoDescription = __('Le campagne funzionano solo se inserite in un sistema chiaro. L\'obiettivo non è "fare pubblicità", ma verificare che ogni euro investito generi valore reale.');
+        $canonicalUrl = route('service.marketing');
+
         return Inertia::render('services/marketing', [
             'faqs' => [
                 [
@@ -85,7 +90,7 @@ class MarketingPageController extends AbstractPageController
                 'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
                 'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
                 'link' => null,
-                'slides' => ClientsLogosService::all()
+                'slides' => ClientsLogosService::all(),
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
@@ -109,7 +114,10 @@ class MarketingPageController extends AbstractPageController
                     ],
                 ],
             ],
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
-
 }

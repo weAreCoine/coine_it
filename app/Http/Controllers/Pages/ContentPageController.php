@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
@@ -12,6 +13,10 @@ class ContentPageController extends AbstractPageController
 {
     public function show(): Response
     {
+        $seoTitle = __('Creazione Contenuti — Coiné');
+        $seoDescription = __('Il content marketing non serve solo a generare traffico. Serve a rispondere ai dubbi, creare autorevolezza e supportare concretamente il percorso d\'acquisto.');
+        $canonicalUrl = route('service.content');
+
         return Inertia::render('services/content', [
             'faqs' => [
                 [
@@ -80,7 +85,7 @@ class ContentPageController extends AbstractPageController
                 'title' => __('Dieci anni di successi: ecco alcuni amici cresciuti con noi.'),
                 'subtitle' => __('Collaboriamo con realtà diverse accompagnandole nella crescita digitale, unendo tecnologia e marketing per costruire soluzioni coerenti con le reali esigenze del business.'),
                 'link' => null,
-                'slides' => ClientsLogosService::all()
+                'slides' => ClientsLogosService::all(),
             ],
             'cardGrid' => [
                 'kicker' => __('Il nostro metodo'),
@@ -104,6 +109,10 @@ class ContentPageController extends AbstractPageController
                     ],
                 ],
             ],
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

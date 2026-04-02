@@ -15,8 +15,10 @@
         :title="$seoTitle ?? config('app.name')"
         :description="$seoDescription ?? null"
         :canonical-url="$canonicalUrl ?? null"
+        :robots="$seoRobots ?? 'index, follow'"
         :og-image="$seoImage ?? null"
         :article="$seoArticle ?? null"
+        :creative-work="$seoCreativeWork ?? null"
         :breadcrumbs="$seoBreadcrumbs ?? []"
     />
     <script>

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace App\Http\Controllers\Pages;
@@ -10,6 +11,10 @@ class AboutPageController extends Controller
 {
     public function show()
     {
+        $seoTitle = __('Chi siamo — Coiné');
+        $seoDescription = __('Professionisti senior su advertising, sviluppo e contenuti. Zero fornitori da coordinare, zero tempo perso. Oltre 10 anni di esperienza dal fashion al biomedicale.');
+        $canonicalUrl = route('about');
+
         return Inertia::render('about', [
             'numbers' => [
                 [
@@ -63,6 +68,10 @@ class AboutPageController extends Controller
                     'title' => __('Comunicazione'),
                 ],
             ],
+        ])->withViewData([
+            'seoTitle' => $seoTitle,
+            'seoDescription' => $seoDescription,
+            'canonicalUrl' => $canonicalUrl,
         ]);
     }
 }

@@ -11,6 +11,12 @@ class CookiePolicyPageController extends Controller
 {
     public function show()
     {
-        return Inertia::render('legal/cookie-policy');
+        return Inertia::render('legal/cookie-policy')
+            ->withViewData([
+                'seoTitle' => __('Cookie Policy — Coiné'),
+                'seoDescription' => __('Informativa sull\'utilizzo dei cookie sul sito Coiné.'),
+                'canonicalUrl' => route('cookie-policy'),
+                'seoRobots' => 'noindex, nofollow',
+            ]);
     }
 }

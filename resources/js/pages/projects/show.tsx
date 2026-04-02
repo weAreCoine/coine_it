@@ -21,9 +21,6 @@ type ProjectPageProps = {
     createdAt: string;
     createdAtIso: string;
     seoTitle: string;
-    seoDescription: string;
-    seoImage: string | null;
-    canonicalUrl: string;
     relatedProjects: ProjectCard[];
 };
 
@@ -40,25 +37,8 @@ export default function Show({
     createdAt,
     createdAtIso,
     seoTitle,
-    seoDescription,
-    seoImage,
-    canonicalUrl,
     relatedProjects,
 }: ProjectPageProps) {
-    const jsonLd = {
-        '@context': 'https://schema.org',
-        '@type': 'CreativeWork',
-        headline: seoTitle,
-        description: seoDescription,
-        datePublished: createdAtIso,
-        url: canonicalUrl,
-        author: {
-            '@type': 'Person',
-            name: authorName,
-        },
-        ...(seoImage ? { image: seoImage } : {}),
-    };
-
     return (
         <>
             <Head title={seoTitle} />
@@ -66,7 +46,6 @@ export default function Show({
             <Navigation />
 
             <article>
-                <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
 
                 {/* Hero / Header */}
                 <header className="container mt-16 mb-8 max-w-180 text-balance">
