@@ -89,7 +89,7 @@ test('gtag script is rendered with marketing consent and GA enabled', function (
 });
 
 test('gtag script is not rendered when GA is disabled', function () {
-    config(['google-analytics.enabled' => false, 'google-analytics.measurement_id' => 'G-TEST123']);
+    config(['google-analytics.enabled' => false, 'google-analytics.measurement_id' => 'G-TEST123', 'google-ads.enabled' => false]);
 
     $response = $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true]))
         ->get(route('home'));

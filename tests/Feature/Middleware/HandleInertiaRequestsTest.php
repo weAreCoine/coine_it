@@ -42,11 +42,11 @@ test('Servizi navigation item has subItems', function () {
         );
 });
 
-test('Scrivici is a call to action', function () {
+test('Testa il tuo sito is a call to action', function () {
     $this->get(route('home'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
-            ->where('navigationItems.5.title', 'Scrivici')
+            ->where('navigationItems.5.title', 'Testa il tuo sito')
             ->where('navigationItems.5.isCallToAction', true)
         );
 });
