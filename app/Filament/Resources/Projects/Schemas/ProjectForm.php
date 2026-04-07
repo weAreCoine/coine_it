@@ -100,6 +100,7 @@ class ProjectForm
                     ->disk(Project::$disk)
                     ->storeFileNamesIn('original_filename')
                     ->directory('images/'.now()->format('Y/m'))
+                    ->visibility('public')
                     ->maxSize(1024 * 2)
                     ->openable()
                     ->image(),
@@ -107,6 +108,7 @@ class ProjectForm
                     ->disk(Project::$disk)
                     ->storeFileNamesIn('original_filename')
                     ->directory('images/'.now()->format('Y/m'))
+                    ->visibility('public')
                     ->maxSize(1024 * 2)
                     ->openable()
                     ->image(),

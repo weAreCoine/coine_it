@@ -63,12 +63,14 @@ class ArticleForm
                 FileUpload::make('cover')
                     ->disk(Article::$disk)
                     ->directory('images/'.now()->format('Y/m'))
+                    ->visibility('public')
                     ->maxSize(1024 * 2)
                     ->openable()
                     ->image(),
                 FileUpload::make('seo_image')
                     ->disk(Article::$disk)
                     ->directory('images/'.now()->format('Y/m'))
+                    ->visibility('public')
                     ->maxSize(1024 * 2)
                     ->openable()
                     ->image(),
