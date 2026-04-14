@@ -76,4 +76,16 @@ export type TabSectionData = {
     services: TabSectionItem[];
 };
 
+export type FeaturePromoData = {
+    kicker: string;
+    title: string;
+    subtitle: string;
+    image: string;
+    imageAlt: string;
+    link: NavigationItem;
+    badge?: string | null;
+    bullets?: string[] | null;
+    theme?: 'light' | 'dark';
+};
+
 export type TeamMember = { name: string; role: string; bio: string; image: string; tags: string[] };

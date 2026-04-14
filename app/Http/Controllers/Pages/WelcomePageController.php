@@ -31,6 +31,7 @@ class WelcomePageController extends Controller
             'ctaBanner' => $this->ctaBannerData(),
             'articleGrid' => $this->articleGridData(),
             'tabSection' => $this->tabSectionData(),
+            'featurePromo' => $this->featurePromoData(),
         ])->withViewData([
             'seoTitle' => $seoTitle,
             'seoDescription' => $seoDescription,
@@ -209,6 +210,27 @@ class WelcomePageController extends Controller
                     'html' => $this->renderPartial('partials.services.content'),
                 ],
             ],
+        ];
+    }
+
+    /**
+     * @return array{kicker: string, title: string, subtitle: string, image: string, imageAlt: string, link: NavigationItem, bullets: list<string>, theme: 'light'|'dark'}
+     */
+    private function featurePromoData(): array
+    {
+        return [
+            'kicker' => __('Health Check gratuito'),
+            'title' => __('Il tuo e-commerce funziona davvero?'),
+            'subtitle' => __('Rispondi a 6 domande e ricevi un report con punteggio, aree critiche e priorità per migliorare conversioni e marginalità.'),
+            'image' => asset('images/health-check-result.webp'),
+            'imageAlt' => __('Health Check gratuito per e-commerce — Coiné'),
+            'link' => new NavigationItem(__('Inizia il quiz gratuito'), route('health-check')),
+            'bullets' => [
+                __('6 domande, 5 minuti'),
+                __('Report personalizzato'),
+                __('Priorità di intervento concrete'),
+            ],
+            'theme' => 'light',
         ];
     }
 

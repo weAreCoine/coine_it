@@ -5,10 +5,20 @@ import ArticleGrid from '@/components/sections/articleGrid';
 import CardGrid from '@/components/sections/cardGrid';
 import ContentStats from '@/components/sections/contentStats';
 import CtaBanner from '@/components/sections/ctaBanner';
+import FeaturePromo from '@/components/sections/featurePromo';
 import Hero from '@/components/sections/hero';
 import Marquee from '@/components/sections/marquee';
 import TabSection from '@/components/sections/tabSection';
-import type { ArticleGridData, CardGridData, ContentStatsData, CtaBannerData, HeroData, MarqueeData, TabSectionData } from '@/types/dto/sections';
+import type {
+    ArticleGridData,
+    CardGridData,
+    ContentStatsData,
+    CtaBannerData,
+    FeaturePromoData,
+    HeroData,
+    MarqueeData,
+    TabSectionData,
+} from '@/types/dto/sections';
 
 export default function Welcome({
     hero,
@@ -18,6 +28,7 @@ export default function Welcome({
     marquee,
     articleGrid,
     tabSection,
+    featurePromo,
 }: {
     hero: HeroData;
     cardGrid: CardGridData;
@@ -26,6 +37,7 @@ export default function Welcome({
     marquee: MarqueeData;
     articleGrid: ArticleGridData;
     tabSection: TabSectionData;
+    featurePromo: FeaturePromoData;
 }) {
     return (
         <>
@@ -36,6 +48,7 @@ export default function Welcome({
             <CardGrid {...cardGrid} />
             <CtaBanner {...ctaBanner} />
             <TabSection {...tabSection} />
+            <FeaturePromo {...featurePromo} />
             <ContentStats {...contentStats} />
             <ArticleGrid {...articleGrid} />
             <Colophon />

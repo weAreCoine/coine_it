@@ -25,6 +25,24 @@ test('returns all expected props', function () {
             ->has('ctaBanner')
             ->has('articleGrid')
             ->has('tabSection')
+            ->has('featurePromo')
+        );
+});
+
+test('featurePromo contains expected fields and links to health check', function () {
+    Cache::flush();
+
+    $this->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('featurePromo.kicker')
+            ->has('featurePromo.title')
+            ->has('featurePromo.subtitle')
+            ->has('featurePromo.image')
+            ->has('featurePromo.imageAlt')
+            ->has('featurePromo.bullets', 3)
+            ->where('featurePromo.theme', 'light')
+            ->where('featurePromo.link.href', route('health-check'))
         );
 });
 
