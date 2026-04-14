@@ -1,3 +1,4 @@
+import { clsx } from 'clsx';
 import AppLink from '@/components/appLink';
 import DevLabel from '@/components/devLabel';
 import type { FeaturePromoData } from '@/types/dto/sections';
@@ -6,17 +7,19 @@ export default function FeaturePromo({ kicker, title, subtitle, image, imageAlt,
     const isDark = theme === 'dark';
 
     return (
-        <section className="container my-32">
+        <section
+            className={clsx({
+                'bg-black text-white': isDark,
+                'bg-mercury-50 text-black': !isDark,
+                'py-20': true,
+            })}
+        >
             <DevLabel name="FeaturePromo" />
-            <div
-                className={`grid overflow-hidden border md:grid-cols-2 ${
-                    isDark ? 'border-black bg-black text-white' : 'border-mercury-200 bg-mercury-50 text-black'
-                }`}
-            >
-                <div className="relative aspect-square md:aspect-auto">
+            <div className="relative container my-20 grid grid-cols-1 items-center gap-12 md:grid-cols-2">
+                <div className="aspect-square">
                     <img src={image} alt={imageAlt} className="h-full w-full object-cover object-top md:object-center" loading="lazy" />
                 </div>
-                <div className="flex flex-col justify-center gap-4 p-8 md:p-12">
+                <div className="flex flex-col gap-4">
                     {badge && (
                         <span
                             className={`inline-flex w-fit items-center px-3 py-1 text-xs font-semibold tracking-wide uppercase ${
