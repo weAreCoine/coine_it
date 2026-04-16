@@ -33,6 +33,7 @@ class ArticleForm
                 Select::make('categories')
                     ->multiple()
                     ->relationship('categories', 'name')
+                    ->preload()
                     ->createOptionForm([
                         TextInput::make('name')
                             ->label('Nome Categoria')
