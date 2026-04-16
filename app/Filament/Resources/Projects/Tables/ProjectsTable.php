@@ -53,6 +53,7 @@ class ProjectsTable
                 IconColumn::make('is_featured')
                     ->boolean(),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 TrashedFilter::make(),
             ])
