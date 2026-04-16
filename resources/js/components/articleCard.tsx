@@ -16,7 +16,7 @@ export default function ArticleCard({ article, className, isLandscape = false }:
             <DevLabel name="ArticleCard" />
             <article className={'gap-2 ' + (isLandscape ? 'flex flex-col md:grid md:grid-cols-2 md:items-center' : 'flex flex-col')}>
                 <figure className="mb-0 shrink-0 bg-mercury-50">
-                    <img src={article.cover ?? '/images/placeholder_image.webp'} alt={article.title} loading="lazy" />
+                    <img src={article.cover ?? '/images/placeholder_image.webp'} alt={article.title} loading="lazy" className="aspect-4/3 w-full object-cover" />
                 </figure>
 
                 <div className="flex h-full flex-col justify-between">

@@ -48,6 +48,7 @@ class ArticleForm
                 Select::make('tags')
                     ->multiple()
                     ->relationship('tags', 'name')
+                    ->preload()
                     ->createOptionForm([
                         TextInput::make('name')
                             ->label('Nome Tag')
