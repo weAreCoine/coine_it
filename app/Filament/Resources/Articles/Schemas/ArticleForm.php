@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Articles\Schemas;
 
+use App\Filament\Plugins\SourceCodeRichContentPlugin;
 use App\Models\Article;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\RichEditor;
@@ -23,7 +24,10 @@ class ArticleForm
                 RichEditor::make('content')
                     ->extraInputAttributes(['style' => 'min-height: 20rem; max-height: 50vh; overflow-y: auto;'])
                     ->columnSpanFull()
-                    ->required(),
+                    ->required()
+                    ->plugins([
+                        SourceCodeRichContentPlugin::make(),
+                    ]),
                 TextInput::make('slug')
                     ->required(),
                 Select::make('user_id')
