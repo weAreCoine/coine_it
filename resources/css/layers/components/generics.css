@@ -79,6 +79,10 @@
             }
         }
 
+        pre {
+            @apply mb-4;
+        }
+
         blockquote {
             @apply bg-black text-white p-12 leading-relaxed text-center text-lg my-6;
         }
