@@ -15,7 +15,7 @@ export default function ArticleCard({ article, className, isLandscape = false }:
         <Link href={show.url({ slug: article.slug })} prefetch="click" className={cn('group relative flex', className)}>
             <DevLabel name="ArticleCard" />
             <article className={'gap-2 ' + (isLandscape ? 'flex flex-col md:grid md:grid-cols-2 md:items-center' : 'flex flex-col')}>
-                <figure className="mb-0 shrink-0 bg-mercury-50 px-4">
+                <figure className="mb-0 shrink-0 bg-mercury-50 p-4">
                     <img
                         src={article.cover ?? '/images/placeholder_image.webp'}
                         alt={article.title}
