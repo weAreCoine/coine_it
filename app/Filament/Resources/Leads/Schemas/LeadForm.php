@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\Resources\Leads\Schemas;
 
 use App\Enums\LeadStage;
+use App\Enums\Services;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -36,6 +37,9 @@ class LeadForm
                     ->maxLength(255),
                 Select::make('services')
                     ->multiple()
+                    ->options(collect(Services::cases())
+                        ->mapWithKeys(fn (Services $service) => [$service->value => $service->getLabel()])
+                        ->all())
                     ->columnSpanFull(),
                 Select::make('stage')
                     ->options(LeadStage::class)

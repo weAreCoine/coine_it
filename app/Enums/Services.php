@@ -2,7 +2,10 @@
 
 namespace App\Enums;
 
-enum Services: string
+use App\Entities\Service;
+use Filament\Support\Contracts\HasLabel;
+
+enum Services: string implements HasLabel
 {
     case Teaching = 'Teaching';
     case WebDeveloping = 'WebDeveloping';
@@ -15,4 +18,9 @@ enum Services: string
     case MarketingConsulting = 'MarketingConsulting';
     case SEO = 'SEO';
     case Notion = 'Notion';
+
+    public function getLabel(): string
+    {
+        return Service::getServiceLabel($this);
+    }
 }
