@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import CookieConsentBanner from '@/components/cookieConsentBanner';
 import { handleGANavigation } from '@/hooks/useGoogleAnalytics';
 import { handleLinkedInNavigation } from '@/hooks/useLinkedIn';
-import { handleMetaPixelNavigation } from '@/hooks/useMetaPixel';
+import { handleMetaPixelNavigation, setMetaTestMode } from '@/hooks/useMetaPixel';
 import '../css/app.css';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -19,6 +19,9 @@ createInertiaApp({
     title: (title) => (title ? `${title} - ${appName}` : appName),
     resolve: (name) => resolvePageComponent(`./pages/${name}.tsx`, import.meta.glob('./pages/**/*.tsx')),
     setup({ el, App, props }) {
+        const metaPixel = props.initialPage.props.metaPixel as { testMode?: boolean } | undefined;
+        setMetaTestMode(metaPixel?.testMode === true);
+
         const root = createRoot(el);
         root.render(
             <>

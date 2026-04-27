@@ -8,6 +8,18 @@ interface MetaPixelProps {
     eventId: string;
     pixelId: string;
     enabled: boolean;
+    testMode: boolean;
+}
+
+let testModeActive = false;
+
+/**
+ * Toggles the verbose console logging used to diagnose Meta Pixel firings.
+ * Driven by the `metaPixel.testMode` shared prop, which is true only when
+ * META_PIXEL_ENABLED=true and META_TEST_MODE_ENABLED=true server-side.
+ */
+export function setMetaTestMode(enabled: boolean): void {
+    testModeActive = enabled;
 }
 
 /**
@@ -26,7 +38,13 @@ export function trackMetaPixelEvent(
         return;
     }
 
-    window.fbq(isCustom ? 'trackCustom' : 'track', eventName, data, { eventID: eventId });
+    const method = isCustom ? 'trackCustom' : 'track';
+
+    if (testModeActive) {
+        console.info(`[Meta Pixel TEST] ${method} ${eventName}`, { eventID: eventId, data, isCustom });
+    }
+
+    window.fbq(method, eventName, data, { eventID: eventId });
 }
 
 /**
@@ -37,6 +55,8 @@ export function trackMetaPixelEvent(
 export function handleMetaPixelNavigation(pageProps: Record<string, unknown>): void {
     const metaPixel = pageProps.metaPixel as MetaPixelProps | undefined;
     const consent = pageProps.consent as { marketing?: boolean } | undefined;
+
+    setMetaTestMode(metaPixel?.testMode === true);
 
     if (!consent?.marketing || !metaPixel?.enabled) {
         return;

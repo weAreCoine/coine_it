@@ -76,6 +76,7 @@ class HandleInertiaRequests extends Middleware
                 'eventId' => $eventId,
                 'pixelId' => MetaPixel::pixelId(),
                 'enabled' => MetaPixel::isEnabled(),
+                'testMode' => MetaPixel::isEnabled() && MetaPixel::testEnabled(),
             ],
             'googleAnalytics' => [
                 'measurementId' => GoogleAnalyticsService::measurementId(),

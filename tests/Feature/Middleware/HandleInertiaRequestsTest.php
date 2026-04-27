@@ -59,13 +59,14 @@ test('health check page hides the main navigation', function () {
         );
 });
 
-test('shared props expose a per-request meta pixel event id', function () {
+test('shared props expose a per-request meta pixel event id and test mode flag', function () {
     $this->get(route('home'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->has('metaPixel.eventId')
             ->has('metaPixel.pixelId')
             ->has('metaPixel.enabled')
+            ->where('metaPixel.testMode', false)
             ->missing('metaPixel.flashEvents')
         );
 });
