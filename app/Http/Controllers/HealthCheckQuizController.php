@@ -8,10 +8,27 @@ use App\Http\Requests\HealthCheckQuizRequest;
 use App\Models\Lead;
 use App\Services\Klaviyo\KlaviyoService;
 use App\Services\LeadService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class HealthCheckQuizController extends Controller
 {
+    /**
+     * Mirror the browser-side `startQuiz` custom Meta Pixel event onto the
+     * Conversions API using the same event id, so that Meta can de-duplicate
+     * the two firings.
+     */
+    public function start(Request $request, LeadService $leadService): JsonResponse
+    {
+        $validated = $request->validate([
+            'eventId' => 'required|uuid',
+        ]);
+
+        $leadService->trackMetaPixelEventServerSide('startQuiz', $validated['eventId']);
+
+        return response()->json(null, 204);
+    }
+
     /**
      * Store the quiz lead (Event 2: Lead).
      */
@@ -59,7 +76,11 @@ class HealthCheckQuizController extends Controller
             }
         }
 
-        $leadService->trackMetaPixelEvent('CompleteRegistration');
+        $leadService->trackMetaPixelEvent(
+            'CompleteRegistration',
+            $validated['email'],
+            $lead?->phone,
+        );
         $leadService->trackGAEvent($request, 'quiz_completed');
         $leadService->trackLinkedInEvent($request, 'complete_registration', $validated['email']);
     }

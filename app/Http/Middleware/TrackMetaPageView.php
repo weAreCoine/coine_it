@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Middleware;
 
 use App\Helpers\CookieConsent;
+use App\Services\Meta\MetaPixelUserDataFactory;
 use Closure;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
@@ -36,7 +37,7 @@ class TrackMetaPageView
         }
 
         try {
-            MetaPixel::send('PageView', $eventId, new CustomData);
+            MetaPixel::send('PageView', $eventId, new CustomData, MetaPixelUserDataFactory::make());
         } catch (\Exception $e) {
             Log::error('Meta Pixel CAPI PageView failed', ['error' => $e->getMessage()]);
         }

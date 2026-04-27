@@ -2,6 +2,7 @@
 
 use App\Mail\LeadReceived;
 use App\Models\Lead;
+use App\Services\LeadService;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -185,6 +186,38 @@ test('complete sends notes to klaviyo when enabled', function () {
 
         return $properties['health_check_notes'] === 'Il nostro problema principale è il checkout mobile.';
     });
+});
+
+test('start endpoint forwards the browser-generated event id to LeadService for CAPI mirroring', function () {
+    $service = Mockery::mock(LeadService::class);
+    $service->shouldReceive('trackMetaPixelEventServerSide')
+        ->once()
+        ->with('startQuiz', '11111111-2222-4333-8444-555555555555');
+    $this->app->instance(LeadService::class, $service);
+
+    $this->postJson(route('health-check.start'), [
+        'eventId' => '11111111-2222-4333-8444-555555555555',
+    ])->assertNoContent();
+});
+
+test('start endpoint requires a valid uuid eventId', function () {
+    $service = Mockery::mock(LeadService::class);
+    $service->shouldReceive('trackMetaPixelEventServerSide')->never();
+    $this->app->instance(LeadService::class, $service);
+
+    $this->postJson(route('health-check.start'), ['eventId' => 'not-a-uuid'])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('eventId');
+});
+
+test('start endpoint requires a non-empty eventId', function () {
+    $service = Mockery::mock(LeadService::class);
+    $service->shouldReceive('trackMetaPixelEventServerSide')->never();
+    $this->app->instance(LeadService::class, $service);
+
+    $this->postJson(route('health-check.start'), [])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors('eventId');
 });
 
 test('complete without openText does not clear notes', function () {

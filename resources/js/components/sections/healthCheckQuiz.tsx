@@ -1,7 +1,7 @@
 import { router, usePage } from '@inertiajs/react';
 import { clsx } from 'clsx';
 import { useReducer, useRef } from 'react';
-import { complete, store } from '@/actions/App/Http/Controllers/HealthCheckQuizController';
+import { complete, start, store } from '@/actions/App/Http/Controllers/HealthCheckQuizController';
 import DevLabel from '@/components/devLabel';
 import HealthCheckResults from '@/components/sections/healthCheckResults';
 import type { QuizConfig, QuizQuestion, ResultRange } from '@/types/dto/healthCheck';
@@ -172,7 +172,28 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
         hasTrackedStart.current = true;
 
         if (!consent.marketing) return;
-        window.fbq?.('track', 'ViewContent', { content_name: 'health_check_quiz_started' });
+
+        const eventId = generateUuid();
+
+        // Browser pixel — custom event
+        window.fbq?.('trackCustom', 'startQuiz', {}, { eventID: eventId });
+
+        // Conversions API — same event id for de-duplication.
+        // Laravel/Inertia rely on the XSRF-TOKEN cookie for CSRF protection.
+        void fetch(start().url, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-XSRF-TOKEN': readXsrfToken(),
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+            body: JSON.stringify({ eventId }),
+        }).catch(() => {
+            // Tracking is best-effort; pixel browser firing already happened.
+        });
+
         window.gtag?.('event', 'quiz_started', { event_category: 'health_check' });
     }
 
@@ -378,6 +399,23 @@ function QuestionStep({
             </div>
         </div>
     );
+}
+
+function readXsrfToken(): string {
+    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : '';
+}
+
+function generateUuid(): string {
+    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+    }
+    // RFC4122 v4 fallback for browsers without crypto.randomUUID
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === 'x' ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
 }
 
 function normalizeUrl(raw: string): string {

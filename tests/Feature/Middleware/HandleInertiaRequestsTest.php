@@ -1,6 +1,8 @@
 <?php
 
 use App\Models\User;
+use App\Services\LeadService;
+use Combindma\FacebookPixel\Facades\MetaPixel;
 
 test('shared props include name and env for guest', function () {
     $this->get(route('home'))
@@ -56,5 +58,32 @@ test('health check page hides the main navigation', function () {
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->has('navigationItems', 0)
+        );
+});
+
+test('flashed meta pixel events expose the isCustomEvent flag and strip the reserved key', function () {
+    $sessionKey = MetaPixel::sessionKey();
+
+    $this->withSession([
+        $sessionKey => [
+            'Lead' => [
+                'data' => [],
+                'event_id' => 'evt-lead',
+            ],
+            'startQuiz' => [
+                'data' => [LeadService::META_TRACK_METHOD_KEY => 'trackCustom'],
+                'event_id' => 'evt-start',
+            ],
+        ],
+    ])->get(route('home'))
+        ->assertOk()
+        ->assertInertia(fn ($page) => $page
+            ->has('metaPixel.flashEvents', 2)
+            ->where('metaPixel.flashEvents.0.eventName', 'Lead')
+            ->where('metaPixel.flashEvents.0.isCustomEvent', false)
+            ->where('metaPixel.flashEvents.0.data', [])
+            ->where('metaPixel.flashEvents.1.eventName', 'startQuiz')
+            ->where('metaPixel.flashEvents.1.isCustomEvent', true)
+            ->where('metaPixel.flashEvents.1.data', [])
         );
 });

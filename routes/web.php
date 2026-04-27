@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\ContactFormController;
 use App\Http\Controllers\HealthCheckQuizController;
-use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
 use App\Http\Controllers\Pages\CategoryPageController;
@@ -16,6 +15,7 @@ use App\Http\Controllers\Pages\MarketingPageController;
 use App\Http\Controllers\Pages\PrivacyPolicyPageController;
 use App\Http\Controllers\Pages\ProjectPageController;
 use App\Http\Controllers\Pages\WelcomePageController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [WelcomePageController::class, 'show'])
@@ -37,6 +37,8 @@ Route::get('/chi-siamo', [AboutPageController::class, 'show'])
 
 Route::get('/health-check', [HealthCheckPageController::class, 'show'])
     ->name('health-check');
+Route::post('/health-check/start', [HealthCheckQuizController::class, 'start'])
+    ->name('health-check.start');
 Route::post('/health-check', [HealthCheckQuizController::class, 'store'])
     ->name('health-check.store');
 Route::patch('/health-check', [HealthCheckQuizController::class, 'complete'])

@@ -15,9 +15,10 @@ interface FlashEvent {
     eventName: string;
     data: Record<string, unknown>;
     eventId: string;
+    isCustomEvent?: boolean;
 }
 
-function trackEvent(eventName: string, data: Record<string, unknown> = {}, eventId?: string): void {
+function trackEvent(eventName: string, data: Record<string, unknown> = {}, eventId?: string, isCustomEvent = false): void {
     if (!window.fbq) {
         return;
     }
@@ -27,7 +28,9 @@ function trackEvent(eventName: string, data: Record<string, unknown> = {}, event
         options.eventID = eventId;
     }
 
-    window.fbq('track', eventName, data, options);
+    const method = isCustomEvent ? 'trackCustom' : 'track';
+
+    window.fbq(method, eventName, data, options);
 }
 
 /**
@@ -52,7 +55,7 @@ export function handleMetaPixelNavigation(pageProps: Record<string, unknown>): v
     // Handle flash events (e.g., Lead after form submission redirect)
     if (metaPixel.flashEvents?.length) {
         for (const event of metaPixel.flashEvents) {
-            trackEvent(event.eventName, event.data, event.eventId);
+            trackEvent(event.eventName, event.data, event.eventId, event.isCustomEvent ?? false);
         }
     }
 }

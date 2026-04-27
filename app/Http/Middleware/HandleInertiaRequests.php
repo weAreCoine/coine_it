@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Entities\NavigationItem;
 use App\Helpers\CookieConsent;
 use App\Services\GoogleAnalytics\GoogleAnalyticsService;
+use App\Services\LeadService;
 use App\Services\LinkedIn\LinkedInService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
@@ -47,11 +48,18 @@ class HandleInertiaRequests extends Middleware
         $isHealthCheck = $request->routeIs('health-check');
 
         $flashEvents = collect(session()->get(MetaPixel::sessionKey(), []))
-            ->map(fn (array $event, string $eventName) => [
-                'eventName' => $eventName,
-                'data' => $event['data'] ?? [],
-                'eventId' => $event['event_id'] ?? null,
-            ])
+            ->map(function (array $event, string $eventName): array {
+                $data = $event['data'] ?? [];
+                $isCustomEvent = ($data[LeadService::META_TRACK_METHOD_KEY] ?? null) === 'trackCustom';
+                unset($data[LeadService::META_TRACK_METHOD_KEY]);
+
+                return [
+                    'eventName' => $eventName,
+                    'data' => $data,
+                    'eventId' => $event['event_id'] ?? null,
+                    'isCustomEvent' => $isCustomEvent,
+                ];
+            })
             ->values()
             ->all();
 

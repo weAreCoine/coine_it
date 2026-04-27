@@ -3,6 +3,7 @@
 use App\Http\Middleware\TrackMetaPageView;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use FacebookAds\Object\ServerSide\CustomData;
+use FacebookAds\Object\ServerSide\UserData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,7 +23,7 @@ test('track meta page view middleware sends a page view when consent and event i
     MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
     MetaPixel::shouldReceive('send')
         ->once()
-        ->with('PageView', 'evt-123', Mockery::type(CustomData::class));
+        ->with('PageView', 'evt-123', Mockery::type(CustomData::class), Mockery::type(UserData::class));
 
     $response = new Response('ok');
 
