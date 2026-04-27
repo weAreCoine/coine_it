@@ -103,6 +103,7 @@ test('contact form does not track lead event without consent', function () {
         'phone' => null,
         'message' => 'Project description',
         'termsAccepted' => true,
+        'metaEventId' => '11111111-2222-4333-8444-555555555555',
     ])->assertOk();
 
     $this->assertDatabaseHas('leads', ['email' => 'test@example.com']);

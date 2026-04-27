@@ -24,7 +24,7 @@ class HealthCheckQuizController extends Controller
             'eventId' => 'required|uuid',
         ]);
 
-        $leadService->trackMetaPixelEventServerSide('startQuiz', $validated['eventId']);
+        $leadService->trackMetaPixelEvent('startQuiz', $validated['eventId']);
 
         return response()->json(null, 204);
     }
@@ -45,7 +45,7 @@ class HealthCheckQuizController extends Controller
             'quiz_answers' => $validated['answers'],
             'quiz_score' => $validated['score'],
             'newsletter_opt_in' => true,
-        ], $request);
+        ], $request, $validated['metaEventId']);
     }
 
     /**
@@ -56,6 +56,7 @@ class HealthCheckQuizController extends Controller
         $validated = $request->validate([
             'email' => 'required|email|indisposable|max:255',
             'openText' => 'nullable|string|max:2000',
+            'metaEventId' => 'required|uuid',
         ], [
             'email.indisposable' => 'Non sono ammessi indirizzi email temporanei.',
         ]);
@@ -78,6 +79,7 @@ class HealthCheckQuizController extends Controller
 
         $leadService->trackMetaPixelEvent(
             'CompleteRegistration',
+            $validated['metaEventId'],
             $validated['email'],
             $lead?->phone,
         );

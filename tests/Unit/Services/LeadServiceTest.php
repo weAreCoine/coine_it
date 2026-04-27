@@ -17,13 +17,13 @@ function consentedRequest(string $url = 'https://coine.test/contact'): Request
     ]);
 }
 
-test('createAndTrack creates the lead and forwards email/phone to the meta tracker', function () {
+test('createAndTrack creates the lead and forwards the browser event id and contact data to the meta tracker', function () {
     $request = consentedRequest();
 
     $service = Mockery::mock(LeadService::class)->makePartial();
     $service->shouldReceive('trackMetaPixelEvent')
         ->once()
-        ->with('Lead', 'lead@example.com', '+39111222333');
+        ->with('Lead', '11111111-2222-4333-8444-555555555555', 'lead@example.com', '+39111222333');
     $service->shouldReceive('trackGAEvent')
         ->once()
         ->with($request, 'generate_lead');
@@ -36,7 +36,7 @@ test('createAndTrack creates the lead and forwards email/phone to the meta track
         'email' => 'lead@example.com',
         'phone' => '+39111222333',
         'terms' => true,
-    ], $request);
+    ], $request, '11111111-2222-4333-8444-555555555555');
 
     expect($lead)->toBeInstanceOf(Lead::class);
     $this->assertDatabaseHas('leads', [
@@ -46,7 +46,7 @@ test('createAndTrack creates the lead and forwards email/phone to the meta track
     ]);
 });
 
-test('trackMetaPixelEvent sends with enriched UserData and flashes a standard event', function () {
+test('trackMetaPixelEvent sends to CAPI with enriched UserData using the browser event id', function () {
     $request = consentedRequest();
     $this->app->instance('request', $request);
 
@@ -54,31 +54,38 @@ test('trackMetaPixelEvent sends with enriched UserData and flashes a standard ev
     MetaPixel::shouldReceive('send')
         ->once()
         ->withArgs(fn (string $eventName, string $eventId, CustomData $custom, UserData $userData): bool => $eventName === 'Lead'
-            && $eventId !== ''
+            && $eventId === '11111111-2222-4333-8444-555555555555'
             && $userData instanceof UserData);
-    MetaPixel::shouldReceive('flashEvent')
-        ->once()
-        ->withArgs(fn (string $eventName, array $payload, string $eventId): bool => $eventName === 'Lead' && $payload === [] && $eventId !== '');
 
-    app(LeadService::class)->trackMetaPixelEvent('Lead', 'lead@example.com', '+39111222333');
+    app(LeadService::class)->trackMetaPixelEvent(
+        'Lead',
+        '11111111-2222-4333-8444-555555555555',
+        'lead@example.com',
+        '+39111222333',
+    );
 });
 
-test('trackMetaPixelEvent flags custom events in the flash payload', function () {
+test('trackMetaPixelEvent is a no-op when the pixel is disabled', function () {
     $request = consentedRequest();
     $this->app->instance('request', $request);
 
-    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')->once();
-    MetaPixel::shouldReceive('flashEvent')
-        ->once()
-        ->withArgs(fn (string $eventName, array $payload, string $eventId): bool => $eventName === 'startQuiz'
-            && ($payload[LeadService::META_TRACK_METHOD_KEY] ?? null) === 'trackCustom'
-            && $eventId !== '');
+    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(false);
+    MetaPixel::shouldReceive('send')->never();
 
-    app(LeadService::class)->trackMetaPixelEvent('startQuiz', null, null, true);
+    app(LeadService::class)->trackMetaPixelEvent('Lead', '11111111-2222-4333-8444-555555555555');
 });
 
-test('trackMetaPixelEvent logs exceptions and still flashes the event', function () {
+test('trackMetaPixelEvent is a no-op when marketing consent is missing', function () {
+    $request = Request::create('https://coine.test/health-check/start', 'POST');
+    $this->app->instance('request', $request);
+
+    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
+    MetaPixel::shouldReceive('send')->never();
+
+    app(LeadService::class)->trackMetaPixelEvent('startQuiz', '11111111-2222-4333-8444-555555555555');
+});
+
+test('trackMetaPixelEvent logs exceptions raised by the SDK', function () {
     $request = consentedRequest();
     $this->app->instance('request', $request);
 
@@ -86,38 +93,10 @@ test('trackMetaPixelEvent logs exceptions and still flashes the event', function
     MetaPixel::shouldReceive('send')
         ->once()
         ->andThrow(new RuntimeException('meta send failed'));
-    MetaPixel::shouldReceive('flashEvent')
-        ->once()
-        ->withArgs(fn (string $eventName, array $payload, string $eventId): bool => $eventName === 'Lead' && $payload === [] && $eventId !== '');
 
     Log::shouldReceive('error')
         ->once()
         ->with('meta send failed', Mockery::on(fn (array $context): bool => $context['exception'] === RuntimeException::class));
 
-    app(LeadService::class)->trackMetaPixelEvent('Lead');
-});
-
-test('trackMetaPixelEventServerSide reuses the provided event id and does not flash', function () {
-    $request = consentedRequest();
-    $this->app->instance('request', $request);
-
-    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')
-        ->once()
-        ->withArgs(fn (string $eventName, string $eventId, CustomData $custom, UserData $userData): bool => $eventName === 'startQuiz'
-            && $eventId === '11111111-2222-4333-8444-555555555555'
-            && $userData instanceof UserData);
-    MetaPixel::shouldReceive('flashEvent')->never();
-
-    app(LeadService::class)->trackMetaPixelEventServerSide('startQuiz', '11111111-2222-4333-8444-555555555555');
-});
-
-test('trackMetaPixelEventServerSide is a no-op when consent is missing', function () {
-    $request = Request::create('https://coine.test/health-check/start', 'POST');
-    $this->app->instance('request', $request);
-
-    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')->never();
-
-    app(LeadService::class)->trackMetaPixelEventServerSide('startQuiz', '11111111-2222-4333-8444-555555555555');
+    app(LeadService::class)->trackMetaPixelEvent('Lead', '11111111-2222-4333-8444-555555555555');
 });

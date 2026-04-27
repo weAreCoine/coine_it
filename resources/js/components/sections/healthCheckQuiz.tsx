@@ -4,6 +4,8 @@ import { useReducer, useRef } from 'react';
 import { complete, start, store } from '@/actions/App/Http/Controllers/HealthCheckQuizController';
 import DevLabel from '@/components/devLabel';
 import HealthCheckResults from '@/components/sections/healthCheckResults';
+import { trackMetaPixelEvent } from '@/hooks/useMetaPixel';
+import { generateUuid } from '@/lib/uuid';
 import type { QuizConfig, QuizQuestion, ResultRange } from '@/types/dto/healthCheck';
 
 type QuizState = {
@@ -175,10 +177,9 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
 
         const eventId = generateUuid();
 
-        // Browser pixel — custom event
-        window.fbq?.('trackCustom', 'startQuiz', {}, { eventID: eventId });
+        trackMetaPixelEvent('startQuiz', eventId, {}, true);
 
-        // Conversions API — same event id for de-duplication.
+        // Mirror onto the Conversions API with the same event id for de-duplication.
         // Laravel/Inertia rely on the XSRF-TOKEN cookie for CSRF protection.
         void fetch(start().url, {
             method: 'POST',
@@ -211,6 +212,7 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
     function handleContactSubmit() {
         dispatch({ type: 'SUBMIT_START' });
         const score = computeScore(questions, state.answers);
+        const metaEventId = generateUuid();
 
         router.post(
             store().url,
@@ -223,11 +225,17 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
                 marketingConsent: state.marketingConsent,
                 answers: state.answers,
                 score,
+                metaEventId,
             },
             {
                 preserveState: true,
                 preserveScroll: true,
-                onSuccess: () => dispatch({ type: 'SUBMIT_SUCCESS' }),
+                onSuccess: () => {
+                    if (consent.marketing) {
+                        trackMetaPixelEvent('Lead', metaEventId);
+                    }
+                    dispatch({ type: 'SUBMIT_SUCCESS' });
+                },
                 onError: (errors) =>
                     dispatch({
                         type: 'SUBMIT_ERROR',
@@ -240,17 +248,22 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
 
     function handleComplete() {
         dispatch({ type: 'COMPLETE_START' });
+        const metaEventId = generateUuid();
 
         router.patch(
             complete().url,
             {
                 email: state.contact.email,
                 openText: state.openText,
+                metaEventId,
             },
             {
                 preserveState: true,
                 preserveScroll: true,
                 onSuccess: () => {
+                    if (consent.marketing) {
+                        trackMetaPixelEvent('CompleteRegistration', metaEventId);
+                    }
                     dispatch({ type: 'COMPLETE_DONE' });
                     window.open(config.calendlyUrl, '_blank');
                 },
@@ -404,18 +417,6 @@ function QuestionStep({
 function readXsrfToken(): string {
     const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
     return match ? decodeURIComponent(match[1]) : '';
-}
-
-function generateUuid(): string {
-    if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
-        return crypto.randomUUID();
-    }
-    // RFC4122 v4 fallback for browsers without crypto.randomUUID
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-        const r = (Math.random() * 16) | 0;
-        const v = c === 'x' ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-    });
 }
 
 function normalizeUrl(raw: string): string {

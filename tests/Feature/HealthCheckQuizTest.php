@@ -24,6 +24,16 @@ function validQuizPayload(array $overrides = []): array
             'retention' => ['value' => 'basic', 'points' => 6],
         ],
         'score' => 43,
+        'metaEventId' => '11111111-2222-4333-8444-555555555555',
+    ], $overrides);
+}
+
+function validCompletePayload(array $overrides = []): array
+{
+    return array_merge([
+        'email' => 'mario@example.com',
+        'openText' => '',
+        'metaEventId' => '22222222-3333-4444-8555-666666666666',
     ], $overrides);
 }
 
@@ -134,10 +144,16 @@ test('validation accepts gmail email', function () {
 });
 
 test('complete rejects disposable email', function () {
-    $this->patch(route('health-check.complete'), [
+    $this->patch(route('health-check.complete'), validCompletePayload([
         'email' => 'test@guerrillamail.com',
         'openText' => 'Some text',
-    ])->assertSessionHasErrors('email');
+    ]))->assertSessionHasErrors('email');
+});
+
+test('complete requires a uuid metaEventId', function () {
+    $this->patch(route('health-check.complete'), validCompletePayload([
+        'metaEventId' => 'not-a-uuid',
+    ]))->assertSessionHasErrors('metaEventId');
 });
 
 test('complete updates notes with openText', function () {
@@ -146,10 +162,9 @@ test('complete updates notes with openText', function () {
     $this->post(route('health-check.store'), validQuizPayload())
         ->assertOk();
 
-    $this->patch(route('health-check.complete'), [
-        'email' => 'mario@example.com',
+    $this->patch(route('health-check.complete'), validCompletePayload([
         'openText' => 'Il nostro problema principale è il checkout mobile.',
-    ])->assertOk();
+    ]))->assertOk();
 
     $lead = Lead::where('email', 'mario@example.com')->first();
     expect($lead->notes)->toBe('Il nostro problema principale è il checkout mobile.');
@@ -172,10 +187,9 @@ test('complete sends notes to klaviyo when enabled', function () {
     $this->post(route('health-check.store'), validQuizPayload())
         ->assertOk();
 
-    $this->patch(route('health-check.complete'), [
-        'email' => 'mario@example.com',
+    $this->patch(route('health-check.complete'), validCompletePayload([
         'openText' => 'Il nostro problema principale è il checkout mobile.',
-    ])->assertOk();
+    ]))->assertOk();
 
     Http::assertSent(function ($request) {
         if ($request->method() !== 'PATCH' || ! str_contains($request->url(), 'profile-abc')) {
@@ -190,7 +204,7 @@ test('complete sends notes to klaviyo when enabled', function () {
 
 test('start endpoint forwards the browser-generated event id to LeadService for CAPI mirroring', function () {
     $service = Mockery::mock(LeadService::class);
-    $service->shouldReceive('trackMetaPixelEventServerSide')
+    $service->shouldReceive('trackMetaPixelEvent')
         ->once()
         ->with('startQuiz', '11111111-2222-4333-8444-555555555555');
     $this->app->instance(LeadService::class, $service);
@@ -202,7 +216,7 @@ test('start endpoint forwards the browser-generated event id to LeadService for 
 
 test('start endpoint requires a valid uuid eventId', function () {
     $service = Mockery::mock(LeadService::class);
-    $service->shouldReceive('trackMetaPixelEventServerSide')->never();
+    $service->shouldReceive('trackMetaPixelEvent')->never();
     $this->app->instance(LeadService::class, $service);
 
     $this->postJson(route('health-check.start'), ['eventId' => 'not-a-uuid'])
@@ -212,7 +226,7 @@ test('start endpoint requires a valid uuid eventId', function () {
 
 test('start endpoint requires a non-empty eventId', function () {
     $service = Mockery::mock(LeadService::class);
-    $service->shouldReceive('trackMetaPixelEventServerSide')->never();
+    $service->shouldReceive('trackMetaPixelEvent')->never();
     $this->app->instance(LeadService::class, $service);
 
     $this->postJson(route('health-check.start'), [])
@@ -229,10 +243,8 @@ test('complete without openText does not clear notes', function () {
     $lead = Lead::where('email', 'mario@example.com')->first();
     $lead->update(['notes' => 'existing notes']);
 
-    $this->patch(route('health-check.complete'), [
-        'email' => 'mario@example.com',
-        'openText' => '',
-    ])->assertOk();
+    $this->patch(route('health-check.complete'), validCompletePayload())
+        ->assertOk();
 
     $lead->refresh();
     expect($lead->notes)->toBe('existing notes');

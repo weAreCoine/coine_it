@@ -76,9 +76,6 @@
     @inertiaHead
 </head>
 <body class="font-sans antialiased md:subpixel-antialiased overflow-x-clip">
-@if(\App\Helpers\CookieConsent::hasMarketingConsent())
-    <x-metapixel-body />
-@endif
 @inertia
 </body>
 </html>

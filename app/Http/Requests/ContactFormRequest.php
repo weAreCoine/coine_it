@@ -29,6 +29,7 @@ class ContactFormRequest extends FormRequest
             'message' => 'required',
             'termsAccepted' => 'accepted',
             'newsletterOptIn' => 'sometimes|boolean',
+            'metaEventId' => 'required|uuid',
         ];
     }
 }

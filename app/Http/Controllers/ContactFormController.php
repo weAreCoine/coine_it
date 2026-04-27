@@ -20,6 +20,6 @@ class ContactFormController extends Controller
             'project' => $validated['message'],
             'terms' => $validated['termsAccepted'],
             'newsletter_opt_in' => $validated['newsletterOptIn'] ?? false,
-        ], $request);
+        ], $request, $validated['metaEventId']);
     }
 }

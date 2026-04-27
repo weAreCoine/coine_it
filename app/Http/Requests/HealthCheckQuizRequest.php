@@ -46,6 +46,7 @@ class HealthCheckQuizRequest extends FormRequest
             'answers.*.value' => 'required|string',
             'answers.*.points' => 'required|integer|min:0',
             'score' => 'required|integer|min:0|max:100',
+            'metaEventId' => 'required|uuid',
         ];
     }
 }

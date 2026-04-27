@@ -1,9 +1,12 @@
-import { useForm } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import React from 'react';
 import { store } from '@/actions/App/Http/Controllers/ContactFormController';
 import DevLabel from '@/components/devLabel';
+import { trackMetaPixelEvent } from '@/hooks/useMetaPixel';
+import { generateUuid } from '@/lib/uuid';
 
 export default function ContactForm() {
+    const { consent } = usePage().props as { consent?: { marketing?: boolean } };
     const { data, setData, post, processing, errors, reset, wasSuccessful } = useForm({
         firstName: '',
         lastName: '',
@@ -16,8 +19,16 @@ export default function ContactForm() {
 
     function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>) {
         e.preventDefault();
+        const metaEventId = generateUuid();
+
         post(store().url, {
-            onSuccess: () => reset(),
+            transform: (formData) => ({ ...formData, metaEventId }),
+            onSuccess: () => {
+                if (consent?.marketing) {
+                    trackMetaPixelEvent('Lead', metaEventId);
+                }
+                reset();
+            },
         });
     }
 
