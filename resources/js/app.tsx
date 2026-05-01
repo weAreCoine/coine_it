@@ -22,6 +22,13 @@ createInertiaApp({
         const metaPixel = props.initialPage.props.metaPixel as { testMode?: boolean } | undefined;
         setMetaTestMode(metaPixel?.testMode === true);
 
+        // Inertia's `navigate` event does not fire on the first HTML load, only on
+        // subsequent SPA navigations. Without this, the browser-side PageView would
+        // never fire for users who land on a page and leave without navigating.
+        handleMetaPixelNavigation(props.initialPage.props);
+        handleGANavigation(props.initialPage.props);
+        handleLinkedInNavigation(props.initialPage.props);
+
         const root = createRoot(el);
         root.render(
             <>
