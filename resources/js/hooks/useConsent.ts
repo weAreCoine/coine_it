@@ -1,4 +1,4 @@
-import { router, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 
 interface ConsentState {
     given: boolean;
@@ -24,7 +24,11 @@ function getCookie(name: string): string | null {
 function saveConsent({ marketing, analytics }: ConsentChoices): void {
     const consent = JSON.stringify({ necessary: true, marketing, analytics });
     setCookie('cookie_consent', consent, 365);
-    router.reload();
+    // Full reload (not router.reload): server-rendered tracking script tags in
+    // app.blade.php are gated by CookieConsent helpers and only inject into the
+    // DOM at full page render — Inertia's soft reload would refresh shared props
+    // but leave the existing DOM intact.
+    window.location.reload();
 }
 
 /**

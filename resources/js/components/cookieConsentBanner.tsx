@@ -1,4 +1,3 @@
-import { router } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
 import { getConsentFromCookie } from '@/hooks/useConsent';
 
@@ -50,7 +49,10 @@ export default function CookieConsentBanner() {
         });
         setCookie('cookie_consent', consent, 365);
         setVisible(false);
-        router.reload();
+        // Full reload required to inject server-side tracking script tags
+        // (Meta Pixel, GA, etc.) that are gated by the consent cookie in
+        // app.blade.php. Inertia's soft reload would not re-render Blade.
+        window.location.reload();
     }
 
     useEffect(() => {
