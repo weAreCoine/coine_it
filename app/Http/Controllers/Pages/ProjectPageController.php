@@ -78,7 +78,7 @@ class ProjectPageController extends AbstractPageController
             ->map(fn (ProjectCategory $category) => ProjectCategoryItem::fromCategory($category))
             ->all();
 
-        $seoTitle = 'Progetti — Coiné';
+        $seoTitle = 'Progetti';
         $seoDescription = 'I nostri progetti: case study, risultati e soluzioni digitali realizzate.';
         $canonicalUrl = route('projects.index');
 

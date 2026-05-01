@@ -78,7 +78,7 @@ class ArticlePageController extends Controller
             ->map(fn (Category $category) => BlogCategoryItem::fromCategory($category))
             ->all();
 
-        $seoTitle = 'Blog — Coiné';
+        $seoTitle = 'Blog';
         $seoDescription = 'Articoli, guide e approfondimenti su sviluppo web, design e tecnologia.';
         $canonicalUrl = route('blog.index');
 
