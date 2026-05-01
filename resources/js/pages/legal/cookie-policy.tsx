@@ -16,7 +16,7 @@ export default function CookiePolicy() {
                     <p>
                         <strong>Titolare del trattamento:</strong> Luca Barbi — <a href="mailto:privacy@coine.it">privacy@coine.it</a>
                         <br />
-                        <strong>Ultimo aggiornamento: marzo 2026</strong>
+                        <strong>Ultimo aggiornamento: maggio 2026</strong>
                     </p>
 
                     <h2>1. Cosa sono i cookie</h2>
@@ -134,6 +134,96 @@ export default function CookiePolicy() {
                             tools.google.com/dlpage/gaoptout
                         </a>{' '}
                         oppure tramite le preferenze del banner.
+                    </p>
+
+                    <h4>Microsoft Clarity</h4>
+                    <p>
+                        Utilizziamo <strong>Microsoft Clarity</strong> (Microsoft Corporation) per analizzare l&apos;interazione degli utenti con il
+                        sito tramite <strong>session replay</strong> (registrazione anonima della sessione di navigazione) e{' '}
+                        <strong>heatmap</strong> (mappe di calore dei click e dello scroll). Le registrazioni non includono campi marcati come sensibili
+                        (password, dati di pagamento) e i dati testuali inseriti nei form sono mascherati di default. <strong>Gli utenti autenticati
+                        nell&apos;area amministrativa sono esclusi dal tracciamento.</strong>
+                    </p>
+                    <div className="overflow-x-auto">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Nome cookie</th>
+                                    <th>Finalità</th>
+                                    <th>Durata</th>
+                                    <th>Gestore</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <code>_clck</code>
+                                    </td>
+                                    <td>Identificatore utente Clarity (persistenza tra sessioni)</td>
+                                    <td>1 anno</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <code>_clsk</code>
+                                    </td>
+                                    <td>Identificatore di sessione Clarity (collega le pageview di una sessione)</td>
+                                    <td>1 giorno</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <code>CLID</code>
+                                    </td>
+                                    <td>Correlazione delle interazioni utente all&apos;interno del progetto Clarity</td>
+                                    <td>1 anno</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <code>MUID</code>
+                                    </td>
+                                    <td>Identificatore univoco del browser, condiviso con altri servizi Microsoft (es. Bing)</td>
+                                    <td>1 anno</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <code>ANONCHK</code>
+                                    </td>
+                                    <td>Verifica MUID e raccolta di dati statistici aggregati</td>
+                                    <td>10 minuti</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <code>SM</code>
+                                    </td>
+                                    <td>Sincronizzazione MUID tra domini Microsoft</td>
+                                    <td>Sessione</td>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>
+                        <strong>Trasferimenti extra-UE:</strong> i dati raccolti da Clarity sono trattati da Microsoft Corporation con sede negli Stati
+                        Uniti. Le garanzie adeguate sono assicurate tramite l&apos;adesione di Microsoft al Data Privacy Framework UE–USA e tramite
+                        Standard Contractual Clauses ai sensi dell&apos;art. 46 GDPR.
+                        <br />
+                        <strong>Privacy Statement Microsoft:</strong>{' '}
+                        <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer">
+                            privacy.microsoft.com/privacystatement
+                        </a>
+                        <br />
+                        <strong>Informativa Clarity:</strong>{' '}
+                        <a
+                            href="https://learn.microsoft.com/clarity/setup-and-installation/cookie-list"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            learn.microsoft.com/clarity/setup-and-installation/cookie-list
+                        </a>
                     </p>
 
                     <h3>2.3 Cookie di marketing — categoria &quot;Marketing&quot;</h3>
@@ -389,6 +479,14 @@ export default function CookiePolicy() {
                                     <td>
                                         <a href="https://www.linkedin.com/psettings/guest-controls" target="_blank" rel="noopener noreferrer">
                                             linkedin.com/psettings/guest-controls
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Microsoft (Clarity, Bing, ecc.)</td>
+                                    <td>
+                                        <a href="https://account.microsoft.com/privacy" target="_blank" rel="noopener noreferrer">
+                                            account.microsoft.com/privacy
                                         </a>
                                     </td>
                                 </tr>

@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
                         <em>(ai sensi degli artt. 13-14 del Regolamento UE 2016/679 — GDPR)</em>
                     </p>
                     <p>
-                        <strong>Ultimo aggiornamento: marzo 2026</strong>
+                        <strong>Ultimo aggiornamento: maggio 2026</strong>
                     </p>
 
                     <h2>1. Titolare del trattamento</h2>
@@ -66,6 +66,24 @@ export default function PrivacyPolicy() {
                         —{' '}
                         <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">
                             Opt-out
+                        </a>
+                    </p>
+
+                    <h4>Microsoft Clarity (Microsoft Corporation)</h4>
+                    <p>
+                        Utilizziamo Microsoft Clarity per analizzare l&apos;esperienza di navigazione tramite session replay (registrazione anonima
+                        della sessione) e heatmap. I dati testuali nei form sono mascherati di default e gli utenti autenticati nell&apos;area
+                        amministrativa sono esclusi dal tracciamento. I dati sono trattati da Microsoft Corporation negli USA, con garanzie adeguate
+                        tramite Data Privacy Framework UE–USA e Standard Contractual Clauses.
+                        <br />
+                        <strong>Base giuridica:</strong> consenso (art. 6, par. 1, lett. a GDPR).
+                        <br />
+                        <a href="https://privacy.microsoft.com/privacystatement" target="_blank" rel="noopener noreferrer">
+                            Privacy Statement Microsoft
+                        </a>{' '}
+                        —{' '}
+                        <a href="https://account.microsoft.com/privacy" target="_blank" rel="noopener noreferrer">
+                            Gestione preferenze
                         </a>
                     </p>
 
@@ -125,8 +143,8 @@ export default function PrivacyPolicy() {
                             28 GDPR;
                         </li>
                         <li>
-                            <strong>Fornitori di strumenti di analytics e advertising</strong> (Google, Meta, LinkedIn), nei limiti descritti al §
-                            2.2, i quali operano come titolari autonomi o responsabili in base ai propri accordi contrattuali.
+                            <strong>Fornitori di strumenti di analytics e advertising</strong> (Google, Microsoft, Meta, LinkedIn), nei limiti
+                            descritti al §2.2, i quali operano come titolari autonomi o responsabili in base ai propri accordi contrattuali.
                         </li>
                     </ul>
                     <p>
