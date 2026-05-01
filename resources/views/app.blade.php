@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    @inertiaHead
     <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
     <link rel="icon" href="/favicon.ico" sizes="any">
@@ -73,7 +74,6 @@
           rel="stylesheet" />
     @viteReactRefresh
     @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
-    @inertiaHead
 </head>
 <body class="font-sans antialiased md:subpixel-antialiased overflow-x-clip">
 @inertia
