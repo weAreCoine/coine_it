@@ -3,6 +3,12 @@ import { router, usePage } from '@inertiajs/react';
 interface ConsentState {
     given: boolean;
     marketing: boolean;
+    analytics: boolean;
+}
+
+interface ConsentChoices {
+    marketing: boolean;
+    analytics: boolean;
 }
 
 function setCookie(name: string, value: string, days: number): void {
@@ -15,8 +21,8 @@ function getCookie(name: string): string | null {
     return match ? decodeURIComponent(match[1]) : null;
 }
 
-function saveConsent(marketing: boolean): void {
-    const consent = JSON.stringify({ necessary: true, marketing });
+function saveConsent({ marketing, analytics }: ConsentChoices): void {
+    const consent = JSON.stringify({ necessary: true, marketing, analytics });
     setCookie('cookie_consent', consent, 365);
     router.reload();
 }
@@ -30,19 +36,22 @@ export function useConsent() {
     return {
         hasGivenConsent: consent.given,
         hasMarketingConsent: consent.marketing,
-        acceptAll: () => saveConsent(true),
-        rejectAll: () => saveConsent(false),
-        savePreferences: ({ marketing }: { marketing: boolean }) => saveConsent(marketing),
+        hasAnalyticsConsent: consent.analytics,
+        acceptAll: () => saveConsent({ marketing: true, analytics: true }),
+        rejectAll: () => saveConsent({ marketing: false, analytics: false }),
+        savePreferences: (choices: ConsentChoices) => saveConsent(choices),
     };
 }
 
 /**
  * Reads consent state directly from the cookie (works outside Inertia context).
+ * Cookies persisted before the `analytics` category was introduced are treated
+ * as having `analytics: false` so legacy users must opt in explicitly.
  */
 export function getConsentFromCookie(): ConsentState {
     const raw = getCookie('cookie_consent');
     if (!raw) {
-        return { given: false, marketing: false };
+        return { given: false, marketing: false, analytics: false };
     }
 
     try {
@@ -50,8 +59,9 @@ export function getConsentFromCookie(): ConsentState {
         return {
             given: true,
             marketing: Boolean(parsed.marketing),
+            analytics: Boolean(parsed.analytics),
         };
     } catch {
-        return { given: false, marketing: false };
+        return { given: false, marketing: false, analytics: false };
     }
 }

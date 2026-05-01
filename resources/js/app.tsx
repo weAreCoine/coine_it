@@ -2,6 +2,7 @@ import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import CookieConsentBanner from '@/components/cookieConsentBanner';
+import { handleClarityNavigation, setClarityTestMode } from '@/hooks/useClarity';
 import { handleGANavigation } from '@/hooks/useGoogleAnalytics';
 import { handleLinkedInNavigation } from '@/hooks/useLinkedIn';
 import { handleMetaPixelNavigation, setMetaTestMode } from '@/hooks/useMetaPixel';
@@ -13,6 +14,7 @@ router.on('navigate', (event) => {
     handleMetaPixelNavigation(event.detail.page.props);
     handleGANavigation(event.detail.page.props);
     handleLinkedInNavigation(event.detail.page.props);
+    handleClarityNavigation(event.detail.page.props);
 });
 
 createInertiaApp({
@@ -22,12 +24,16 @@ createInertiaApp({
         const metaPixel = props.initialPage.props.metaPixel as { testMode?: boolean } | undefined;
         setMetaTestMode(metaPixel?.testMode === true);
 
+        const clarity = props.initialPage.props.clarity as { testMode?: boolean } | undefined;
+        setClarityTestMode(clarity?.testMode === true);
+
         // Inertia's `navigate` event does not fire on the first HTML load, only on
         // subsequent SPA navigations. Without this, the browser-side PageView would
         // never fire for users who land on a page and leave without navigating.
         handleMetaPixelNavigation(props.initialPage.props);
         handleGANavigation(props.initialPage.props);
         handleLinkedInNavigation(props.initialPage.props);
+        handleClarityNavigation(props.initialPage.props);
 
         const root = createRoot(el);
         root.render(

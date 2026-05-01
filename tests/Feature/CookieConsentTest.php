@@ -44,7 +44,35 @@ test('getConsent handles malformed JSON gracefully', function () {
 
     $consent = CookieConsent::getConsent();
 
-    expect($consent)->toBe(['necessary' => true, 'marketing' => false]);
+    expect($consent)->toBe(['necessary' => true, 'marketing' => false, 'analytics' => false]);
+});
+
+test('hasAnalyticsConsent returns false without cookie', function () {
+    $this->get(route('home'));
+
+    expect(CookieConsent::hasAnalyticsConsent())->toBeFalse();
+});
+
+test('hasAnalyticsConsent returns true with analytics true', function () {
+    $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => false, 'analytics' => true]))
+        ->get(route('home'));
+
+    expect(CookieConsent::hasAnalyticsConsent())->toBeTrue();
+});
+
+test('hasAnalyticsConsent returns false with legacy cookie missing analytics key', function () {
+    $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true]))
+        ->get(route('home'));
+
+    expect(CookieConsent::hasAnalyticsConsent())->toBeFalse();
+});
+
+test('marketing and analytics consent are independent', function () {
+    $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true, 'analytics' => false]))
+        ->get(route('home'));
+
+    expect(CookieConsent::hasMarketingConsent())->toBeTrue()
+        ->and(CookieConsent::hasAnalyticsConsent())->toBeFalse();
 });
 
 // --- Blade & Inertia integration tests ---
@@ -80,16 +108,18 @@ test('shared props include consent data without cookie', function () {
         ->assertInertia(fn ($page) => $page
             ->where('consent.given', false)
             ->where('consent.marketing', false)
+            ->where('consent.analytics', false)
         );
 });
 
 test('shared props include consent data with marketing accepted', function () {
-    $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true]))
+    $this->withUnencryptedCookie('cookie_consent', json_encode(['necessary' => true, 'marketing' => true, 'analytics' => true]))
         ->get(route('home'))
         ->assertOk()
         ->assertInertia(fn ($page) => $page
             ->where('consent.given', true)
             ->where('consent.marketing', true)
+            ->where('consent.analytics', true)
         );
 });
 

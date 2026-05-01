@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use App\Entities\NavigationItem;
 use App\Helpers\CookieConsent;
+use App\Services\Clarity\ClarityService;
 use App\Services\GoogleAnalytics\GoogleAnalyticsService;
 use App\Services\LinkedIn\LinkedInService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
@@ -71,6 +72,7 @@ class HandleInertiaRequests extends Middleware
             'consent' => [
                 'given' => CookieConsent::hasConsent(),
                 'marketing' => CookieConsent::hasMarketingConsent(),
+                'analytics' => CookieConsent::hasAnalyticsConsent(),
             ],
             'metaPixel' => [
                 'eventId' => $eventId,
@@ -87,6 +89,11 @@ class HandleInertiaRequests extends Middleware
                 'partnerId' => LinkedInService::partnerId(),
                 'enabled' => LinkedInService::isEnabled(),
                 'flashEvents' => session()->pull('linkedin_flash_events', []),
+            ],
+            'clarity' => [
+                'projectId' => ClarityService::projectId(),
+                'enabled' => ClarityService::isEnabled(),
+                'testMode' => ClarityService::isEnabled() && ClarityService::testEnabled(),
             ],
         ];
     }
