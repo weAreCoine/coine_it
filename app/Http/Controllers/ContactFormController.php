@@ -6,10 +6,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ContactFormRequest;
 use App\Services\LeadService;
+use Illuminate\Http\RedirectResponse;
 
 class ContactFormController extends Controller
 {
-    public function store(ContactFormRequest $request, LeadService $leadService): void
+    public function store(ContactFormRequest $request, LeadService $leadService): RedirectResponse
     {
         $validated = $request->validated();
 
@@ -23,5 +24,7 @@ class ContactFormController extends Controller
             'terms' => $validated['termsAccepted'],
             'newsletter_opt_in' => $validated['newsletterOptIn'] ?? false,
         ], $request, $validated['metaEventId']);
+
+        return back();
     }
 }

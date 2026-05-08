@@ -20,7 +20,7 @@ test('creates a lead with correct field mapping', function () {
     Mail::fake();
 
     $this->post(route('contact.store'), contactPayload())
-        ->assertOk();
+        ->assertRedirect();
 
     $this->assertDatabaseHas('leads', [
         'first_name' => 'John',
@@ -41,7 +41,7 @@ test('accepts nullable phone', function () {
         'email' => 'jane.doe@gmail.com',
         'phone' => null,
         'message' => 'Help me',
-    ]))->assertOk();
+    ]))->assertRedirect();
 
     $this->assertDatabaseHas('leads', [
         'name' => 'Jane Doe',
@@ -127,7 +127,7 @@ test('stores newsletter_opt_in as true when newsletterOptIn is true', function (
         'phone' => null,
         'message' => 'I want newsletter',
         'newsletterOptIn' => true,
-    ]))->assertOk();
+    ]))->assertRedirect();
 
     $this->assertDatabaseHas('leads', [
         'email' => 'newsletter.user@gmail.com',
@@ -142,7 +142,7 @@ test('stores newsletter_opt_in as false when newsletterOptIn is omitted', functi
         'email' => 'nonews.user@gmail.com',
         'phone' => null,
         'message' => 'No newsletter',
-    ]))->assertOk();
+    ]))->assertRedirect();
 
     $this->assertDatabaseHas('leads', [
         'email' => 'nonews.user@gmail.com',
