@@ -23,7 +23,7 @@ test('createAndTrack creates the lead and forwards the browser event id and cont
     $service = Mockery::mock(LeadService::class)->makePartial();
     $service->shouldReceive('trackMetaPixelEvent')
         ->once()
-        ->with('Lead', '11111111-2222-4333-8444-555555555555', 'lead@example.com', '+39111222333');
+        ->with('Lead', '11111111-2222-4333-8444-555555555555', 'lead@example.com', '+39111222333', 'Tracked', 'Lead');
     $service->shouldReceive('trackGAEvent')
         ->once()
         ->with($request, 'generate_lead');
@@ -32,6 +32,8 @@ test('createAndTrack creates the lead and forwards the browser event id and cont
         ->with($request, 'lead', 'lead@example.com');
 
     $lead = $service->createAndTrack([
+        'first_name' => 'Tracked',
+        'last_name' => 'Lead',
         'name' => 'Tracked Lead',
         'email' => 'lead@example.com',
         'phone' => '+39111222333',
@@ -40,6 +42,8 @@ test('createAndTrack creates the lead and forwards the browser event id and cont
 
     expect($lead)->toBeInstanceOf(Lead::class);
     $this->assertDatabaseHas('leads', [
+        'first_name' => 'Tracked',
+        'last_name' => 'Lead',
         'name' => 'Tracked Lead',
         'email' => 'lead@example.com',
         'terms' => true,

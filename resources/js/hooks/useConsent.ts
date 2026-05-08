@@ -4,6 +4,7 @@ interface ConsentState {
     given: boolean;
     marketing: boolean;
     analytics: boolean;
+    consentId: string | null;
 }
 
 interface ConsentChoices {
@@ -51,11 +52,15 @@ export function useConsent() {
  * Reads consent state directly from the cookie (works outside Inertia context).
  * Cookies persisted before the `analytics` category was introduced are treated
  * as having `analytics: false` so legacy users must opt in explicitly.
+ *
+ * `consentId` is returned only when present — pre-tracking cookies don't carry
+ * one, so the banner treats them as "no prior id known" and generates a fresh
+ * uuid on the next save.
  */
 export function getConsentFromCookie(): ConsentState {
     const raw = getCookie('cookie_consent');
     if (!raw) {
-        return { given: false, marketing: false, analytics: false };
+        return { given: false, marketing: false, analytics: false, consentId: null };
     }
 
     try {
@@ -64,8 +69,9 @@ export function getConsentFromCookie(): ConsentState {
             given: true,
             marketing: Boolean(parsed.marketing),
             analytics: Boolean(parsed.analytics),
+            consentId: typeof parsed.consent_id === 'string' ? parsed.consent_id : null,
         };
     } catch {
-        return { given: false, marketing: false, analytics: false };
+        return { given: false, marketing: false, analytics: false, consentId: null };
     }
 }

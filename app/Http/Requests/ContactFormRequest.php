@@ -1,11 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
+use App\Rules\NotFakeEmail;
 use Illuminate\Foundation\Http\FormRequest;
 
 class ContactFormRequest extends FormRequest
 {
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'email.indisposable' => 'Non sono ammessi indirizzi email temporanei.',
+        ];
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -24,7 +39,7 @@ class ContactFormRequest extends FormRequest
         return [
             'firstName' => 'required',
             'lastName' => 'required',
-            'email' => 'required|email',
+            'email' => ['required', 'email', 'indisposable', new NotFakeEmail],
             'phone' => 'sometimes|nullable',
             'message' => 'required',
             'termsAccepted' => 'accepted',

@@ -8,7 +8,7 @@ function contactPayload(array $overrides = []): array
     return array_merge([
         'firstName' => 'John',
         'lastName' => 'Doe',
-        'email' => 'john@example.com',
+        'email' => 'john.doe@gmail.com',
         'phone' => '+39123456789',
         'message' => 'I need a website',
         'termsAccepted' => true,
@@ -23,8 +23,10 @@ test('creates a lead with correct field mapping', function () {
         ->assertOk();
 
     $this->assertDatabaseHas('leads', [
+        'first_name' => 'John',
+        'last_name' => 'Doe',
         'name' => 'John Doe',
-        'email' => 'john@example.com',
+        'email' => 'john.doe@gmail.com',
         'phone' => '+39123456789',
         'project' => 'I need a website',
         'terms' => true,
@@ -36,14 +38,14 @@ test('accepts nullable phone', function () {
 
     $this->post(route('contact.store'), contactPayload([
         'firstName' => 'Jane',
-        'email' => 'jane@example.com',
+        'email' => 'jane.doe@gmail.com',
         'phone' => null,
         'message' => 'Help me',
     ]))->assertOk();
 
     $this->assertDatabaseHas('leads', [
         'name' => 'Jane Doe',
-        'email' => 'jane@example.com',
+        'email' => 'jane.doe@gmail.com',
         'phone' => null,
     ]);
 });
@@ -54,7 +56,7 @@ test('dispatches LeadCreated event and sends LeadReceived mailable', function ()
     $this->post(route('contact.store'), contactPayload([
         'firstName' => 'Test',
         'lastName' => 'User',
-        'email' => 'test@example.com',
+        'email' => 'pippo.utente@gmail.com',
         'phone' => null,
         'message' => 'Project description',
     ]));
@@ -71,7 +73,7 @@ test('LeadReceived mailable has correct subject and from', function () {
     $this->post(route('contact.store'), contactPayload([
         'firstName' => 'Test',
         'lastName' => 'User',
-        'email' => 'mailable@example.com',
+        'email' => 'mailable.user@gmail.com',
         'phone' => null,
         'message' => 'Check mailable',
     ]));
@@ -121,14 +123,14 @@ test('stores newsletter_opt_in as true when newsletterOptIn is true', function (
     Mail::fake();
 
     $this->post(route('contact.store'), contactPayload([
-        'email' => 'newsletter@example.com',
+        'email' => 'newsletter.user@gmail.com',
         'phone' => null,
         'message' => 'I want newsletter',
         'newsletterOptIn' => true,
     ]))->assertOk();
 
     $this->assertDatabaseHas('leads', [
-        'email' => 'newsletter@example.com',
+        'email' => 'newsletter.user@gmail.com',
         'newsletter_opt_in' => true,
     ]);
 });
@@ -137,13 +139,13 @@ test('stores newsletter_opt_in as false when newsletterOptIn is omitted', functi
     Mail::fake();
 
     $this->post(route('contact.store'), contactPayload([
-        'email' => 'nonews@example.com',
+        'email' => 'nonews.user@gmail.com',
         'phone' => null,
         'message' => 'No newsletter',
     ]))->assertOk();
 
     $this->assertDatabaseHas('leads', [
-        'email' => 'nonews@example.com',
+        'email' => 'nonews.user@gmail.com',
         'newsletter_opt_in' => false,
     ]);
 });
@@ -151,4 +153,24 @@ test('stores newsletter_opt_in as false when newsletterOptIn is omitted', functi
 test('validation requires termsAccepted', function () {
     $this->post(route('contact.store'), contactPayload(['termsAccepted' => false]))
         ->assertSessionHasErrors('termsAccepted');
+});
+
+test('validation rejects disposable email', function () {
+    $this->post(route('contact.store'), contactPayload(['email' => 'pippo@mailinator.com']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation rejects fake host segment', function () {
+    $this->post(route('contact.store'), contactPayload(['email' => 'info@test.it']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation rejects fake local part on real domain', function () {
+    $this->post(route('contact.store'), contactPayload(['email' => 'prova@gmail.com']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation rejects fake local part with separators', function () {
+    $this->post(route('contact.store'), contactPayload(['email' => 'mario.test@gmail.com']))
+        ->assertSessionHasErrors('email');
 });

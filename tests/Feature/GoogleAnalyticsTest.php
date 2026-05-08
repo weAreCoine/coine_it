@@ -218,12 +218,12 @@ test('contact form tracks generate_lead via GA4 server-side', function () {
         ->post(route('contact.store'), [
             'firstName' => 'Test',
             'lastName' => 'User',
-            'email' => 'ga4test@example.com',
+            'email' => 'ga4.utente@gmail.com',
             'phone' => null,
             'message' => 'GA4 test project',
             'termsAccepted' => true,
             'metaEventId' => '11111111-2222-4333-8444-555555555555',
         ])->assertOk();
 
-    $this->assertDatabaseHas('leads', ['email' => 'ga4test@example.com']);
+    $this->assertDatabaseHas('leads', ['email' => 'ga4.utente@gmail.com']);
 });

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Middleware\EnsureExternalId;
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\TrackGAPageView;
 use App\Http\Middleware\TrackMetaPageView;
@@ -22,9 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: [
             'cookie_consent',
             '_ga',
+            'coine_uid',
         ]);
 
         $middleware->web(append: [
+            EnsureExternalId::class,
             HandleInertiaRequests::class,
             AddLinkHeadersForPreloadedAssets::class,
             TrackMetaPageView::class,

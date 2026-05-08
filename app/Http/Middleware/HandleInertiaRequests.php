@@ -79,6 +79,7 @@ class HandleInertiaRequests extends Middleware
                 'pixelId' => MetaPixel::pixelId(),
                 'enabled' => MetaPixel::isEnabled(),
                 'testMode' => MetaPixel::isEnabled() && MetaPixel::testEnabled(),
+                'externalId' => $request->cookie('coine_uid'),
             ],
             'googleAnalytics' => [
                 'measurementId' => GoogleAnalyticsService::measurementId(),

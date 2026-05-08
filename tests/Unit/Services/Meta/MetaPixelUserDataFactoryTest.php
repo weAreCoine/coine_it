@@ -43,3 +43,64 @@ test('does not set email or phone when empty strings are provided', function () 
     expect($userData->getEmail())->toBeNull()
         ->and($userData->getPhone())->toBeNull();
 });
+
+test('normalizes first and last names to lowercase and strips non-letter characters', function () {
+    $userData = MetaPixelUserDataFactory::make(
+        firstName: '  Mario! ',
+        lastName: 'De-Luca',
+    );
+
+    expect($userData->getFirstName())->toBe('mario')
+        ->and($userData->getLastName())->toBe('deluca');
+});
+
+test('preserves accented letters and inner whitespace when normalizing names', function () {
+    $userData = MetaPixelUserDataFactory::make(
+        firstName: 'Niccolò',
+        lastName: 'Della Rovere',
+    );
+
+    expect($userData->getFirstName())->toBe('niccolò')
+        ->and($userData->getLastName())->toBe('della rovere');
+});
+
+test('does not set name fields when empty or whitespace-only strings are provided', function () {
+    $userData = MetaPixelUserDataFactory::make(firstName: '   ', lastName: '!!!');
+
+    expect($userData->getFirstName())->toBeNull()
+        ->and($userData->getLastName())->toBeNull();
+});
+
+test('falls back to coine_uid cookie for external_id when no value is passed', function () {
+    request()->cookies->set('coine_uid', 'aaaa1111-bbbb-2222-cccc-333344445555');
+
+    $userData = MetaPixelUserDataFactory::make();
+
+    expect($userData->getExternalId())->toBe('aaaa1111-bbbb-2222-cccc-333344445555');
+});
+
+test('lets an explicit external_id override the coine_uid cookie', function () {
+    request()->cookies->set('coine_uid', 'cookie-value');
+
+    $userData = MetaPixelUserDataFactory::make(externalId: 'explicit-value');
+
+    expect($userData->getExternalId())->toBe('explicit-value');
+});
+
+test('does not set external_id when no cookie nor explicit value is available', function () {
+    $userData = MetaPixelUserDataFactory::make();
+
+    expect($userData->getExternalId())->toBeNull();
+});
+
+test('normalizes Italian phone numbers to digits-only E.164 form', function (string $input, string $expected) {
+    $userData = MetaPixelUserDataFactory::make(phone: $input);
+
+    expect($userData->getPhone())->toBe($expected);
+})->with([
+    'with +39 prefix and separators' => ['+39 333 1234567', '393331234567'],
+    'with 00 international prefix' => ['00393331234567', '393331234567'],
+    'mobile without country code' => ['3331234567', '393331234567'],
+    'landline without country code' => ['0233456789', '390233456789'],
+    'already E.164 digits-only' => ['393331234567', '393331234567'],
+]);

@@ -14,6 +14,8 @@ class ContactFormController extends Controller
         $validated = $request->validated();
 
         $leadService->createAndTrack([
+            'first_name' => $validated['firstName'],
+            'last_name' => $validated['lastName'],
             'name' => sprintf('%s %s', $validated['firstName'], $validated['lastName']),
             'email' => $validated['email'],
             'phone' => $validated['phone'],

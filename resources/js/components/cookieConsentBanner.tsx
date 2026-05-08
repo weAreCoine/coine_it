@@ -1,9 +1,31 @@
 import { useEffect, useState } from 'react';
+import { store as storeCookieConsent } from '@/actions/App/Http/Controllers/CookieConsentController';
 import { getConsentFromCookie } from '@/hooks/useConsent';
+import { generateUuid } from '@/lib/uuid';
+
+type ChoiceType = 'accept_all' | 'reject_all' | 'custom' | 'update';
 
 function setCookie(name: string, value: string, days: number): void {
     const expires = new Date(Date.now() + days * 864e5).toUTCString();
     document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function readXsrfToken(): string {
+    const match = document.cookie.match(/(?:^|;\s*)XSRF-TOKEN=([^;]+)/);
+    return match ? decodeURIComponent(match[1]) : '';
+}
+
+function resolveChoiceType(marketing: boolean, analytics: boolean, isUpdate: boolean): ChoiceType {
+    if (isUpdate) {
+        return 'update';
+    }
+    if (marketing && analytics) {
+        return 'accept_all';
+    }
+    if (!marketing && !analytics) {
+        return 'reject_all';
+    }
+    return 'custom';
 }
 
 interface ToggleProps {
@@ -41,13 +63,44 @@ export default function CookieConsentBanner() {
     const [marketing, setMarketing] = useState(false);
     const [analytics, setAnalytics] = useState(false);
 
-    function saveConsent({ marketing: marketingConsent, analytics: analyticsConsent }: { marketing: boolean; analytics: boolean }): void {
-        const consent = JSON.stringify({
+    async function saveConsent({ marketing: marketingConsent, analytics: analyticsConsent }: { marketing: boolean; analytics: boolean }): Promise<void> {
+        const previous = getConsentFromCookie();
+        // When the user reopens settings and changes their mind, reuse the same id
+        // and tag the row as "update" — keeps the audit trail tied to the visitor.
+        const consentId = previous.consentId ?? generateUuid();
+        const choiceType = resolveChoiceType(marketingConsent, analyticsConsent, previous.consentId !== null);
+
+        const cookieValue = JSON.stringify({
             necessary: true,
             marketing: marketingConsent,
             analytics: analyticsConsent,
+            consent_id: consentId,
         });
-        setCookie('cookie_consent', consent, 365);
+        setCookie('cookie_consent', cookieValue, 365);
+
+        // Tracking is best-effort — never block the user-visible save flow on it.
+        try {
+            await fetch(storeCookieConsent().url, {
+                method: 'POST',
+                credentials: 'same-origin',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-XSRF-TOKEN': readXsrfToken(),
+                    'X-Requested-With': 'XMLHttpRequest',
+                },
+                body: JSON.stringify({
+                    consent_id: consentId,
+                    marketing: marketingConsent,
+                    analytics: analyticsConsent,
+                    choice_type: choiceType,
+                    path: window.location.pathname,
+                }),
+            });
+        } catch {
+            // Swallow: persistence failure must not block the consent UX.
+        }
+
         setVisible(false);
         // Full reload required to inject server-side tracking script tags
         // (Meta Pixel, GA, etc.) that are gated by the consent cookie in
@@ -153,7 +206,7 @@ export default function CookieConsentBanner() {
                             {showSettings && (
                                 <button
                                     type="button"
-                                    onClick={() => saveConsent({ marketing, analytics })}
+                                    onClick={() => void saveConsent({ marketing, analytics })}
                                     className="rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
                                 >
                                     Salva preferenze
@@ -162,14 +215,14 @@ export default function CookieConsentBanner() {
                             <div className="flex space-x-2">
                                 <button
                                     type="button"
-                                    onClick={() => saveConsent({ marketing: false, analytics: false })}
+                                    onClick={() => void saveConsent({ marketing: false, analytics: false })}
                                     className="cursor-pointer rounded-lg border border-mercury-600 px-5 py-2 text-sm font-semibold text-mercury-200 transition-colors hover:bg-mercury-800"
                                 >
                                     Solo necessari
                                 </button>
                                 <button
                                     type="button"
-                                    onClick={() => saveConsent({ marketing: true, analytics: true })}
+                                    onClick={() => void saveConsent({ marketing: true, analytics: true })}
                                     className="rounded-lg cursor-pointer bg-mercury-200 px-5 py-2 text-sm font-semibold text-mercury-950 transition-colors hover:bg-white"
                                 >
                                     Accetta tutti

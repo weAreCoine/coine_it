@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\HealthCheckQuizRequest;
 use App\Models\Lead;
+use App\Rules\NotFakeEmail;
 use App\Services\Klaviyo\KlaviyoService;
 use App\Services\LeadService;
 use Illuminate\Http\JsonResponse;
@@ -38,6 +39,8 @@ class HealthCheckQuizController extends Controller
 
         $leadService->createAndTrack([
             'email' => $validated['email'],
+            'first_name' => $validated['firstName'],
+            'last_name' => $validated['lastName'],
             'name' => sprintf('%s %s', $validated['firstName'], $validated['lastName']),
             'phone' => $validated['phone'],
             'website' => $validated['url'],
@@ -54,7 +57,7 @@ class HealthCheckQuizController extends Controller
     public function complete(Request $request, LeadService $leadService, KlaviyoService $klaviyoService): void
     {
         $validated = $request->validate([
-            'email' => 'required|email|indisposable|max:255',
+            'email' => ['required', 'email', 'indisposable', new NotFakeEmail, 'max:255'],
             'openText' => 'nullable|string|max:2000',
             'metaEventId' => 'required|uuid',
         ], [
@@ -82,6 +85,8 @@ class HealthCheckQuizController extends Controller
             $validated['metaEventId'],
             $validated['email'],
             $lead?->phone,
+            $lead?->first_name,
+            $lead?->last_name,
         );
         $leadService->trackGAEvent($request, 'quiz_completed');
         $leadService->trackLinkedInEvent($request, 'complete_registration', $validated['email']);

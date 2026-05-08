@@ -5,7 +5,17 @@
         event id used by the server-side Conversions API call, so that Meta can
         de-duplicate the two firings. The library default `fbq('track','PageView')`
         is intentionally removed because it would fire without an event id.
+
+        For anonymous visitors we still pass `external_id` taken from the
+        first-party `coine_uid` cookie set by the EnsureExternalId middleware.
+        The same id is also forwarded to Conversions API by
+        MetaPixelUserDataFactory, so Meta can match browser and server events
+        for the same visitor across sessions.
     --}}
+    @php
+        $coineUid = request()->cookie('coine_uid');
+        $coineUid = is_string($coineUid) && preg_match('/^[0-9a-f-]{36}$/i', $coineUid) ? $coineUid : null;
+    @endphp
     <!-- Meta Pixel Code -->
     <script>
         !function(f,b,e,v,n,t,s)
@@ -22,6 +32,8 @@
         @else
             fbq('init', '{{ $metaPixel->pixelId() }}', {em: '{{ $user['em'] }}', external_id: {{ $user['external_id'] }}});
         @endif
+    @elseif($coineUid)
+        fbq('init', '{{ $metaPixel->pixelId() }}', {external_id: '{{ $coineUid }}'});
     @else
         fbq('init', '{{ $metaPixel->pixelId() }}');
     @endif

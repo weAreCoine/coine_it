@@ -38,6 +38,8 @@ class LeadService
             $metaEventId,
             $attributes['email'] ?? null,
             $attributes['phone'] ?? null,
+            $attributes['first_name'] ?? null,
+            $attributes['last_name'] ?? null,
         );
         $this->trackGAEvent($request, $gaEventName);
         $this->trackLinkedInEvent($request, 'lead', $attributes['email'] ?? null);
@@ -54,6 +56,8 @@ class LeadService
         string $eventId,
         ?string $email = null,
         ?string $phone = null,
+        ?string $firstName = null,
+        ?string $lastName = null,
     ): void {
         if (! MetaPixel::isEnabled() || ! CookieConsent::hasMarketingConsent()) {
             return;
@@ -64,7 +68,7 @@ class LeadService
                 $eventName,
                 $eventId,
                 new CustomData,
-                MetaPixelUserDataFactory::make($email, $phone),
+                MetaPixelUserDataFactory::make($email, $phone, $firstName, $lastName),
             );
         } catch (\Exception $e) {
             ExceptionHandler::handle($e);

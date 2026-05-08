@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\Rules\NotFakeEmail;
 use Illuminate\Foundation\Http\FormRequest;
 
 class HealthCheckQuizRequest extends FormRequest
@@ -38,7 +39,7 @@ class HealthCheckQuizRequest extends FormRequest
         return [
             'firstName' => 'required|string|max:255',
             'lastName' => 'required|string|max:255',
-            'email' => 'required|email|indisposable|max:255',
+            'email' => ['required', 'email', 'indisposable', new NotFakeEmail, 'max:255'],
             'phone' => 'required|string|max:50',
             'url' => 'required|url|max:255',
             'marketingConsent' => 'accepted',

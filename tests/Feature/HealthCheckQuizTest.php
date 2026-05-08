@@ -11,9 +11,9 @@ function validQuizPayload(array $overrides = []): array
     return array_merge([
         'firstName' => 'Mario',
         'lastName' => 'Rossi',
-        'email' => 'mario@example.com',
+        'email' => 'mario.rossi@gmail.com',
         'phone' => '+39123456789',
-        'url' => 'https://www.example.com',
+        'url' => 'https://www.coine.it',
         'marketingConsent' => true,
         'answers' => [
             'platform' => ['value' => 'shopify', 'points' => 0],
@@ -31,7 +31,7 @@ function validQuizPayload(array $overrides = []): array
 function validCompletePayload(array $overrides = []): array
 {
     return array_merge([
-        'email' => 'mario@example.com',
+        'email' => 'mario.rossi@gmail.com',
         'openText' => '',
         'metaEventId' => '22222222-3333-4444-8555-666666666666',
     ], $overrides);
@@ -44,10 +44,12 @@ test('creates a lead with correct field mapping', function () {
         ->assertOk();
 
     $this->assertDatabaseHas('leads', [
+        'first_name' => 'Mario',
+        'last_name' => 'Rossi',
         'name' => 'Mario Rossi',
-        'email' => 'mario@example.com',
+        'email' => 'mario.rossi@gmail.com',
         'phone' => '+39123456789',
-        'website' => 'https://www.example.com',
+        'website' => 'https://www.coine.it',
         'terms' => true,
         'quiz_score' => 43,
     ]);
@@ -59,7 +61,7 @@ test('stores quiz_answers as JSON', function () {
     $this->post(route('health-check.store'), validQuizPayload())
         ->assertOk();
 
-    $lead = Lead::where('email', 'mario@example.com')->first();
+    $lead = Lead::where('email', 'mario.rossi@gmail.com')->first();
     expect($lead->quiz_answers)->toBeArray()
         ->and($lead->quiz_answers['advertising']['points'])->toBe(9);
 });
@@ -75,7 +77,7 @@ test('duplicate email creates separate leads', function () {
         'score' => 70,
     ]))->assertOk();
 
-    expect(Lead::where('email', 'mario@example.com')->count())->toBe(2);
+    expect(Lead::where('email', 'mario.rossi@gmail.com')->count())->toBe(2);
 });
 
 test('dispatches LeadCreated event and sends LeadReceived mailable', function () {
@@ -92,7 +94,7 @@ test('stores newsletter_opt_in as true', function () {
     $this->post(route('health-check.store'), validQuizPayload())
         ->assertOk();
 
-    $lead = Lead::where('email', 'mario@example.com')->first();
+    $lead = Lead::where('email', 'mario.rossi@gmail.com')->first();
     expect($lead->newsletter_opt_in)->toBeTrue();
 });
 
@@ -132,20 +134,42 @@ test('validation requires score', function () {
 });
 
 test('validation rejects disposable email', function () {
-    $this->post(route('health-check.store'), validQuizPayload(['email' => 'test@mailinator.com']))
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'pippo@mailinator.com']))
         ->assertSessionHasErrors('email');
 });
 
-test('validation accepts gmail email', function () {
+test('validation accepts a real-looking gmail email', function () {
     Mail::fake();
 
-    $this->post(route('health-check.store'), validQuizPayload(['email' => 'test@gmail.com']))
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'anna.bianchi@gmail.com']))
         ->assertOk();
+});
+
+test('validation rejects fake host segment', function () {
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'info@test.it']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation rejects fake local part on real domain', function () {
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'prova@gmail.com']))
+        ->assertSessionHasErrors('email');
+});
+
+test('validation rejects fake local part with separators', function () {
+    $this->post(route('health-check.store'), validQuizPayload(['email' => 'mario.test@gmail.com']))
+        ->assertSessionHasErrors('email');
 });
 
 test('complete rejects disposable email', function () {
     $this->patch(route('health-check.complete'), validCompletePayload([
-        'email' => 'test@guerrillamail.com',
+        'email' => 'pippo@guerrillamail.com',
+        'openText' => 'Some text',
+    ]))->assertSessionHasErrors('email');
+});
+
+test('complete rejects fake email', function () {
+    $this->patch(route('health-check.complete'), validCompletePayload([
+        'email' => 'test@test.it',
         'openText' => 'Some text',
     ]))->assertSessionHasErrors('email');
 });
@@ -166,7 +190,7 @@ test('complete updates notes with openText', function () {
         'openText' => 'Il nostro problema principale è il checkout mobile.',
     ]))->assertOk();
 
-    $lead = Lead::where('email', 'mario@example.com')->first();
+    $lead = Lead::where('email', 'mario.rossi@gmail.com')->first();
     expect($lead->notes)->toBe('Il nostro problema principale è il checkout mobile.');
 });
 
@@ -240,7 +264,7 @@ test('complete without openText does not clear notes', function () {
     $this->post(route('health-check.store'), validQuizPayload())
         ->assertOk();
 
-    $lead = Lead::where('email', 'mario@example.com')->first();
+    $lead = Lead::where('email', 'mario.rossi@gmail.com')->first();
     $lead->update(['notes' => 'existing notes']);
 
     $this->patch(route('health-check.complete'), validCompletePayload())

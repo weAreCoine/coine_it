@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\CookieConsentController;
 use App\Http\Controllers\HealthCheckQuizController;
 use App\Http\Controllers\Pages\AboutPageController;
 use App\Http\Controllers\Pages\ArticlePageController;
@@ -61,6 +62,9 @@ Route::prefix('contact')->group(function () {
 
 Route::get('/cookie-policy', [CookiePolicyPageController::class, 'show'])
     ->name('cookie-policy');
+
+Route::post('/cookie-consent', [CookieConsentController::class, 'store'])
+    ->name('cookie-consent.store');
 
 Route::get('/privacy-policy', [PrivacyPolicyPageController::class, 'show'])
     ->name('privacy-policy');
