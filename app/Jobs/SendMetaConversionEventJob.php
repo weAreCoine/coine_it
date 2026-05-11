@@ -9,6 +9,7 @@ use FacebookAds\Object\ServerSide\CustomData;
 use FacebookAds\Object\ServerSide\UserData;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
+use Throwable;
 
 /**
  * Asynchronous dispatch of a single Meta Conversions API event.
@@ -35,14 +36,23 @@ class SendMetaConversionEventJob implements ShouldQueue
      *                                                    `FacebookAds\Object\ServerSide\UserData`.
      * @param  array<string, mixed>  $customDataAttributes  Plain arrays that mirror
      *                                                      `FacebookAds\Object\ServerSide\CustomData`.
+     * @param  ?string  $eventSourceUrl  Absolute URL of the page where the event
+     *                                   originated. Captured at dispatch time
+     *                                   (not at send time) because the queue
+     *                                   worker has no active request and would
+     *                                   otherwise collapse the URL to APP_URL.
      */
     public function __construct(
         public readonly string $eventName,
         public readonly string $eventId,
         public readonly array $userDataAttributes,
         public readonly array $customDataAttributes = [],
+        public readonly ?string $eventSourceUrl = null,
     ) {}
 
+    /**
+     * @throws Throwable
+     */
     public function handle(CapiClient $client): void
     {
         $client->send(
@@ -50,6 +60,7 @@ class SendMetaConversionEventJob implements ShouldQueue
             $this->eventId,
             self::buildCustomData($this->customDataAttributes),
             self::buildUserData($this->userDataAttributes),
+            $this->eventSourceUrl,
         );
     }
 
@@ -66,12 +77,14 @@ class SendMetaConversionEventJob implements ShouldQueue
         string $eventId,
         UserData $userData,
         array $customDataAttributes = [],
+        ?string $eventSourceUrl = null,
     ): void {
         $job = new self(
             $eventName,
             $eventId,
             self::serializeUserData($userData),
             $customDataAttributes,
+            $eventSourceUrl,
         );
 
         if (config('meta-pixel.queue_enabled', true)) {

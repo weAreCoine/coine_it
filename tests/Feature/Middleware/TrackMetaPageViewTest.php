@@ -3,6 +3,7 @@
 use App\Http\Middleware\TrackMetaPageView;
 use App\Jobs\SendMetaConversionEventJob;
 use App\Models\User;
+use App\Services\Meta\CapiClient;
 use Combindma\FacebookPixel\Facades\MetaPixel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Bus;
@@ -33,7 +34,9 @@ test('track meta page view middleware sends a page view when consent and event i
 
     Bus::assertDispatched(
         SendMetaConversionEventJob::class,
-        fn (SendMetaConversionEventJob $job) => $job->eventName === 'PageView' && $job->eventId === 'evt-123',
+        fn (SendMetaConversionEventJob $job) => $job->eventName === 'PageView'
+            && $job->eventId === 'evt-123'
+            && $job->eventSourceUrl === 'https://coine.test/contact',
     );
 });
 
@@ -113,13 +116,12 @@ test('track meta page view middleware logs and swallows send failures', function
     $this->app->instance('request', $request);
 
     MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')
+
+    $client = Mockery::mock(CapiClient::class);
+    $client->shouldReceive('send')
         ->once()
         ->andThrow(new RuntimeException('meta failed'));
-
-    Log::shouldReceive('channel')->with('meta-capi')->andReturn(
-        tap(Mockery::mock(\Psr\Log\LoggerInterface::class), fn ($m) => $m->shouldReceive('error'))
-    );
+    $this->app->instance(CapiClient::class, $client);
 
     Log::shouldReceive('error')
         ->once()

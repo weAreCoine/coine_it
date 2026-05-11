@@ -40,6 +40,7 @@ class LeadService
             $attributes['phone'] ?? null,
             $attributes['first_name'] ?? null,
             $attributes['last_name'] ?? null,
+            self::resolveEventSourceUrl($request),
         );
         $this->trackGAEvent($request, $gaEventName);
         $this->trackLinkedInEvent($request, 'lead', $attributes['email'] ?? null);
@@ -58,6 +59,7 @@ class LeadService
         ?string $phone = null,
         ?string $firstName = null,
         ?string $lastName = null,
+        ?string $eventSourceUrl = null,
     ): void {
         if (! MetaPixel::isEnabled() || ! CookieConsent::hasMarketingConsent()) {
             return;
@@ -68,10 +70,38 @@ class LeadService
                 $eventName,
                 $eventId,
                 MetaPixelUserDataFactory::make($email, $phone, $firstName, $lastName),
+                eventSourceUrl: $eventSourceUrl ?? self::resolveEventSourceUrl(request()),
             );
         } catch (\Exception $e) {
             ExceptionHandler::handle($e);
         }
+    }
+
+    /**
+     * Resolve the page URL where the conversion actually happened.
+     *
+     * For form submissions the request URL is the POST endpoint (e.g. `/contact`)
+     * which doesn't match the page the browser pixel fires from. The `Referer`
+     * header points to the form page, so we prefer it whenever it belongs to
+     * our own host — falling back to the request URL otherwise.
+     */
+    private static function resolveEventSourceUrl(?Request $request): ?string
+    {
+        if ($request === null) {
+            return null;
+        }
+
+        $referer = $request->headers->get('referer');
+
+        if (is_string($referer) && $referer !== '') {
+            $refererHost = parse_url($referer, PHP_URL_HOST);
+
+            if ($refererHost !== false && $refererHost === $request->getHost()) {
+                return $referer;
+            }
+        }
+
+        return $request->fullUrl();
     }
 
     /**

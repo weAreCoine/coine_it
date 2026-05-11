@@ -39,7 +39,12 @@ class TrackMetaPageView
         try {
             $userData = MetaPixelUserDataFactory::make(...self::userDataParamsFor($request));
 
-            SendMetaConversionEventJob::send('PageView', $eventId, $userData);
+            SendMetaConversionEventJob::send(
+                'PageView',
+                $eventId,
+                $userData,
+                eventSourceUrl: $request->fullUrl(),
+            );
         } catch (\Exception $e) {
             Log::error('Meta Pixel CAPI PageView failed', ['error' => $e->getMessage()]);
         }
