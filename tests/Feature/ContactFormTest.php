@@ -1,6 +1,9 @@
 <?php
 
+use App\Jobs\SendMetaConversionEventJob;
 use App\Mail\LeadReceived;
+use Combindma\FacebookPixel\Facades\MetaPixel;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Mail;
 
 function contactPayload(array $overrides = []): array
@@ -173,4 +176,46 @@ test('validation rejects fake local part on real domain', function () {
 test('validation rejects fake local part with separators', function () {
     $this->post(route('contact.store'), contactPayload(['email' => 'mario.test@gmail.com']))
         ->assertSessionHasErrors('email');
+});
+
+test('forwards the browser-provided metaEventId 1:1 to the Meta CAPI Lead event', function () {
+    Mail::fake();
+    Bus::fake();
+
+    MetaPixel::shouldReceive('isEnabled')->andReturn(true);
+    MetaPixel::shouldReceive('pixelId')->andReturn('');
+    MetaPixel::shouldReceive('testEnabled')->andReturn(false);
+
+    $this->call(
+        'POST',
+        route('contact.store'),
+        contactPayload(),
+        ['cookie_consent' => json_encode(['necessary' => true, 'marketing' => true, 'analytics' => true])],
+    )->assertRedirect();
+
+    Bus::assertDispatched(
+        SendMetaConversionEventJob::class,
+        function (SendMetaConversionEventJob $job) {
+            return $job->eventName === 'Lead'
+                && $job->eventId === '11111111-2222-4333-8444-555555555555'
+                && ($job->userDataAttributes['email'] ?? null) === 'john.doe@gmail.com'
+                && ($job->userDataAttributes['phone'] ?? null) === '39123456789'
+                && ($job->userDataAttributes['firstName'] ?? null) === 'john'
+                && ($job->userDataAttributes['lastName'] ?? null) === 'doe';
+        },
+    );
+});
+
+test('does not call CAPI when marketing consent is missing', function () {
+    Mail::fake();
+    Bus::fake();
+
+    MetaPixel::shouldReceive('isEnabled')->andReturn(true);
+    MetaPixel::shouldReceive('pixelId')->andReturn('');
+    MetaPixel::shouldReceive('testEnabled')->andReturn(false);
+
+    $this->post(route('contact.store'), contactPayload())
+        ->assertRedirect();
+
+    Bus::assertNotDispatched(SendMetaConversionEventJob::class);
 });

@@ -3,10 +3,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { store } from '@/actions/App/Http/Controllers/ContactFormController';
 import DevLabel from '@/components/devLabel';
 import { trackMetaPixelEvent } from '@/hooks/useMetaPixel';
+import { buildMetaUserData } from '@/lib/metaUserData';
 import { generateUuid } from '@/lib/uuid';
 
 export default function ContactForm() {
-    const { consent } = usePage().props as { consent?: { marketing?: boolean } };
+    const { consent, metaPixel } = usePage().props as {
+        consent?: { marketing?: boolean };
+        metaPixel?: { externalId?: string | null };
+    };
     const { data, setData, post, processing, errors, reset, transform, wasSuccessful } = useForm({
         firstName: '',
         lastName: '',
@@ -44,10 +48,18 @@ export default function ContactForm() {
 
         transform((formData) => ({ ...formData, metaEventId }));
 
+        const userData = buildMetaUserData({
+            email: data.email,
+            phone: data.phone,
+            firstName: data.firstName,
+            lastName: data.lastName,
+            externalId: metaPixel?.externalId,
+        });
+
         post(store().url, {
             onSuccess: () => {
                 if (consent?.marketing) {
-                    trackMetaPixelEvent('Lead', metaEventId);
+                    trackMetaPixelEvent('Lead', metaEventId, {}, false, userData);
                 }
                 reset();
             },

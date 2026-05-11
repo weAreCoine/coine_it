@@ -1,5 +1,6 @@
 <?php
 
+use App\Services\Meta\IpGeolocator;
 use App\Services\Meta\MetaPixelUserDataFactory;
 use FacebookAds\Object\ServerSide\UserData;
 use Illuminate\Http\Request;
@@ -91,6 +92,91 @@ test('does not set external_id when no cookie nor explicit value is available', 
     $userData = MetaPixelUserDataFactory::make();
 
     expect($userData->getExternalId())->toBeNull();
+});
+
+test('defaults country to IT when no value is passed', function () {
+    $userData = MetaPixelUserDataFactory::make();
+
+    expect($userData->getCountryCode())->toBe('it');
+});
+
+test('lets an explicit country override the default', function () {
+    $userData = MetaPixelUserDataFactory::make(country: 'FR');
+
+    expect($userData->getCountryCode())->toBe('fr');
+});
+
+test('does not set country when an explicit empty string is passed', function () {
+    $userData = MetaPixelUserDataFactory::make(country: '');
+
+    expect($userData->getCountryCode())->toBeNull();
+});
+
+test('normalizes city to lowercase and collapses inner whitespace', function () {
+    $userData = MetaPixelUserDataFactory::make(city: '  Reggio   Emilia ');
+
+    expect($userData->getCity())->toBe('reggioemilia');
+});
+
+test('normalizes state to lowercase digit-stripped value', function () {
+    $userData = MetaPixelUserDataFactory::make(state: 'RE');
+
+    expect($userData->getState())->toBe('re');
+});
+
+test('normalizes zip to digits and letters lowercase without spaces', function () {
+    $userData = MetaPixelUserDataFactory::make(zip: '42 121');
+
+    expect($userData->getZipCode())->toBe('42121');
+});
+
+test('does not set city, state or zip when whitespace-only is provided', function () {
+    $userData = MetaPixelUserDataFactory::make(city: '   ', state: '  ', zip: '  ');
+
+    expect($userData->getCity())->toBeNull()
+        ->and($userData->getState())->toBeNull()
+        ->and($userData->getZipCode())->toBeNull();
+});
+
+test('enriches missing geo fields from the registered IpGeolocator', function () {
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')
+        ->once()
+        ->with('203.0.113.42')
+        ->andReturn(['country' => 'FR', 'city' => 'Paris', 'state' => 'IDF', 'zip' => '75001']);
+
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $userData = MetaPixelUserDataFactory::make();
+
+    expect($userData->getCountryCode())->toBe('fr')
+        ->and($userData->getCity())->toBe('paris')
+        ->and($userData->getState())->toBe('idf')
+        ->and($userData->getZipCode())->toBe('75001');
+});
+
+test('explicit caller-supplied geo values take precedence over the IpGeolocator', function () {
+    $geolocator = Mockery::mock(IpGeolocator::class);
+    $geolocator->shouldReceive('locate')->andReturn([
+        'country' => 'FR',
+        'city' => 'Paris',
+        'state' => 'IDF',
+        'zip' => '75001',
+    ]);
+
+    app()->instance(IpGeolocator::class, $geolocator);
+
+    $userData = MetaPixelUserDataFactory::make(
+        country: 'DE',
+        city: 'Berlin',
+        state: 'BE',
+        zip: '10115',
+    );
+
+    expect($userData->getCountryCode())->toBe('de')
+        ->and($userData->getCity())->toBe('berlin')
+        ->and($userData->getState())->toBe('be')
+        ->and($userData->getZipCode())->toBe('10115');
 });
 
 test('normalizes Italian phone numbers to digits-only E.164 form', function (string $input, string $expected) {

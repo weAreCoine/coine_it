@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { index } from '@/actions/App/Http/Controllers/Pages/ProjectPageController';
+import { useTrackViewContent } from '@/hooks/useMetaPixel';
 import Colophon from '@/components/colophon';
 import ContactForm from '@/components/contactForm';
 import Navigation from '@/components/navigation';
@@ -26,6 +27,7 @@ type ProjectPageProps = {
 
 export default function Show({
     title,
+    slug,
     content,
     cover,
     goal,
@@ -39,6 +41,8 @@ export default function Show({
     seoTitle,
     relatedProjects,
 }: ProjectPageProps) {
+    useTrackViewContent({ content_name: title, content_category: 'project', content_ids: [slug] });
+
     return (
         <>
             <Head title={seoTitle} />

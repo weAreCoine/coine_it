@@ -1,3 +1,8 @@
+import { usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
+import { generateUuid } from '@/lib/uuid';
+import type { MetaUserData } from '@/lib/metaUserData';
+
 declare global {
     interface Window {
         fbq?: (...args: unknown[]) => void;
@@ -9,6 +14,7 @@ interface MetaPixelProps {
     pixelId: string;
     enabled: boolean;
     testMode: boolean;
+    externalId?: string | null;
 }
 
 let testModeActive = false;
@@ -27,12 +33,17 @@ export function setMetaTestMode(enabled: boolean): void {
  * Conversions API call can be de-duplicated by Meta. Both standard events
  * (e.g. Lead, CompleteRegistration) and custom events (e.g. startQuiz) are
  * supported via the `isCustom` flag.
+ *
+ * The optional `userData` is forwarded as per-event manual advanced matching,
+ * which Meta then hashes browser-side. Passing the same normalized values we
+ * send via CAPI keeps the event hashes consistent and lifts the EMQ score.
  */
 export function trackMetaPixelEvent(
     eventName: string,
     eventId: string,
     data: Record<string, unknown> = {},
     isCustom = false,
+    userData?: MetaUserData,
 ): void {
     if (!window.fbq) {
         return;
@@ -40,11 +51,55 @@ export function trackMetaPixelEvent(
 
     const method = isCustom ? 'trackCustom' : 'track';
 
-    if (testModeActive) {
-        console.info(`[Meta Pixel TEST] ${method} ${eventName}`, { eventID: eventId, data, isCustom });
+    const hasUserData = userData !== undefined && Object.keys(userData).length > 0;
+    const eventInfo: Record<string, unknown> = { eventID: eventId };
+
+    if (hasUserData) {
+        eventInfo.user_data = userData;
     }
 
-    window.fbq(method, eventName, data, { eventID: eventId });
+    if (testModeActive) {
+        console.info(`[Meta Pixel TEST] ${method} ${eventName}`, { eventID: eventId, data, isCustom, userData });
+    }
+
+    window.fbq(method, eventName, data, eventInfo);
+}
+
+/**
+ * Convenience wrapper for the standard `ViewContent` event Meta uses for
+ * high-intent page hits (services, projects, blog posts). Returns silently
+ * when marketing consent is missing so callers can invoke it unconditionally
+ * from a page component's effect hook.
+ */
+export function trackMetaPixelViewContent(
+    content: { content_name: string; content_category?: string; content_ids?: string[] },
+    consent: { marketing?: boolean } | undefined,
+    eventId: string,
+): void {
+    if (!consent?.marketing) {
+        return;
+    }
+
+    trackMetaPixelEvent('ViewContent', eventId, content);
+}
+
+/**
+ * Hook helper for `ViewContent`: fires once at mount with a unique browser
+ * event id, drawn from the same UUID generator used by the form events. The
+ * effect re-runs when `content_name` changes so navigating between sibling
+ * pages of the same Inertia layout still produces a fresh event.
+ */
+export function useTrackViewContent(content: {
+    content_name: string;
+    content_category?: string;
+    content_ids?: string[];
+}): void {
+    const { consent } = usePage().props as { consent?: { marketing?: boolean } };
+
+    useEffect(() => {
+        trackMetaPixelViewContent(content, consent, generateUuid());
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [content.content_name, content.content_category, consent?.marketing]);
 }
 
 /**

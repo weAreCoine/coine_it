@@ -1,6 +1,7 @@
 import { Head, Link } from '@inertiajs/react';
 import { index } from '@/actions/App/Http/Controllers/Pages/ArticlePageController';
 import { show as showCategory } from '@/actions/App/Http/Controllers/Pages/CategoryPageController';
+import { useTrackViewContent } from '@/hooks/useMetaPixel';
 import ArticleCard from '@/components/articleCard';
 import Colophon from '@/components/colophon';
 import Navigation from '@/components/navigation';
@@ -23,6 +24,7 @@ type ArticlePageProps = {
 
 export default function Show({
     title,
+    slug,
     content,
     cover,
     categories,
@@ -33,6 +35,8 @@ export default function Show({
     seoTitle,
     relatedArticles,
 }: ArticlePageProps) {
+    useTrackViewContent({ content_name: title, content_category: 'article', content_ids: [slug] });
+
     return (
         <>
             <Head title={seoTitle} />

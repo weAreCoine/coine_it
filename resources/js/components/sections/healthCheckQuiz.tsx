@@ -5,6 +5,7 @@ import { complete, start, store } from '@/actions/App/Http/Controllers/HealthChe
 import DevLabel from '@/components/devLabel';
 import HealthCheckResults from '@/components/sections/healthCheckResults';
 import { trackMetaPixelEvent } from '@/hooks/useMetaPixel';
+import { buildMetaUserData } from '@/lib/metaUserData';
 import { generateUuid } from '@/lib/uuid';
 import type { QuizConfig, QuizQuestion, ResultRange } from '@/types/dto/healthCheck';
 
@@ -151,7 +152,10 @@ type HealthCheckQuizProps = {
 };
 
 export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizProps) {
-    const { consent } = usePage().props;
+    const { consent, metaPixel } = usePage().props as unknown as {
+        consent: { marketing?: boolean };
+        metaPixel?: { externalId?: string | null };
+    };
     const hasTrackedStart = useRef(false);
 
     const [state, dispatch] = useReducer(quizReducer, {
@@ -232,7 +236,14 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
                 preserveScroll: true,
                 onSuccess: () => {
                     if (consent.marketing) {
-                        trackMetaPixelEvent('Lead', metaEventId);
+                        const userData = buildMetaUserData({
+                            email: state.contact.email,
+                            phone: state.contact.phone,
+                            firstName: state.contact.firstName,
+                            lastName: state.contact.lastName,
+                            externalId: metaPixel?.externalId,
+                        });
+                        trackMetaPixelEvent('Lead', metaEventId, {}, false, userData);
                     }
                     dispatch({ type: 'SUBMIT_SUCCESS' });
                 },
@@ -262,7 +273,14 @@ export default function HealthCheckQuiz({ questions, config }: HealthCheckQuizPr
                 preserveScroll: true,
                 onSuccess: () => {
                     if (consent.marketing) {
-                        trackMetaPixelEvent('CompleteRegistration', metaEventId);
+                        const userData = buildMetaUserData({
+                            email: state.contact.email,
+                            phone: state.contact.phone,
+                            firstName: state.contact.firstName,
+                            lastName: state.contact.lastName,
+                            externalId: metaPixel?.externalId,
+                        });
+                        trackMetaPixelEvent('CompleteRegistration', metaEventId, {}, false, userData);
                     }
                     dispatch({ type: 'COMPLETE_DONE' });
                     window.open(config.calendlyUrl, '_blank');

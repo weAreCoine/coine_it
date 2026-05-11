@@ -1,8 +1,11 @@
 <?php
 
+use App\Jobs\SendMetaConversionEventJob;
 use App\Mail\LeadReceived;
 use App\Models\Lead;
 use App\Services\LeadService;
+use Combindma\FacebookPixel\Facades\MetaPixel;
+use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -256,6 +259,61 @@ test('start endpoint requires a non-empty eventId', function () {
     $this->postJson(route('health-check.start'), [])
         ->assertUnprocessable()
         ->assertJsonValidationErrors('eventId');
+});
+
+test('store endpoint forwards the browser-provided metaEventId 1:1 to the Meta CAPI Lead event', function () {
+    Mail::fake();
+    Bus::fake();
+
+    MetaPixel::shouldReceive('isEnabled')->andReturn(true);
+    MetaPixel::shouldReceive('pixelId')->andReturn('');
+    MetaPixel::shouldReceive('testEnabled')->andReturn(false);
+
+    $this->call(
+        'POST',
+        route('health-check.store'),
+        validQuizPayload(),
+        ['cookie_consent' => json_encode(['necessary' => true, 'marketing' => true, 'analytics' => true])],
+    )->assertOk();
+
+    Bus::assertDispatched(
+        SendMetaConversionEventJob::class,
+        function (SendMetaConversionEventJob $job) {
+            return $job->eventName === 'Lead'
+                && $job->eventId === '11111111-2222-4333-8444-555555555555'
+                && ($job->userDataAttributes['email'] ?? null) === 'mario.rossi@gmail.com'
+                && ($job->userDataAttributes['firstName'] ?? null) === 'mario'
+                && ($job->userDataAttributes['lastName'] ?? null) === 'rossi';
+        },
+    );
+});
+
+test('complete endpoint forwards the browser-provided metaEventId 1:1 to the Meta CAPI CompleteRegistration event', function () {
+    Mail::fake();
+
+    // Seed the lead without marketing consent so the prior CAPI Lead call is skipped.
+    $this->post(route('health-check.store'), validQuizPayload())->assertOk();
+
+    Bus::fake();
+    MetaPixel::shouldReceive('isEnabled')->andReturn(true);
+    MetaPixel::shouldReceive('pixelId')->andReturn('');
+    MetaPixel::shouldReceive('testEnabled')->andReturn(false);
+
+    $this->call(
+        'PATCH',
+        route('health-check.complete'),
+        validCompletePayload(),
+        ['cookie_consent' => json_encode(['necessary' => true, 'marketing' => true, 'analytics' => true])],
+    )->assertOk();
+
+    Bus::assertDispatched(
+        SendMetaConversionEventJob::class,
+        function (SendMetaConversionEventJob $job) {
+            return $job->eventName === 'CompleteRegistration'
+                && $job->eventId === '22222222-3333-4444-8555-666666666666'
+                && ($job->userDataAttributes['email'] ?? null) === 'mario.rossi@gmail.com';
+        },
+    );
 });
 
 test('complete without openText does not clear notes', function () {

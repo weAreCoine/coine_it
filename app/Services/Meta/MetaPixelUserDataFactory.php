@@ -14,11 +14,15 @@ class MetaPixelUserDataFactory
      *
      * Always includes _fbp / _fbc cookies, client IP and user agent so that
      * Meta can match the server event to the matching browser pixel event.
-     * Email, phone, first name and last name are passed unhashed to the
-     * Facebook Business SDK, which performs SHA-256 hashing before sending.
-     * The external_id falls back to the `coine_uid` cookie set by the
-     * EnsureExternalId middleware so the same id is sent on every event for
-     * the same visitor across sessions.
+     * Email, phone, first name, last name and the geo parameters are passed
+     * unhashed to the Facebook Business SDK, which performs SHA-256 hashing
+     * before sending. The external_id falls back to the `coine_uid` cookie
+     * set by the EnsureExternalId middleware so the same id is sent on every
+     * event for the same visitor across sessions.
+     *
+     * `country` defaults to "it" to give the SDK a meaningful value even when
+     * we don't know the visitor's exact location — passing an explicit empty
+     * string disables the default for cases where we genuinely don't know.
      */
     public static function make(
         ?string $email = null,
@@ -26,12 +30,20 @@ class MetaPixelUserDataFactory
         ?string $firstName = null,
         ?string $lastName = null,
         ?string $externalId = null,
+        ?string $country = 'it',
+        ?string $city = null,
+        ?string $state = null,
+        ?string $zip = null,
     ): UserData {
+        $clientIp = Request::ip();
+
         $userData = (new UserData)
-            ->setClientIpAddress(Request::ip())
+            ->setClientIpAddress($clientIp)
             ->setClientUserAgent(Request::userAgent())
             ->setFbp(self::cookie('_fbp'))
             ->setFbc(self::cookie('_fbc'));
+
+        [$country, $city, $state, $zip] = self::enrichWithGeo($clientIp, $country, $city, $state, $zip);
 
         if ($email !== null && $email !== '') {
             $userData->setEmail(strtolower(trim($email)));
@@ -61,6 +73,38 @@ class MetaPixelUserDataFactory
 
         if ($resolvedExternalId !== null && $resolvedExternalId !== '') {
             $userData->setExternalId($resolvedExternalId);
+        }
+
+        if ($country !== null && $country !== '') {
+            $normalized = self::normalizeCountry($country);
+
+            if ($normalized !== '') {
+                $userData->setCountryCode($normalized);
+            }
+        }
+
+        if ($city !== null && $city !== '') {
+            $normalized = self::normalizeCity($city);
+
+            if ($normalized !== '') {
+                $userData->setCity($normalized);
+            }
+        }
+
+        if ($state !== null && $state !== '') {
+            $normalized = self::normalizeState($state);
+
+            if ($normalized !== '') {
+                $userData->setState($normalized);
+            }
+        }
+
+        if ($zip !== null && $zip !== '') {
+            $normalized = self::normalizeZip($zip);
+
+            if ($normalized !== '') {
+                $userData->setZipCode($normalized);
+            }
         }
 
         return $userData;
@@ -121,5 +165,100 @@ class MetaPixelUserDataFactory
         $collapsed = preg_replace('/\s+/u', ' ', $stripped) ?? '';
 
         return mb_strtolower(trim($collapsed));
+    }
+
+    /**
+     * Normalize a country code to the lowercase ISO 3166-1 alpha-2 form
+     * expected by Meta (e.g. "IT" → "it"). Anything longer than 2 chars is
+     * truncated to keep the SDK happy when callers pass full country names.
+     */
+    private static function normalizeCountry(string $country): string
+    {
+        $stripped = preg_replace('/[^A-Za-z]/', '', $country) ?? '';
+
+        if ($stripped === '') {
+            return '';
+        }
+
+        return mb_strtolower(mb_substr($stripped, 0, 2));
+    }
+
+    /**
+     * Normalize a city to lowercase letters only, stripping spaces and
+     * punctuation. Meta hashes the result, so removing whitespace prevents
+     * "Reggio Emilia" and "ReggioEmilia" from producing different hashes.
+     */
+    private static function normalizeCity(string $city): string
+    {
+        $stripped = preg_replace('/[^\p{L}]+/u', '', $city) ?? '';
+
+        return mb_strtolower($stripped);
+    }
+
+    /**
+     * Normalize a state to a lowercase short code (max 5 chars to absorb
+     * non-Italian variants), stripping anything that is not a letter.
+     */
+    private static function normalizeState(string $state): string
+    {
+        $stripped = preg_replace('/[^\p{L}]+/u', '', $state) ?? '';
+
+        if ($stripped === '') {
+            return '';
+        }
+
+        return mb_strtolower(mb_substr($stripped, 0, 5));
+    }
+
+    /**
+     * Normalize a postal code by stripping whitespace and lowercasing, keeping
+     * digits and letters (UK-style codes contain both).
+     */
+    private static function normalizeZip(string $zip): string
+    {
+        $stripped = preg_replace('/[^A-Za-z0-9]/', '', $zip) ?? '';
+
+        return mb_strtolower($stripped);
+    }
+
+    /**
+     * Resolve the client IP through the registered IpGeolocator and fold the
+     * lookup into the caller-supplied geo parameters. The caller's explicit
+     * values always win: geo lookup only fills the gaps. The country default
+     * `'it'` is treated as a fallback too — a non-null geo `country` will
+     * override it because the lookup is more specific than the static guess.
+     *
+     * @return array{0: ?string, 1: ?string, 2: ?string, 3: ?string}
+     */
+    private static function enrichWithGeo(
+        ?string $clientIp,
+        ?string $country,
+        ?string $city,
+        ?string $state,
+        ?string $zip,
+    ): array {
+        $shouldLookup = $clientIp !== null && $clientIp !== '' && (
+            ($country === null || $country === 'it')
+            || $city === null
+            || $state === null
+            || $zip === null
+        );
+
+        if (! $shouldLookup) {
+            return [$country, $city, $state, $zip];
+        }
+
+        try {
+            $geo = app(IpGeolocator::class)->locate($clientIp);
+        } catch (\Throwable) {
+            return [$country, $city, $state, $zip];
+        }
+
+        return [
+            $country === null || $country === 'it' ? ($geo['country'] ?? $country) : $country,
+            $city ?? $geo['city'],
+            $state ?? $geo['state'],
+            $zip ?? $geo['zip'],
+        ];
     }
 }

@@ -6,12 +6,12 @@ namespace App\Services;
 
 use App\Exceptions\ExceptionHandler;
 use App\Helpers\CookieConsent;
+use App\Jobs\SendMetaConversionEventJob;
 use App\Models\Lead;
 use App\Services\GoogleAnalytics\GoogleAnalyticsService;
 use App\Services\LinkedIn\LinkedInService;
 use App\Services\Meta\MetaPixelUserDataFactory;
 use Combindma\FacebookPixel\Facades\MetaPixel;
-use FacebookAds\Object\ServerSide\CustomData;
 use Illuminate\Http\Request;
 
 class LeadService
@@ -64,10 +64,9 @@ class LeadService
         }
 
         try {
-            MetaPixel::send(
+            SendMetaConversionEventJob::send(
                 $eventName,
                 $eventId,
-                new CustomData,
                 MetaPixelUserDataFactory::make($email, $phone, $firstName, $lastName),
             );
         } catch (\Exception $e) {

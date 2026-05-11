@@ -1,12 +1,11 @@
 <?php
 
+use App\Jobs\SendMetaConversionEventJob;
 use App\Models\Lead;
 use App\Services\LeadService;
 use Combindma\FacebookPixel\Facades\MetaPixel;
-use FacebookAds\Object\ServerSide\CustomData;
-use FacebookAds\Object\ServerSide\UserData;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Bus;
 
 uses(Tests\TestCase::class, Illuminate\Foundation\Testing\RefreshDatabase::class);
 
@@ -50,16 +49,12 @@ test('createAndTrack creates the lead and forwards the browser event id and cont
     ]);
 });
 
-test('trackMetaPixelEvent sends to CAPI with enriched UserData using the browser event id', function () {
+test('trackMetaPixelEvent dispatches a queue job with the enriched UserData and browser event id', function () {
+    Bus::fake();
     $request = consentedRequest();
     $this->app->instance('request', $request);
 
     MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')
-        ->once()
-        ->withArgs(fn (string $eventName, string $eventId, CustomData $custom, UserData $userData): bool => $eventName === 'Lead'
-            && $eventId === '11111111-2222-4333-8444-555555555555'
-            && $userData instanceof UserData);
 
     app(LeadService::class)->trackMetaPixelEvent(
         'Lead',
@@ -67,40 +62,38 @@ test('trackMetaPixelEvent sends to CAPI with enriched UserData using the browser
         'lead@example.com',
         '+39111222333',
     );
+
+    Bus::assertDispatched(
+        SendMetaConversionEventJob::class,
+        function (SendMetaConversionEventJob $job) {
+            return $job->eventName === 'Lead'
+                && $job->eventId === '11111111-2222-4333-8444-555555555555'
+                && ($job->userDataAttributes['email'] ?? null) === 'lead@example.com'
+                && ($job->userDataAttributes['phone'] ?? null) === '39111222333';
+        },
+    );
 });
 
 test('trackMetaPixelEvent is a no-op when the pixel is disabled', function () {
+    Bus::fake();
     $request = consentedRequest();
     $this->app->instance('request', $request);
 
     MetaPixel::shouldReceive('isEnabled')->once()->andReturn(false);
-    MetaPixel::shouldReceive('send')->never();
 
     app(LeadService::class)->trackMetaPixelEvent('Lead', '11111111-2222-4333-8444-555555555555');
+
+    Bus::assertNotDispatched(SendMetaConversionEventJob::class);
 });
 
 test('trackMetaPixelEvent is a no-op when marketing consent is missing', function () {
+    Bus::fake();
     $request = Request::create('https://coine.test/health-check/start', 'POST');
     $this->app->instance('request', $request);
 
     MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')->never();
 
     app(LeadService::class)->trackMetaPixelEvent('startQuiz', '11111111-2222-4333-8444-555555555555');
-});
 
-test('trackMetaPixelEvent logs exceptions raised by the SDK', function () {
-    $request = consentedRequest();
-    $this->app->instance('request', $request);
-
-    MetaPixel::shouldReceive('isEnabled')->once()->andReturn(true);
-    MetaPixel::shouldReceive('send')
-        ->once()
-        ->andThrow(new RuntimeException('meta send failed'));
-
-    Log::shouldReceive('error')
-        ->once()
-        ->with('meta send failed', Mockery::on(fn (array $context): bool => $context['exception'] === RuntimeException::class));
-
-    app(LeadService::class)->trackMetaPixelEvent('Lead', '11111111-2222-4333-8444-555555555555');
+    Bus::assertNotDispatched(SendMetaConversionEventJob::class);
 });

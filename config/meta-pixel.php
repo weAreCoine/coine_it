@@ -45,4 +45,12 @@ return [
     'test_event_code' => env('META_TEST_MODE_ENABLED', false)
         ? env('META_TEST_EVENT_CODE')
         : null,
+
+    /*
+     * Whether the Conversions API call should be pushed to a queue or invoked
+     * inline. The queue keeps the response cycle fast and retries failed sends
+     * automatically; flipping the flag off restores the previous sync behavior
+     * if the queue infrastructure ever becomes unavailable.
+     */
+    'queue_enabled' => env('META_CAPI_QUEUE_ENABLED', true),
 ];

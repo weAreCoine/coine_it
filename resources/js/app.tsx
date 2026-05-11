@@ -1,6 +1,7 @@
 import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
+import ContactClickTracker from '@/components/contactClickTracker';
 import CookieConsentBanner from '@/components/cookieConsentBanner';
 import { handleClarityNavigation, setClarityTestMode } from '@/hooks/useClarity';
 import { handleGANavigation } from '@/hooks/useGoogleAnalytics';
@@ -40,6 +41,7 @@ createInertiaApp({
             <>
                 <App {...props} />
                 <CookieConsentBanner />
+                <ContactClickTracker />
             </>,
         );
     },

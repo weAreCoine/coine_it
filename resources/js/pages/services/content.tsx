@@ -1,4 +1,5 @@
 import { Head } from '@inertiajs/react';
+import { useTrackViewContent } from '@/hooks/useMetaPixel';
 import AnimatedLand from '@/components/animatedLand';
 import Colophon from '@/components/colophon';
 import ContactForm from '@/components/contactForm';
@@ -10,6 +11,8 @@ import type { CardGridData, MarqueeData } from '@/types/dto/sections';
 import Faq = App.Entities.Faq;
 
 export default function Content({ cardGrid, faqs, marquee }: { cardGrid: CardGridData; faqs: Faq[]; marquee: MarqueeData }) {
+    useTrackViewContent({ content_name: 'Content creation', content_category: 'service' });
+
     return (
         <>
             <Head title="Content creation" />

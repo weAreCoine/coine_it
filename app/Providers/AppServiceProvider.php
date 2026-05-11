@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\Meta\IpGeolocationService;
+use App\Services\Meta\IpGeolocator;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(IpGeolocator::class, IpGeolocationService::class);
     }
 
     /**

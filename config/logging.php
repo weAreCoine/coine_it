@@ -73,6 +73,14 @@ return [
             'replace_placeholders' => true,
         ],
 
+        'meta-capi' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/meta-capi.log'),
+            'level' => env('META_CAPI_LOG_LEVEL', 'info'),
+            'days' => env('META_CAPI_LOG_DAYS', 14),
+            'replace_placeholders' => true,
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
